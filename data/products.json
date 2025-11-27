@@ -1,0 +1,2028 @@
+[
+   {
+    "id": 101,
+     "title": "FC25",
+    "image": "/games/UpcomingGames1.png", 
+    "price": 51,
+     "oldPrice": 60,
+     "rating": 81,
+      "releaseDate": "27/10/2025",
+     "buttonText": "Pre-Order" ,
+     "genres": ["Action", "Open World"],
+     "category": "preorders",
+     "delivery": "Online",
+    "platforms": ["Windows/PlayStation 5", "Xbox One"],
+    "regions": ["Global", "EU"],
+
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+   },
+   {
+    "id": 102,
+     "title": "FC25",
+    "image": "/games/UpcomingGames1.png", 
+    "price": 51,
+     "oldPrice": 60,
+     "rating": 81,
+      "releaseDate": "27/10/2025",
+     "buttonText": "Pre-Order" ,
+     "genres": ["Action", "Open World"],
+     "category": "upcominggames",
+     "delivery": "Online",
+    "platforms": ["Windows/PlayStation 5", "Xbox One"],
+    "regions": ["Global", "EU"],
+
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+   },
+   {
+    "id": 103,
+     "title": "FC25",
+    "image": "/games/UpcomingGames1.png", 
+    "price": 51,
+     "oldPrice": 60,
+     "rating": 81,
+      "releaseDate": "27/10/2025",
+     "buttonText": "Pre-Order" ,
+     "genres": ["Action", "Open World"],
+     "category": "trending",
+     "delivery": "Online",
+    "platforms": ["Windows/PlayStation 5", "Xbox One"],
+    "regions": ["Global", "EU"],
+
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+   },
+   {
+    "id": 102,
+     "title": "FC25",
+    "image": "/games/UpcomingGames1.png", 
+    "price": 51,
+     "oldPrice": 60,
+     "rating": 81,
+      "releaseDate": "27/10/2025",
+     "buttonText": "Pre-Order" ,
+     "genres": ["Action", "Open World"],
+     "category": "bestsellers",
+     "delivery": "Online",
+    "platforms": ["Windows/PlayStation 5", "Xbox One"],
+    "regions": ["Global", "EU"],
+
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+   },
+   {
+    "id": 102,
+     "title": "FC25",
+    "image": "/games/UpcomingGames1.png", 
+    "price": 51,
+     "oldPrice": 60,
+     "rating": 81,
+      "releaseDate": "27/10/2025",
+     "buttonText": "Pre-Order" ,
+     "genres": ["Action", "Open World"],
+     "category": "nintendo",
+     "delivery": "Online",
+    "platforms": ["Windows/PlayStation 5", "Xbox One"],
+    "regions": ["Global", "EU"],
+
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+   },
+   {
+    "id": 102,
+     "title": "FC25",
+    "image": "/games/UpcomingGames1.png", 
+    "price": 51,
+     "oldPrice": 60,
+     "rating": 81,
+      "releaseDate": "27/10/2025",
+     "buttonText": "Pre-Order" ,
+     "genres": ["Action", "Open World"],
+     "category": "xbox",
+     "delivery": "Online",
+    "platforms": ["Windows/PlayStation 5", "Xbox One"],
+    "regions": ["Global", "EU"],
+
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+   },
+   {
+    "id": 107,
+     "title": "$10 Gift Cards",
+    "image": "/games/Products7.png", 
+    "price": 51,
+     "oldPrice": 60,
+     "rating": 81,
+      "releaseDate": "27/10/2025",
+     "buttonText": "Pre-Order" ,
+     "genres": ["Action", "Open World"],
+     "category": "gift",
+     "delivery": "Online",
+    "platforms": ["Windows/PlayStation 5", "Xbox One"],
+    "regions": ["Global", "EU"],
+
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+   },
+   {
+    "id": 107,
+     "title": "$10 Gift Cards",
+    "image": "/games/Products7.png", 
+    "price": 51,
+     "oldPrice": 60,
+     "rating": 81,
+      "releaseDate": "27/10/2025",
+     "buttonText": "Pre-Order" ,
+     "genres": ["Action", "Open World"],
+     "category": "gifts",
+     "delivery": "Online",
+    "platforms": ["Windows/PlayStation 5", "Xbox One"],
+    "regions": ["Global", "EU"],
+
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+   },
+   {
+    "id": 101,
+     "title": "$10 Gift Cards",
+    "image": "/games/UpcomingGames1.png", 
+    "price": 51,
+     "oldPrice": 60,
+     "rating": 81,
+      "releaseDate": "27/10/2025",
+     "buttonText": "Pre-Order" ,
+     "genres": ["Action", "Open World"],
+     "category": "gifts",
+     "delivery": "Online",
+    "platforms": ["Windows/PlayStation 5", "Xbox One"],
+    "regions": ["Global", "EU"],
+
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+   },
+  {
+    "id": 1,
+    "title": "Minecraft",
+    "image": "/games/minecraft.jpg",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Adventure", "Simulation"],
+    "category": "pc",    
+    "platforms": ["Windows/Xbox One/PlayStation 5"],
+    "regions": ["Global", "US", "EU"],
+    "delivery": "Online",
+
+     "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Gameplay is super smooth and realistic!",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+  },
+  {
+    "id": 123,
+    "title": "$20 Gift Card",
+    "image": "/games/minecraft.jpg",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Adventure", "Simulation"],
+    "category": "gifts",    
+    "platforms": ["Windows/Xbox One/PlayStation 5"],
+    "regions": ["Global", "US", "EU"],
+    "delivery": "Online",
+
+     "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Gameplay is super smooth and realistic!",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+  },
+  {
+    "id": 123,
+    "title": "$50 Gift Card",
+    "image": "/games/minecraft.jpg",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Adventure", "Simulation"],
+    "category": "gifts",    
+    "platforms": ["Windows/Xbox One/PlayStation 5"],
+    "regions": ["Global", "US", "EU"],
+    "delivery": "Online",
+
+     "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Gameplay is super smooth and realistic!",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+  },
+  {
+    "id": 102,
+     "title": "FC25",
+    "image": "/games/UpcomingGames1.png", 
+    "price": 51,
+     "oldPrice": 60,
+     "rating": 81,
+      "releaseDate": "27/10/2025",
+     "buttonText": "Pre-Order" ,
+     "genres": ["Action", "Open World"],
+     "category": "gift",
+     "delivery": "Online",
+    "platforms": ["Windows/PlayStation 5", "Xbox One"],
+    "regions": ["Global", "EU"],
+
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+   },
+  {
+    "id": 1,
+    "title": "Minecraft",
+    "image": "/games/minecraft.jpg",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Adventure", "Simulation"],
+    "category": "trending",    
+    "platforms": ["Windows/Xbox One/PlayStation 5"],
+    "regions": ["Global", "US", "EU"],
+    "delivery": "Online",
+
+     "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Gameplay is super smooth and realistic!",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+  },
+  {
+    "id": 2,
+    "title": "Counter-Str..",
+    "image": "/games/Frame.Slider.jpg",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 61,
+    "genres": ["Adventure"],
+    "category": "pc"
+  },
+  {
+    "id": 3,
+    "title": "Spider-Man 2",
+    "image": "/games/spiderman2.jpg",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 51,
+    "genres": ["Action", "Adventure"],
+    "category": "pc"
+  },
+  {
+    "id": 3,
+    "title": "GTA VI",
+    "image": "/games/Products4.png",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Action", "Racing"],
+    "category": "playstation"
+  },
+  {
+    "id": 4,
+    "title": "The Witcher 3",
+    "image": "/games/witcher3.jpg",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 40,
+    "genres": ["Adventure"],
+    "category": "pc"
+  },
+  {
+    "id": 1,
+    "title": "FC25",
+    "image": "/games/Products1.png",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Adventure", "Simulation"],
+    "category": "pc"
+  },
+  {
+    "id": 1,
+    "title": "Star Wars..",
+    "image": "/games/Products2.png",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Adventure"],
+    "category": "pc"
+  },
+  {
+    "id": 1,
+    "title": "The Witcher 4",
+    "image": "/games/Products3.png",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Action", "Adventure"],
+    "category": "pc"
+  },
+  {
+    "id": 1,
+    "title": "GTA VI",
+    "image": "/games/Products4.png",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Action", "Racing"],
+    "category": "pc"
+  },
+  {
+    "id": 1,
+    "title": "Minecraft",
+    "image": "/games/minecraft.jpg",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Adventure", "Simulation"],
+    "category": "pc"
+  },
+  {
+    "id": 1,
+    "title": "Counter-Str..",
+    "image": "/games/Frame.Slider.jpg",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Adventure"],
+    "category": "pc"
+  },
+  {
+    "id": 1,
+    "title": "Spider-Man 2",
+    "image": "/games/spiderman2.jpg",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Action", "Adventure"],
+    "category": "pc"
+  },
+   {
+    "id": 1,
+    "title": "The Witcher 3",
+    "image": "/games/witcher3.jpg",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Adventure"],
+    "category": "pc"
+  },
+   {
+    "id": 1,
+    "title": "FC25",
+    "image": "/games/Products1.png",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Adventure", "Simulation"],
+    "category": "pc"
+  },
+  {
+    "id": 1,
+    "title": "Star Wars..",
+    "image": "/games/Products2.png",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Adventure"],
+    "category": "pc"
+  },
+  {
+    "id": 1,
+    "title": "The Witcher 4",
+    "image": "/games/Products3.png",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Action", "Adventure"],
+    "category": "pc"
+  },
+  {
+    "id": 1,
+    "title": "GTA VI",
+    "image": "/games/Products4.png",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Action", "Racing"],
+    "category": "pc"
+  },
+  {
+    "id": 6,
+    "title": "Minecraft",
+    "image": "/games/minecraft.jpg",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Adventure", "Simulation"],
+    "category": "deals"
+  },
+  {
+    "id": 6,
+    "title": "BOSSGAME..",
+    "image": "/games/Products5.jpg",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Adventure"],
+    "category": "deals"
+  },
+  {
+    "id": 6,
+    "title": "Xander X-2",
+    "image": "/games/Products6.png",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Action", "Adventure"],
+    "category": "deals"
+  },
+  {
+    "id": 6,
+    "title": "The Witcher 3",
+    "image": "/games/Products7.png",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Action", "Racing"],
+    "category": "deals"
+  },
+   {
+    "id": 1,
+    "title": "Minecraft",
+    "image": "/games/minecraft.jpg",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Adventure", "Simulation"],
+    "category": "pc"
+  },
+  {
+    "id": 1,
+    "title": "Counter-Str..",
+    "image": "/games/Frame.Slider.jpg",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Adventure"],
+    "category": "pc"
+  },
+  {
+    "id": 1,
+    "title": "Spider-Man 2",
+    "image": "/games/spiderman2.jpg",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Action", "Adventure"],
+    "category": "pc"
+  },
+   {
+    "id": 1,
+    "title": "The Witcher 3",
+    "image": "/games/witcher3.jpg",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Adventure"],
+    "category": "pc"
+  },
+  {
+    "id": 6,
+    "title": "FC25",
+    "image": "/games/Products1.png",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Adventure", "Simulation"],
+    "category": "deals"
+  },
+  {
+    "id": 6,
+    "title": "Star Wars..",
+    "image": "/games/Products2.png",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Adventure"],
+    "category": "deals"
+  },
+  {
+    "id": 6,
+    "title": "The Witcher 4",
+    "image": "/games/Products3.png",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Action", "Adventure"],
+    "category": "deals"
+  },
+  {
+    "id": 6,
+    "title": "GTA VI",
+    "image": "/games/Products4.png",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Action", "Racing"],
+    "category": "deals"
+  },
+   {
+    "id": 6,
+    "title": "Minecraft",
+    "image": "/games/minecraft.jpg",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Adventure", "Simulation"],
+    "category": "deals"
+  },
+  {
+    "id": 6,
+    "title": "Counter-Str..",
+    "image": "/games/Frame.Slider.jpg",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Adventure"],
+    "category": "deals"
+  },
+  {
+    "id": 6,
+    "title": "Spider-Man 2",
+    "image": "/games/spiderman2.jpg",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Action", "Adventure"],
+    "category": "deals"
+  },
+   {
+    "id": 6,
+    "title": "The Witcher 3",
+    "image": "/games/witcher3.jpg",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Adventure"],
+    "category": "deals"
+  },
+   {
+    "id": 6,
+    "title": "FC25",
+    "image": "/games/Products1.png",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Adventure", "Simulation"],
+    "category": "deals"
+  },
+  {
+    "id": 6,
+    "title": "Star Wars..",
+    "image": "/games/Products2.png",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Adventure"],
+    "category": "deals"
+  },
+  {
+    "id": 6,
+    "title": "The Witcher 4",
+    "image": "/games/Products3.png",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Action", "Adventure"],
+    "category": "deals"
+  },
+  {
+    "id": 6,
+    "title": "GTA VI",
+    "image": "/games/Products4.png",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Action", "Racing"],
+    "category": "deals"
+  },
+  {
+    "id": 6,
+    "title": "Minecraft",
+    "image": "/games/minecraft.jpg",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "genres": ["Adventure", "Simulation"],
+    "category": "deals"
+  },
+  {
+    "id": 1,
+    "title": "Fortnite",
+    "image": "/games/black-myth-slider.png",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 3,
+    "genres": ["Battle Royale", "Action"],
+    "category": "trending",
+    "platforms": ["Windows", "PlayStation 5", "Xbox Series X", "Nintendo Switch"],
+    "regions": ["Global"],
+    "delivery": "Online",
+    "reviews": []
+  },
+  {
+    "id": 2,
+    "title": "Minecraft",
+    "image": "/games/minecraft.jpg",
+    "discount": 15,
+    "price": 45,
+    "oldPrice": 55,
+    "rating": 4,
+    "genres": ["Adventure", "Simulation", "Sandbox"],
+    "category": "trending",
+    "platforms": ["Windows", "PlayStation 5", "Xbox Series X", "Nintendo Switch"],
+    "regions": ["Global"],
+    "delivery": "Online",
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+  },
+  {
+    "id": 3,
+    "title": "Counter-Strike 2",
+    "image": "/games/Frame.Slider.jpg",
+    "discount": 20,
+    "price": 40,
+    "oldPrice": 50,
+    "rating": 5,
+    "genres": ["FPS", "Tactical"],
+    "category": "trending",
+    "platforms": ["Windows"],
+    "regions": ["Global"],
+    "delivery": "Online",
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+  },
+  {
+    "id": 4,
+    "title": "Spider-Man 2",
+    "image": "/games/spiderman2.jpg",
+    "discount": 25,
+    "price": 35,
+    "oldPrice": 48,
+    "rating": 1,
+    "genres": ["Action", "Open World"],
+    "category": "trending",
+    "platforms": ["PlayStation 5"],
+    "regions": ["Global"],
+    "delivery": "Online",
+    "reviews": []
+  },
+  {
+    "id": 5,
+    "title": "The Witcher 3",
+    "image": "/games/witcher3.jpg",
+    "discount": 18,
+    "price": 49,
+    "oldPrice": 60,
+    "rating": 4,
+    "genres": ["RPG", "Adventure"],
+    "category": "trending",
+    "platforms": ["Windows", "PlayStation 5", "Xbox Series X"],
+    "regions": ["Global"],
+    "delivery": "Online",
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+  },
+
+  {
+    "id": 6,
+    "title": "Fortnite",
+    "image": "/games/black-myth-slider.png",
+    "discount": 15,
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 4,
+    "genres": ["Battle Royale", "Action"],
+    "category": "bestsellers",
+    "platforms": ["Windows", "PlayStation 5", "Xbox Series X", "Nintendo Switch"],
+    "regions": ["Global"],
+    "delivery": "Online",
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+  },
+  {
+    "id": 7,
+    "title": "Minecraft",
+    "image": "/games/minecraft.jpg",
+    "discount": 15,
+    "price": 45,
+    "oldPrice": 55,
+    "rating": 3,
+    "genres": ["Adventure", "Simulation", "Sandbox"],
+    "category": "bestsellers",
+    "platforms": ["Windows", "PlayStation 5", "Xbox Series X", "Nintendo Switch"],
+    "regions": ["Global"],
+    "delivery": "Online",
+    "reviews": []
+  },
+  {
+    "id": 8,
+    "title": "Counter-Strike 2",
+    "image": "/games/Frame.Slider.jpg",
+    "discount": 20,
+    "price": 40,
+    "oldPrice": 50,
+    "rating": 5,
+    "genres": ["Action", "Tactical"],
+    "category": "bestsellers",
+    "platforms": ["Windows"],
+    "regions": ["Global"],
+    "delivery": "Online",
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+  },
+  {
+    "id": 9,
+    "title": "Spider-Man 2",
+    "image": "/games/spiderman2.jpg",
+    "discount": 25,
+    "price": 35,
+    "oldPrice": 48,
+    "rating": 1,
+    "genres": ["Action", "Open World"],
+    "category": "bestsellers",
+    "platforms": ["PlayStation 5"],
+    "regions": ["Global"],
+    "delivery": "Online",
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+  },
+  {
+    "id": 10,
+    "title": "The Witcher 3",
+    "image": "/games/witcher3.jpg",
+    "discount": 18,
+    "price": 49,
+    "oldPrice": 60,
+    "rating": 4,
+    "genres": ["RPG", "Open World"],
+    "category": "bestsellers",
+    "platforms": ["Windows", "PlayStation 5", "Xbox Series X"],
+    "regions": ["Global"],
+    "delivery": "Online",
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+  },
+
+  {
+    "id": 101,
+    "title": "FC25",
+    "image": "/games/UpcomingGames1.png",
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "releaseDate": "27/10/2025",
+    "buttonText": "Pre-Order",
+    "genres": ["Sports", "Simulation"],
+    "category": "preorders",
+    "platforms": ["Windows", "PlayStation 5", "Xbox Series X"],
+    "regions": ["Global", "EU"],
+    "delivery": "Online",
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+  },
+  {
+    "id": 102,
+    "title": "Marvel: Wolverine",
+    "image": "/games/UpcomingGames2.png",
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 88,
+    "releaseDate": "Early 2025",
+    "buttonText": "Pre-Order",
+    "genres": ["Action", "Adventure"],
+    "category": "preorders",
+    "platforms": ["PlayStation 5"],
+    "regions": ["Global"],
+    "delivery": "Online",
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+  },
+  {
+    "id": 103,
+    "title": "Star Wars Outlaws",
+    "image": "/games/UpcomingGames3.png",
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 79,
+    "releaseDate": "Mid 2025",
+    "buttonText": "Pre-Order",
+    "genres": ["Open World", "Action"],
+    "category": "preorders",
+    "platforms": ["Windows", "PlayStation 5", "Xbox Series X"],
+    "regions": ["Global"],
+    "delivery": "Online",
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+  },
+  {
+    "id": 104,
+    "title": "GTA VI",
+    "image": "/games/UpcomingGames4.png",
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 90,
+    "releaseDate": "Late 2025",
+    "buttonText": "Pre-Order",
+    "genres": ["Open World", "Action"],
+    "category": "preorders",
+    "platforms": ["PlayStation 5", "Xbox Series X"],
+    "regions": ["Global"],
+    "delivery": "Online",
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+  },
+  {
+    "id": 105,
+    "title": "The Witcher 4",
+    "image": "/games/UpcomingGames5.png",
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 93,
+    "releaseDate": "Mid 2026",
+    "buttonText": "Pre-Order",
+    "genres": ["RPG", "Open World"],
+    "category": "preorders",
+    "platforms": ["Windows", "PlayStation 5", "Xbox Series X"],
+    "regions": ["Global"],
+    "delivery": "Online",
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+  },
+  
+  {
+    "id": 106,
+    "title": "FC25",
+    "image": "/games/UpcomingGames1.png",
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 81,
+    "releaseDate": "27/10/2025",
+    "buttonText": "Pre-Order",
+    "genres": ["Sports", "Simulation"],
+    "category": "preorders",
+    "platforms": ["Windows", "PlayStation 5", "Xbox Series X"],
+    "regions": ["Global", "EU"],
+    "delivery": "Online",
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+  },
+  {
+    "id": 107,
+    "title": "Marvel: Wolverine",
+    "image": "/games/UpcomingGames2.png",
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 88,
+    "releaseDate": "Early 2025",
+    "buttonText": "Pre-Order",
+    "genres": ["Action", "Adventure"],
+    "category": "preorders",
+    "platforms": ["PlayStation 5"],
+    "regions": ["Global"],
+    "delivery": "Online",
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+  },
+  {
+    "id": 108,
+    "title": "Star Wars Outlaws",
+    "image": "/games/UpcomingGames3.png",
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 79,
+    "releaseDate": "Mid 2025",
+    "buttonText": "Pre-Order",
+    "genres": ["Open World", "Action"],
+    "category": "preorders",
+    "platforms": ["Windows", "PlayStation 5", "Xbox Series X"],
+    "regions": ["Global"],
+    "delivery": "Online",
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+  },
+  {
+    "id": 109,
+    "title": "GTA VI",
+    "image": "/games/UpcomingGames4.png",
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 90,
+    "releaseDate": "Late 2025",
+    "buttonText": "Pre-Order",
+    "genres": ["Open World", "Action"],
+    "category": "preorders",
+    "platforms": ["PlayStation 5", "Xbox Series X"],
+    "regions": ["Global"],
+    "delivery": "Online",
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+  },
+  {
+    "id": 110,
+    "title": "The Witcher 4",
+    "image": "/games/UpcomingGames5.png",
+    "price": 51,
+    "oldPrice": 60,
+    "rating": 93,
+    "releaseDate": "Mid 2026",
+    "buttonText": "Pre-Order",
+    "genres": ["RPG", "Open World"],
+    "category": "preorders",
+    "platforms": ["Windows", "PlayStation 5", "Xbox Series X"],
+    "regions": ["Global"],
+    "delivery": "Online",
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+  },
+
+  {
+    "id": 123,
+    "title": "$20 Gift Card",
+    "image": "/games/minecraft.jpg",
+    "discount": 15,
+    "price": 20,
+    "oldPrice": 20,
+    "rating": 0,
+    "genres": ["Gift Card"],
+    "category": "gifts",
+    "platforms": [],
+    "regions": ["Global"],
+    "delivery": "Email",
+    "reviews": [
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    },
+    {
+      "id": 1,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 5,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-22"
+    },
+    {
+      "id": 2,
+      "name": "Darrell Steward",
+      "avatar": "/games/Reviews.png",
+      "rating": 4,
+      "text": "Best football game ever! The graphics and gameplay feel so real. FC25 is a must-have for every football fan.",
+      "date": "2025-09-24"
+    }
+  ]
+  }
+]

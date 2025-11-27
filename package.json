@@ -1,0 +1,34 @@
+{
+  "name": "E-Game-Stoore",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxt/content": "^3.8.2",
+    "@nuxt/eslint": "^1.10.0",
+    "@nuxt/fonts": "^0.12.1",
+    "@nuxt/icon": "^2.1.0",
+    "@nuxt/image": "^2.0.0",
+    "@nuxt/scripts": "^0.13.0",
+    "@nuxtjs/google-fonts": "^3.2.0",
+    "@nuxtjs/tailwindcss": "^6.14.0",
+    "@pinia/nuxt": "^0.11.3",
+    "@unhead/vue": "^2.0.19",
+    "aos": "^2.3.4",
+    "better-sqlite3": "^12.4.1",
+    "eslint": "^9.39.1",
+    "izitoast": "^1.4.0",
+    "nuxt": "^4.2.1",
+    "nuxt-toast": "^1.4.0",
+    "pinia": "^3.0.4",
+    "swiper": "^12.0.3",
+    "vue": "^3.5.24",
+    "vue-router": "^4.6.3"
+  }
+}
