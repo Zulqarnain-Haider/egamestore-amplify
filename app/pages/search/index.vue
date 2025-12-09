@@ -19,24 +19,33 @@
       <!-- Products Section -->
       <section class="flex-1 flex flex-col w-full">
         <!-- Breadcrumb + Sorting -->
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-          <div class="flex items-center gap-3">
+        <div class="flex flex-wrap items-center mb-6 gap-4">
+          <div class="flex items-center gap-3 text-sm sm:text-base">
             <NuxtLink class="text-mainText text-lg hover:text-primary" to="/">Home</NuxtLink>
             <i class="fa-solid fa-chevron-right text-sm text-mainText"></i>
             <h2 class="font-medium">Search Results</h2>
           </div>
 
-          <div class="flex items-center gap-2 text-sm sm:text-base">
-            <span class="text-onMainText">Sort by:</span>
-            <select
-              v-model="sortBy"
-              class="bg-bgDark border border-outline rounded-lg text-sm px-3 py-2 text-mainText focus:outline-none"
-            >
+          <div class="flex items-center gap-2 text-sm sm:text-base relative">
+            <span class="text-onMainText/80 text-xl">Sort by:</span>
+
+              
+            <div class="relative">
+            <select v-model="sortBy"
+              class="bg-bgDark border appearance-none border-outline rounded-lg text-md 
+              px-4 py-2 pr-10 cursor-pointer text-mainText focus:outline-none">
               <option value="default">Default</option>
-              <option value="priceAsc">Price: Low to High</option>
-              <option value="priceDesc">Price: High to Low</option>
+              <option value="priceAsc">Price: Low → High</option>
+              <option value="priceDesc">Price: High → Low</option>
               <option value="rating">Rating</option>
             </select>
+
+            <!-- Custom Arrow Icon -->
+          <Icon
+           name="heroicons-chevron-down-20-solid"
+           class="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none w-6 h-6 sm:w-7 sm:h-7 text-mainText"
+           />
+            </div>
           </div>
         </div>
 

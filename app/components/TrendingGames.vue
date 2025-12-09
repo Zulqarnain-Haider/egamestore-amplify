@@ -24,7 +24,23 @@
           :key="game.id"
           class="flex-shrink-0 w-[60%] sm:w-[45%] md:w-[29%] lg:w-[23%] xl:w-[19.5%]"
         >
-          <GameCard :product="game"/>
+          <GameCard 
+          :product="{
+    id: game.id,
+    title: game.name,
+    image: game.main_image || game.img || (game.images?.[0]?.image ?? ''),
+    discount: game.price_after_discount && game.price_after_discount < game.price
+      ? Math.round(((game.price - game.price_after_discount) / game.price) * 100)
+      : 0,
+    price: game.price_after_discount && game.price_after_discount < game.price
+      ? game.price_after_discount
+      : game.price,
+    oldPrice: game.price_after_discount && game.price_after_discount < game.price
+      ? game.price
+      : null,
+    rating: game.reviews_avg_rating || 0
+  }"
+  />
         </div>
       </div>
 
@@ -54,11 +70,11 @@
     </div>
   </section>
 </template>
-
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
-import products from '../../data/products.json'
+import GameCard from '~/components/GameCard.vue'
 
+const config = useRuntimeConfig()
 const games = ref([])
 const loading = ref(true)
 const slider = ref(null)
@@ -66,53 +82,44 @@ const cardWidth = ref(0)
 const currentPage = ref(0)
 const windowWidth = ref(1280)
 
-
 // Safely get window width
-const getWindowWidth = () => {
-  if (typeof window !== 'undefined' && window.innerWidth) {
-    return window.innerWidth
-  }
-  return 1024
-}
+const getWindowWidth = () => typeof window !== 'undefined' ? window.innerWidth : 1024
+const updateWidth = () => { windowWidth.value = getWindowWidth() }
 
-// Update on resize
-const updateWidth = () => {
-  windowWidth.value = getWindowWidth()
-}
+// Fetch latest products
+async function fetchTrendingGames() {
+  try {
+    const result = await $fetch(`${config.public.apiBase}/products/latest?limit=2`, {
+      headers: {
+         "Accept-language" :'en',
 
-
-// Load data + initial setup
-onMounted(async () => {
-  if (process.client) {
-
-    windowWidth.value = window.innerWidth
-    window.addEventListener('resize', updateWidth)
-
-    try {
-      games.value = (products || [])
-        .filter((item) => item.category === 'trending')
-        .slice(0, 30)
-    } catch (e) {
-      console.error('Failed to load trending:', e)
-    } finally {
-      loading.value = false
+       },
+    })
+    // const result = await res.json()
+    if (result.status && result.data?.cards?.length) {
+      games.value = result.data.cards
+    } else {
+      console.warn('No trending products found', result)
     }
-
+  } catch (err) {
+    console.error('Failed to fetch trending products:', err)
+  } finally {
+    loading.value = false
     await nextTick()
-
-    if (slider.value) {
-      const first = slider.value.querySelector('div')
-      if (first) {
-        const style = getComputedStyle(first)
-        cardWidth.value = first.offsetWidth + parseInt(style.marginRight)
-      }
-
-      //Add scroll sync for dots
-      slider.value.addEventListener('scroll', handleScroll)
-    }
+    setupSlider()
   }
-})
+}
 
+// Setup slider after data
+function setupSlider() {
+  if (!slider.value) return
+  const first = slider.value.querySelector('div')
+  if (first) {
+    const style = getComputedStyle(first)
+    cardWidth.value = first.offsetWidth + parseInt(style.marginRight)
+  }
+  slider.value.addEventListener('scroll', handleScroll)
+}
 
 // Responsive visible cards
 const visibleCards = computed(() => {
@@ -123,65 +130,51 @@ const visibleCards = computed(() => {
   return 2
 })
 
-
 // Pages
-const pages = computed(() =>
-  Math.ceil(games.value.length / visibleCards.value)
-)
+const pages = computed(() => Math.ceil(games.value.length / visibleCards.value))
 
-
-// Dots logic
+// Dots
 const currentDot = computed(() => {
   if (pages.value <= 6) return currentPage.value
   const step = (pages.value - 1) / 5
   return Math.min(Math.round(currentPage.value / step), 5)
 })
 
-
-// Scroll left
+// Scroll functions
 function scrollLeft() {
-  slider.value?.scrollBy({
-    left: -cardWidth.value * visibleCards.value,
-    behavior: 'smooth',
-  })
-    setTimeout(handleScroll, 300) // 🔥 ensure dots update after scroll
-
+  slider.value?.scrollBy({ left: -cardWidth.value * visibleCards.value, behavior: 'smooth' })
+  setTimeout(handleScroll, 300)
   currentPage.value = Math.max(currentPage.value - 1, 0)
 }
 
-// Scroll right
 function scrollRight() {
-  slider.value?.scrollBy({
-    left: cardWidth.value * visibleCards.value,
-    behavior: 'smooth',
-  })
-    setTimeout(handleScroll, 300) // 🔥 ensure dots update after scroll
-
+  slider.value?.scrollBy({ left: cardWidth.value * visibleCards.value, behavior: 'smooth' })
+  setTimeout(handleScroll, 300)
   currentPage.value = Math.min(currentPage.value + 1, pages.value - 1)
 }
 
-
-// Manual scroll → update current page
 function handleScroll() {
   if (!slider.value || cardWidth.value === 0) return
-
   const scrollLeft = slider.value.scrollLeft
   const perPage = cardWidth.value * visibleCards.value
-
-  const newPage = Math.round(scrollLeft / perPage)
-
-  currentPage.value = Math.min(newPage, pages.value - 1)
+  currentPage.value = Math.min(Math.round(scrollLeft / perPage), pages.value - 1)
 }
 
-
-// Cleanup
-onBeforeUnmount(() => {
-  if (typeof window !== 'undefined') {
-    window.removeEventListener('resize', updateWidth)
+// Lifecycle
+onMounted(() => {
+  if (process.client) {
+    windowWidth.value = getWindowWidth()
+    window.addEventListener('resize', updateWidth)
+    fetchTrendingGames()
   }
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', updateWidth)
   slider.value?.removeEventListener('scroll', handleScroll)
 })
 </script>
+
 
 
 <style scoped>

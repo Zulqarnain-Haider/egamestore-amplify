@@ -13,6 +13,7 @@
 
     <!-- BLOG GRID -->
     <div class="px-4 sm:px-6">
+      <div v-if="isReady">
       <!--Desktop / Tablet -->
       <div class="hidden md:flex flex-col lg:flex-row gap-5 transition-all duration-700"
         :class="{ 'animate-slide-in': true }"
@@ -87,6 +88,7 @@
           </div>
         </div>
       </div>
+      </div>
     </div>
 
     <!-- Pagination Dots -->
@@ -138,8 +140,15 @@ const error = ref(null)
 const loadBlogs = async () => {
   try {
     const { data } = await useFetch(
-      `${config.public.apiBase}/posts?limit=10`,
-      { headers: { Accept: "application/json" } }
+      `${config.public.apiBase}/posts`,
+      {
+     server: false,
+     headers: { Accept: "application/json" },
+     query: {
+        type: "news",      // <-- REQUIRED
+        per_page: 25       // optional
+      }
+     }
     )
 
     const posts = data.value?.data?.posts || data.value?.data || []
@@ -148,9 +157,9 @@ const loadBlogs = async () => {
       id: post.id,
       slug: post.slug,
       title: post.title,
-      category: post.tags?.[0]?.name || "General",
-      image: post.img?.startsWith('/')
-        ? config.public.apiBase.replace('/api', '') + post.img
+      category: post.tags?.[0]?.name || "News",
+      image: post.img?.startsWith("/")
+        ? config.public.apiBase.replace('/api', "") + post.img
         : post.img
     }))
 
@@ -166,13 +175,14 @@ const loadBlogs = async () => {
 // CLICK HANDLER FOR CARDS
 // -----------------------
 const goToBlog = (slug) => {
-  navigateTo(`/blog/${slug}`)
+  navigateTo(`/blogs/${slug}`)
 }
 
 // -----------------------
 // SLIDER COMPUTED
 // -----------------------
 const currentDot = computed(() => activeIndex.value % 5)
+const isReady = computed(() => allBlogs.value.length >= 5 && !pending.value)
 
 const currentSet = computed(() => {
   const len = allBlogs.value.length
@@ -191,9 +201,10 @@ const currentSet = computed(() => {
 
 let intervalId = null
 
-onMounted(() => {
-  loadBlogs()
+onMounted(async () => {
+ await loadBlogs()
 
+     if (allBlogs.value.length > 0) {
   intervalId = setInterval(() => {
     activeIndex.value = (activeIndex.value + 1) % allBlogs.value.length
 
@@ -203,7 +214,9 @@ onMounted(() => {
         behavior: "smooth"
       })
     }
+  
   }, 4000)
+}
 })
 
 onUnmounted(() => {

@@ -1,10 +1,14 @@
 <template>
-  <NuxtLink :to="`/product/${product.id}`" class="relative bg-surface border border-onOutline rounded-xl p-3 sm:p-4 md:p-5 shadow-md 
+  <div class="relative border border-onOutline rounded-xl p-3 sm:p-4 md:p-5 shadow-md 
     hover:shadow-lg transition-all duration-300 flex flex-col justify-between h-full">
 
+    <NuxtLink :to="`/product/${product.id}`" class="block">
     <!-- Game Image -->
     <div class="relative mb-2 md:mb-1 xl:mb-3">
-      <NuxtImg :src="product.image" :alt="product.title" format="webp" quality="75" densities="x1 x2" loading="lazy"
+      <NuxtImg :src="product.image" 
+      :alt="product.title" format="webp"
+       quality="75" densities="x1 x2" 
+       loading="lazy"
         class="w-full h-[180px] sm:h-[180px] md:h-[180px] lg:h-[190px] xl:h-[230px] object-cover rounded-lg"
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
       <span v-if="product.discount" class="absolute top-0 left-0 bg-onGoNext text-onError 
@@ -42,15 +46,17 @@
         <span class="text-onMainText text-xs">/100</span>
       </div>
     </div>
+  </NuxtLink>
 
     <!-- Buttons -->
     <div class="flex gap-2 mt-3 md:mt-1 xl:mt-3">
       <AppButton 
         class="flex-1" 
         :height="38" 
-        variant="outline" 
+        variant="outline"
+        as="button" 
         extraClass="text-xs py-2 px-2 rounded-xl whitespace-nowrap"
-        @click.stop.prevent="handleAddToCart"
+        @click.stop="handleAddToCart"
       >
         Add to Cart
       </AppButton>
@@ -60,11 +66,12 @@
         :height="38" 
         variant="primary" 
         extraClass="text-xs py-2 px-2 rounded-xl whitespace-nowrap"
+       :to="`/checkout?product=${product.id}`"
       >
         Buy Now
       </AppButton>
     </div>
-  </NuxtLink>
+    </div>
 </template>
 
 <script setup>

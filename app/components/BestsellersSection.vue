@@ -29,24 +29,9 @@
           class="flex-shrink-0 w-[60%] sm:w-[45%] md:w-[29%] lg:w-[23%] xl:w-[19.5%]"
         >
          <GameCard
-  class="border border-onOutline"
-  :product="{
-    id: g.id,
-    title: g.name,
-    image: g.main_image,
-    discount: g.price_after_discount && g.price_after_discount < g.price
-      ? Math.round(((g.price - g.price_after_discount) / g.price) * 100)
-      : 0,
-    price: g.price_after_discount && g.price_after_discount < g.price
-      ? g.price_after_discount
-      : g.price,
-    oldPrice: g.price_after_discount && g.price_after_discount < g.price
-      ? g.price
-      : null,
-    rating: g.reviews_avg_rating || 0
-  }"
-/>
-
+        class="border border-onOutline"
+        :product="g"
+        />
         </div>
       </div>
 
@@ -144,10 +129,35 @@ onMounted(async () => {
   window.addEventListener('resize', updateWidth)
 
   try {
-    const data = await $fetch(`${config.public.apiBase}/products/best-selling?limit=15&days=30`, {
-      headers: { lang: 'en' },
+    const data = await $fetch(`https://api.egyptgamestore.com/api/products/best-selling?limit=15&days=30`, {
+      headers: {
+      "Accept-language": "en",
+      // "Accept": "*/*" 
+     },
     })
-    if (data.status && data.data.products) products.value = data.data.products
+        console.log("API RAW:", data)  
+
+if (data.status && data.data.products) {
+  products.value = data.data.products.map(p => ({
+    id: p.id,
+    slug: p.slug || p.id, // fallback if slug missing
+    title: p.name,
+    image: p.main_image || p.img || (p.images?.[0]?.image ?? ''),
+    discount:
+      p.price_after_discount && p.price_after_discount < p.price
+        ? Math.round(((p.price - p.price_after_discount) / p.price) * 100)
+        : 0,
+    price:
+      p.price_after_discount && p.price_after_discount < p.price
+        ? p.price_after_discount
+        : p.price,
+    oldPrice:
+      p.price_after_discount && p.price_after_discount < p.price
+        ? p.price
+        : null,
+    rating: p.reviews_avg_rating || 0
+  }))
+}
     else console.error('Failed to load bestsellers', data.message)
   } catch (err) {
     console.error('API Error:', err)

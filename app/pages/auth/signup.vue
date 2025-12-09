@@ -22,12 +22,20 @@
         <!-- Phone -->
         <div>
           <label class="block mb-1 text-sm font-poppins">Phone Number</label>
-          <input
+            <VueTelInput
             v-model="form.phone"
-            type="tel"
+            mode="international"
+            :preferredCountries="['US','PK','AE']"
+            :disabledFetchingCountry="true"
             placeholder="Enter your phone number"
-            :class="inputClass('phone')"
-          />
+            @validate="onPhoneValidate"
+            :inputOptions="{
+      showDialCode: true,
+      showDialCodeInList: true,
+      placeholder: 'Enter your phone number',
+    }"
+  :class="[{ error: errors.phone }]"
+         />
           <p v-if="errors.phone" class="text-error text-xs mt-1">{{ errors.phone }}</p>
         </div>
 
@@ -40,19 +48,16 @@
             placeholder="Enter your password"
             :class="inputClass('password')"
           />
-
-                <!-- Toggle Eye Icon -->
-  <button
-    type="button"
-    class="absolute right-2 top-12 -translate-y-1/2 text-onFooter"
-    @click="showPassword = !showPassword"
-  >
-    <Icon
-      :name="showPassword ? 'heroicons:eye-slash' : 'heroicons:eye'"
-      class="w-5 h-5"
-    />
-  </button>
-
+          <button
+            type="button"
+            class="absolute right-2 top-12 -translate-y-1/2 text-onFooter"
+            @click="showPassword = !showPassword"
+          >
+            <Icon
+              :name="showPassword ? 'heroicons:eye-slash' : 'heroicons:eye'"
+              class="w-5 h-5"
+            />
+          </button>
           <p v-if="errors.password" class="text-error text-xs mt-1">{{ errors.password }}</p>
         </div>
 
@@ -65,19 +70,16 @@
             placeholder="Confirm your password"
             :class="inputClass('confirmPassword')"
           />
-
-                <!-- Toggle Eye Icon -->
-  <button
-    type="button"
-    class="absolute right-2 top-12 -translate-y-1/2 text-onFooter"
-    @click="showConfirmPassword = !showConfirmPassword"
-  >
-    <Icon
-      :name="showConfirmPassword ? 'heroicons:eye-slash' : 'heroicons:eye'"
-      class="w-5 h-5"
-    />
-  </button>
-
+          <button
+            type="button"
+            class="absolute right-2 top-12 -translate-y-1/2 text-onFooter"
+            @click="showConfirmPassword = !showConfirmPassword"
+          >
+            <Icon
+              :name="showConfirmPassword ? 'heroicons:eye-slash' : 'heroicons:eye'"
+              class="w-5 h-5"
+            />
+          </button>
           <p v-if="errors.confirmPassword" class="text-error text-xs mt-1">{{ errors.confirmPassword }}</p>
         </div>
 
@@ -200,10 +202,10 @@
 
         <!-- SMS Consent (optional) -->
         <div class="flex items-center mt-2 space-x-2">
-          <input v-model="form.smsConsent" type="checkbox" class="accent-primary cursor-pointer" />
+          <input v-model="form.agree_sms" type="checkbox" class="accent-primary cursor-pointer" />
           <label class="text-sm">I agree to receive SMS from <span class="font-semibold">EGAMETSTORE</span></label>
         </div>
-        <p v-if="errors.smsConsent" class="text-error text-xs mt-1">{{ errors.smsConsent }}</p>
+        <p v-if="errors.agree_sms" class="text-error text-xs mt-1">{{ errors.agree_sms }}</p>
         
         <!-- Signup Button -->
         <AppLink
@@ -232,10 +234,14 @@
          src="/games/Signinwith2.svg" alt="" class="cursor-pointer" />
         <NuxtImg
          densities="x1" quality="85" loading="lazy"
-         src="/games/Signinwith3.svg" alt="" class="cursor-pointer" />
+         src="/games/Signinwith3.svg" alt="" class="cursor-pointer"
+         @click="handleSocialLogin('facebook')"
+         />
         <NuxtImg
          densities="x1" quality="85" loading="lazy"
-         src="/games/Signinwith4.svg" alt="" class="cursor-pointer" />
+         src="/games/Signinwith4.svg" alt="" class="cursor-pointer"
+         @click="handleSocialLogin('google')"
+         />
       </div>
 
       <!-- Login Link -->
@@ -250,116 +256,252 @@
 <script setup>
 import { ref } from 'vue'
 import { useUserStore } from '~/stores/userStore.js'
-import { navigateTo, useRuntimeConfig } from '#app'
+import { signInWithPopup } from "firebase/auth";
+
+import { navigateTo } from '#app'
 import { useToast } from '#imports'
+
+// Import VueTelInput
+import { VueTelInput } from 'vue-tel-input'
+import 'vue-tel-input/dist/vue-tel-input.css'
 
 const toast = useToast()
 const userStore = useUserStore()
-const config = useRuntimeConfig()
+
 
 // Password toggle
 const showPassword = ref(false)
 const showConfirmPassword = ref(false)
 
-// Form data
+
+// Form
 const form = ref({
   email: '',
   phone: '',
   password: '',
   confirmPassword: '',
   agree: false,
-  smsConsent: false,
+  agree_sms: false,
 })
 
-// DOB + dropdowns
+const phoneIsValid = ref(false) // will track if user input is valid
+
+const onPhoneValidate = (event) => {
+  phoneIsValid.value = event.valid
+}
+
+
+// DOB
 const dob = ref({ day: '', month: '', year: '' })
 const dropdown = ref('')
 const activeField = ref('')
-const currentYear = new Date().getFullYear()
-const years = Array.from({ length: 100 }, (_, i) => currentYear - i)
+const years = Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i)
 
-// Errors + global
+// Errors
 const errors = ref({})
 const globalError = ref('')
 
-// Input CSS
+// Input style
 const inputClass = (field) => [
   'w-full h-10 p-2 text-sm rounded-md text-onFooter bg-bgDark font-poppins focus:outline-none transition-all duration-200 placeholder:text-inputsIn',
   errors.value[field] ? 'border border-error' : 'border border-transparent focus:border-primary',
 ].join(' ')
 
-// Dropdown toggle
 function openDropdown(field) {
   dropdown.value = dropdown.value === field ? '' : field
 }
 
-// Form validation
+// Validate fields
 const validateForm = () => {
   errors.value = {}
   globalError.value = ''
 
   if (!form.value.email) errors.value.email = 'Email is required.'
-  if (!form.value.phone) errors.value.phone = 'Phone number is required.'
+  if (!form.value.phone || !phoneIsValid.value) errors.value.phone = 'Please enter a valid Phone number.'
   if (!form.value.password) errors.value.password = 'Password is required.'
   if (!form.value.confirmPassword) errors.value.confirmPassword = 'Confirm your password.'
-  else if (form.value.password !== form.value.confirmPassword) errors.value.confirmPassword = 'Passwords do not match.'
-  if (!dob.value.day || !dob.value.month || !dob.value.year) errors.value.dob = 'Date of birth is required.'
+  else if (form.value.password !== form.value.confirmPassword)
+    errors.value.confirmPassword = 'Passwords do not match.'
+
+  if (!dob.value.day || !dob.value.month || !dob.value.year)
+    errors.value.dob = 'Date of birth is required.'
+
   if (!form.value.agree) errors.value.agree = 'You must accept the terms.'
-  if (!form.value.smsConsent) errors.value.smsConsent = 'You must receive SMS.'
+  if (!form.value.agree_sms) errors.value.agree_sms = 'You must receive SMS.'
 
   return Object.keys(errors.value).length === 0
 }
 
-// Handle signup with API
+
+// Handle Signup Through store
 const handleSignup = async () => {
   if (!validateForm()) {
     globalError.value = 'Please fix the highlighted fields.'
     return
   }
 
+  // Create DOB format YYYY-MM-DD
+  const pad = (val) => val.toString().padStart(2, '0')
+  const finalDob = `${dob.value.year}-${dob.value.month}-${dob.value.day}`
+
+  const payload = {
+    email: form.value.email,
+    phone: form.value.phone,
+    password: form.value.password,
+    // password_confirmation: form.value.confirmPassword,
+    dob: finalDob,
+    agree_sms: form.value.agree_sms ? 1 : 0,
+  }
+console.log("from singup",form.value.phone)
+  const res = await userStore.signup(payload) 
+
+  if (!res.success) {
+    globalError.value = res.message
+    toast.error({ title: 'Error!', message: res.message, position: 'topCenter' })
+    return
+  }
+
+  toast.success({
+    title: 'Success!',
+    message: res.message,
+    position: 'topCenter',
+    duration: 2500,
+  })
+
+  setTimeout(() => navigateTo('/auth/otp-verification'), 1000)
+}
+
+const { $firebaseAuth, $googleProvider, $facebookProvider } = useNuxtApp();
+
+// Social Login
+const handleSocialLogin = async (provider) => {
   try {
-    const body = new FormData()
-    body.append('email', form.value.email)
-    body.append('phone', form.value.phone)
-    body.append('password', form.value.password)
-    body.append('dob', `${dob.value.year}-${dob.value.month}-${dob.value.day}`)
-    body.append('smsConsent', form.value.smsConsent)
+        console.log("🔵 Starting social login for:", provider);
+        let result;
+        let oauthToken = null;
 
-    const res = await $fetch(`${config.NUXT_PUBLIC_API_BASE}/users/register`, {
-      method: 'POST',
-      body,
-      headers: { lang: 'ar' },
-    })
+  if (provider === "google") {
+   result = await signInWithPopup($firebaseAuth, $googleProvider);
+         console.log("✅ Google login successful");
+  oauthToken = result._tokenResponse?.oauthAccessToken; // THIS WORKS
+}
 
-    if (!res.status) throw new Error(res.message || 'Signup failed')
-
-    toast.success({
-      title: 'Success!',
-      message: res.message,
-      position: 'topCenter',
-      duration: 3000,
-      class: 'bg-[#1E1F22] text-white border-l-4 border-green-500',
-    })
-
-    // Optional: save token in store
-    if (res.data?.token) {
-      userStore.setUser({ token: res.data.token, email: form.value.email, phone: form.value.phone })
+    if (provider === "facebook") {
+      result = await signInWithPopup($firebaseAuth, $facebookProvider);
+      oauthToken = result._tokenResponse.oauthAccessToken;
     }
 
-    setTimeout(() => navigateTo('/auth/login'), 1500)
-  } catch (err) {
-    globalError.value = err.message || 'Signup failed'
+     if (!oauthToken) {
+      toast.error({ title: "Error", 
+      message: "OAuth token not found" 
+    });
+      return;
+    }
 
-    toast.error({
-      title: 'Error!',
-      message: err.message || 'Signup failed',
-      position: 'topCenter',
-      duration: 3000,
-      class: 'bg-[#1E1F22] text-white border-l-4 border-red-500',
+    const res = await userStore.socialLogin(provider, oauthToken)
+
+    if (!res.success) {
+      toast.error({ title: "Error!",
+       message: res.message,
+       position: "topCenter"
+       })
+      return
+    }
+
+    toast.success({
+      title: "Success!",
+      message: res.message,
+      position: "topCenter",
+      duration: 2500
+    })
+
+    setTimeout(() => navigateTo("/auth/otp-verification"), 800)
+
+  } catch (e) {
+    console.log(e);
+    toast.error({ title: "Error!",
+     message: e.message 
     })
   }
 }
 
+
 definePageMeta({ layout: 'auth' })
 </script>
 
+
+<style>
+/* Parent wrapper bg (matches your input fields) */
+.vue-tel-input {
+  background-color: #17191D !important; /* same as bg-bgDark */
+  border: 1px solid transparent !important;
+  border-radius: 6px !important;
+  height: 40px !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  box-shadow: none !important;
+  transition: border-color 0.2s ease !important;
+}
+
+
+/* Focus = primary border */
+.vue-tel-input:focus-within {
+  border-color: #FF6916 !important; /* your primary color */
+}
+
+
+/* Error Border (Jab aap class se "border-error" lagayen) */
+.vue-tel-input.error {
+  border-color: #D91B1B !important;
+}
+
+/* Actual text input */
+.vue-tel-input input {
+  background-color: transparent !important;
+  border: none !important;
+  /* color: white !important; */
+  font-size: 14px !important;
+  padding: 8px !important;
+  height: 42px !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+
+/* Country dropdown button */
+.vti__dropdown {
+  background: transparent !important;
+  border-right: 1px solid #333 !important;
+  color: white !important;
+  padding: 0 10px !important;
+}
+
+/* Dropdown list (full dark mode) */
+.vti__dropdown-list {
+  background: #17191D  !important;
+  border: 1px solid #333 !important;
+  border-radius: 6px !important;
+  color: #fff !important;
+  max-height: 200px !important;
+}
+
+/* Dropdown items */
+.vti__dropdown-item {
+  background-color: transparent !important;
+  /* background: #1e1e1e !important; */
+  padding: 8px !important;
+}
+
+.vti__dropdown-item:hover {
+  background: #1e1e1e !important;
+}
+
+/* Remove default shadows everywhere */
+.vue-tel-input *,
+.vti__dropdown,
+.vti__dropdown-list {
+  box-shadow: none !important;
+}
+
+</style>

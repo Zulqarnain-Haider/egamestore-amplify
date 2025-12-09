@@ -54,65 +54,64 @@
         <div class="mt-4">
           <h3 class="text-md sm:text-lg font-semibold mb-3">Payment methods</h3>
 
-          <!-- PayPal -->
-          <div
-            class="flex items-baseline justify-between p-2 rounded-lg cursor-pointer transition-all"
-            :class="selectedPayment === 'paypal'
-              ? 'border-primary  scale-[1.01]'
-              : 'border-onMainText hover:border-primary/60'"
-            @click="selectPayment('paypal')"
-          >
-            <div class="flex items-center gap-3">
-              <div
-                class="w-5 h-5 rounded-full border flex items-center justify-center"
-                :class="selectedPayment === 'paypal' ? 'border-primary' : 'border-primary'"
-              >
-                <div v-if="selectedPayment === 'paypal'" class="w-2.5 h-2.5 bg-primary rounded-full"></div>
-              </div>
-              <NuxtImg
-              densities="x1" quality="80" format="webp" loading="lazy"
-               src="/games/PayPal.png" alt="PayPal" class="object-contain" />
-              <span class="text-mainText items-baseline text-md font-medium">PayPal</span>
-            </div>
+          <!-- Loading State -->
+          <div v-if="loadingPayments" class="flex items-center justify-center py-8">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            <span class="ml-3 text-sm text-onFooter">Loading payment methods...</span>
           </div>
 
-          <!-- Card -->
-          <div
-            class="flex flex-col rounded-lg p-2 cursor-pointer mt-2 transition-all"
-            :class="selectedPayment === 'card'
-              ? 'border-primary scale-[1.01]'
-              : 'border-onMainText hover:border-primary/60'"
-            @click="selectPayment('card')"
-          >
-            <div class="flex items-center justify-between">
+          <!-- Error State -->
+          <div v-else-if="paymentsError" class="bg-error/10 border border-error/30 rounded-lg p-4 text-center">
+            <p class="text-error text-sm">Failed to load payment methods</p>
+            <button @click="fetchPaymentMethods" class="text-primary text-xs underline mt-2">Retry</button>
+          </div>
+
+          <!-- Payment Options -->
+          <div v-else class="space-y-2">
+            <div
+              v-for="method in paymentMethods"
+              :key="method.id"
+              class="flex items-center justify-between p-3 rounded-lg cursor-pointer transition-all border"
+              :class="selectedPaymentId === method.id
+                ? 'border-primary bg-primary/5 scale-[1.01]'
+                : 'border-onMainText hover:border-primary/60'"
+              @click="selectPayment(method)"
+            >
               <div class="flex items-center gap-3">
+                <!-- Radio Button -->
                 <div
-                  class="w-5 h-5 rounded-full border flex items-center justify-center"
-                  :class="selectedPayment === 'card' ? 'border-primary' : 'border-primary'"
+                  class="w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all"
+                  :class="selectedPaymentId === method.id ? 'border-primary' : 'border-onMainText'"
                 >
-                  <div v-if="selectedPayment === 'card'" class="w-2.5 h-2.5 bg-primary rounded-full"></div>
+                  <div v-if="selectedPaymentId === method.id" class="w-2.5 h-2.5 bg-primary rounded-full"></div>
                 </div>
-                <div class="flex items-center gap-2">
-                  <NuxtImg
-              densities="x1" quality="80" format="webp" loading="lazy"
-                  src="/games/VISA.png" alt="Visa" class="object-contain" />
-                  <NuxtImg
-              densities="x1" quality="80" format="webp" loading="lazy"
-                   src="/games/Stripe.png" alt="Stripe" class="object-contain" />
-                  <NuxtImg
-              densities="x1" quality="80" format="webp" loading="lazy"
-                   src="/games/AximBank.png" alt="Axim" class="object-contain" />
-                  <NuxtImg
-              densities="x1" quality="80" format="webp" loading="lazy"
-                   src="/games/GooglePay.png" alt="Gpay" class="object-contain" />
-                </div>
+
+                <!-- Payment Icon -->
+                <NuxtImg
+                  v-if="method.logo"
+                  :src="method.logo"
+                  :alt="method.name"
+                  class="w-10 h-10 object-contain"
+                  densities="x1"
+                  quality="80"
+                  format="webp"
+                  loading="lazy"
+                />
+
+                <!-- Payment Name -->
+                <span class="text-mainText text-sm font-medium">{{ method.name }}</span>
               </div>
+
+              <!-- Fee Info (if any) -->
+              <span v-if="method.fee" class="text-xs text-onFooter">
+                +{{ method.fee }}
+              </span>
             </div>
           </div>
         </div>
 
-        <!--Card Details (always visible) -->
-        <div class="space-y-4 mt-5">
+        <!-- Card Details (show only if card payment is selected) -->
+        <div v-if="selectedPaymentRequiresCard" class="space-y-4 mt-5">
           <h2 class="text-mainText text-xl font-semibold mb-3">Card Details</h2>
 
           <div>
@@ -135,8 +134,7 @@
             </div>
             <div>
               <label class="label">CVC <span class="text-error">*</span></label>
-              <input v-model="form.cvc" type="text" :class="inputClass('cvc')" placeholder="654 *" class="input"  data-has-asterisk="true"
- />
+              <input v-model="form.cvc" type="text" :class="inputClass('cvc')" placeholder="654 *" class="input" data-has-asterisk="true" />
               <p v-if="errors.cvc" class="text-error text-xs mt-1">{{ errors.cvc }}</p>
             </div>
           </div>
@@ -183,7 +181,8 @@
             <AppButton
               @click="placeOrder"
               variant="primary"
-              extraClass="w-full justify-center items-center px-8 py-3 rounded-full text-md hover:opacity-90 transition-all"
+              :disabled="!selectedPaymentId"
+              extraClass="w-full justify-center items-center px-8 py-3 rounded-full text-md hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Place Order
             </AppButton>
@@ -191,39 +190,25 @@
         </div>
       </div>
     </div>
-
-    <!-- Toast -->
-    <transition name="fade">
-      <div
-        v-if="toast.visible"
-        class="fixed bottom-6 right-6 bg-green-600 text-white px-5 py-3 rounded-lg shadow-lg text-sm"
-      >
-        {{ toast.message }}
-      </div>
-    </transition>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useOrdersStore } from '~/stores/ordersStore.js'
 import { navigateTo } from '#app'
+import { useToast } from '#imports'
 
 const ordersStore = useOrdersStore()
-onMounted(() => ordersStore.loadOrdersFromStorage())
+const toast = useToast()
 
+// Cart & Totals
 const cartItems = computed(() => ordersStore.cart)
 const subtotal = computed(() => ordersStore.cart.reduce((acc, item) => acc + (Number(item.price) || 0) * (item.quantity || 1), 0))
 const shipping = computed(() => 9.5)
 const total = computed(() => subtotal.value + shipping.value)
 
-const toast = reactive({ visible: false, message: '' })
-function showToast(msg) {
-  toast.message = msg
-  toast.visible = true
-  setTimeout(() => (toast.visible = false), 2000)
-}
-
+// Form
 const form = ref({
   firstName: '',
   lastName: '',
@@ -237,51 +222,196 @@ const form = ref({
   cvc: '',
 })
 
-const selectedPayment = ref('paypal')
-const errors = reactive({})
+// Payment States
+const selectedPaymentId = ref(null)
+const selectedPaymentMethod = ref(null)
+const paymentMethods = ref([])
+const loadingPayments = ref(false)
+const paymentsError = ref(false)
+const errors = ref({})
 
+// Check if selected payment requires card details
+const selectedPaymentRequiresCard = computed(() => {
+  if (!selectedPaymentMethod.value) return false
+  const name = selectedPaymentMethod.value.name?.toLowerCase() || ''
+  // Show card form for visa, mastercard, stripe, credit card, etc.
+  return name.includes('card') || name.includes('visa') || name.includes('stripe') || name.includes('credit')
+})
+
+// Helper
 function inputClass(field) {
   return [
     'input',
-    errors[field] ? 'border-error focus:border-error' : 'focus:border-primary focus:ring-1 focus:ring-primary',
+    errors.value[field] ? 'border-error focus:border-error' : 'focus:border-primary focus:ring-1 focus:ring-primary',
   ]
 }
 
-function selectPayment(method) {
-  selectedPayment.value = method
-  showToast(`${method === 'paypal' ? '💰 PayPal' : '💳 Card'} selected successfully!`)
+// ===================
+// Fetch Payment Methods
+// ===================
+async function fetchPaymentMethods() {
+  loadingPayments.value = true
+  paymentsError.value = false
+  
+  try {
+    const token = localStorage.getItem('token') // Get JWT token
+    
+    if (!token) {
+      toast.error({
+        title: 'Authentication Required',
+        message: 'Please login to continue',
+        position: 'topCenter',
+        duration: 3000
+      })
+      setTimeout(() => navigateTo('/auth/login'), 1500)
+      return
+    }
+
+    const response = await $fetch('https://api.egamestore.com/api/payments', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'lang': 'en'
+      },
+      params: {
+        platform: 'web',
+        is_buy_now: 1,
+        card_id: 3679, // Replace with actual card_id from cart
+        qty: 1
+      }
+    })
+
+    console.log('✅ Payment Methods Response:', response)
+
+    if (response.status && response.data) {
+      paymentMethods.value = response.data
+      
+      // Auto-select first payment method
+      if (paymentMethods.value.length > 0) {
+        selectPayment(paymentMethods.value[0])
+      }
+      
+      toast.success({
+        title: 'Payment Methods Loaded',
+        message: `${paymentMethods.value.length} payment options available`,
+        position: 'topCenter',
+        duration: 2000
+      })
+    } else {
+      paymentsError.value = true
+      toast.error({
+        title: 'Payment Error',
+        message: response.message || 'Failed to load payment methods',
+        position: 'topCenter',
+        duration: 4000
+      })
+    }
+  } catch (error) {
+    paymentsError.value = true
+    console.error('❌ Payment Methods Error:', error)
+    
+    // Check if it's an auth error
+    if (error.statusCode === 401 || error.statusCode === 403) {
+      toast.error({
+        title: 'Session Expired',
+        message: 'Please login again',
+        position: 'topCenter',
+        duration: 3000
+      })
+      setTimeout(() => navigateTo('/auth/login'), 1500)
+    } else {
+      toast.error({
+        title: 'Connection Error',
+        message: 'Unable to load payment methods. Please try again.',
+        position: 'topCenter',
+        duration: 4000
+      })
+    }
+  } finally {
+    loadingPayments.value = false
+  } 
 }
 
+// ===================
+// Select Payment
+// ===================
+function selectPayment(method) {
+  selectedPaymentId.value = method.id
+  selectedPaymentMethod.value = method
+  
+  console.log('Selected Payment:', method)
+  
+  toast.success({
+    title: 'Payment Selected',
+    message: `${method.name} selected`,
+    position: 'topCenter',
+    duration: 2000
+  })
+}
+
+// ===================
+// Form Validation
+// ===================
 function validateForm() {
-  for (const k in errors) delete errors[k]
+  errors.value = {}
 
-  if (!form.value.firstName) errors.firstName = 'First name is required.'
-  if (!form.value.lastName) errors.lastName = 'Last name is required.'
-  if (!form.value.address) errors.address = 'Address is required.'
-  if (!form.value.city) errors.city = 'City is required.'
-  if (!form.value.state) errors.state = 'State is required.'
-  if (!form.value.postalCode) errors.postalCode = 'Postal code is required.'
+  if (!form.value.firstName) errors.value.firstName = 'First name is required.'
+  if (!form.value.lastName) errors.value.lastName = 'Last name is required.'
+  if (!form.value.address) errors.value.address = 'Address is required.'
+  if (!form.value.city) errors.value.city = 'City is required.'
+  if (!form.value.state) errors.value.state = 'State is required.'
+  if (!form.value.postalCode) errors.value.postalCode = 'Postal code is required.'
 
-  if (!form.value.cardName) errors.cardName = "Cardholder's name is required."
-  if (!form.value.cardNumber) errors.cardNumber = 'Card number is required.'
-  if (!form.value.expiry) errors.expiry = 'Expiry is required.'
-  if (!form.value.cvc) errors.cvc = 'CVC is required.'
+  // Only validate card details if card payment is selected
+  if (selectedPaymentRequiresCard.value) {
+    if (!form.value.cardName) errors.value.cardName = "Cardholder's name is required."
+    if (!form.value.cardNumber) errors.value.cardNumber = 'Card number is required.'
+    if (!form.value.expiry) errors.value.expiry = 'Expiry is required.'
+    if (!form.value.cvc) errors.value.cvc = 'CVC is required.'
+  }
 
-  if (!ordersStore.cart.length) {
-    showToast('Your cart is empty.')
+  if (!selectedPaymentId.value) {
+    toast.error({
+      title: 'Payment Required',
+      message: 'Please select a payment method',
+      position: 'topCenter',
+      duration: 3000
+    })
     return false
   }
 
-  return Object.keys(errors).length === 0
+  if (!ordersStore.cart.length) {
+    toast.error({
+      title: 'Cart Empty',
+      message: 'Your cart is empty.',
+      position: 'topCenter',
+      duration: 3000
+    })
+    return false
+  }
+
+  return Object.keys(errors.value).length === 0
 }
 
+// ===================
+// Place Order
+// ===================
 function placeOrder() {
-  if (!validateForm()) return
+  if (!validateForm()) {
+    toast.error({
+      title: 'Validation Error',
+      message: 'Please fill all required fields',
+      position: 'topCenter',
+      duration: 3000
+    })
+    return
+  }
 
   const order = {
     id: Date.now(),
     ...form.value,
-    paymentMethod: selectedPayment.value,
+    paymentMethod: selectedPaymentMethod.value.name,
+    paymentMethodId: selectedPaymentId.value,
     items: [...ordersStore.cart],
     subtotal: subtotal.value,
     shipping: shipping.value,
@@ -291,9 +421,21 @@ function placeOrder() {
 
   ordersStore.addOrder(order)
   ordersStore.clearCart()
-  showToast('✅ Order placed successfully!')
+  
+  toast.success({
+    title: 'Order Placed',
+    message: '✅ Order placed successfully!',
+    position: 'topCenter',
+    duration: 2500
+  })
+  
   setTimeout(() => navigateTo('/orders'), 1400)
 }
+
+onMounted(() => {
+  ordersStore.loadOrdersFromStorage()
+  fetchPaymentMethods()
+})
 </script>
 
 <style scoped>
@@ -307,49 +449,25 @@ function placeOrder() {
 }
 
 .text-error {
-  color: #ef4444; /* Tailwind red-500 */
+  color: #ef4444;
 }
 
-/* =============================
-    Red * inside placeholder
-   ============================= */
-.input {
-  position: relative;
-}
-
-/* Normal placeholder color */
 .input::placeholder {
   color: #9ca3af;
 }
 
-/* Inputs that have asterisk placeholders */
 .input[data-has-asterisk="true"]::after {
   content: '*';
   position: absolute;
   right: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  color: #ef4444; /* red */
+  color: #ef4444;
   pointer-events: none;
   opacity: 0.9;
 }
 
-/* Jab user type kare, to * chhup jaye */
 .input[data-has-asterisk="true"]:not(:placeholder-shown)::after {
   content: '';
 }
-
-/* =============================
-   Toast fade animation
-   ============================= */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.25s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
 </style>
-

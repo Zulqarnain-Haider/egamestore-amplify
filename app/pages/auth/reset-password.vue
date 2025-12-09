@@ -5,7 +5,7 @@
     <!-- Left Image -->
     <div class="w-full md:w-1/2 flex justify-center mb-8 md:mb-0 z-10">
       <NuxtImg
-        src="/games/ForgotPasswordLeft.png"
+        src="/games/ForgotPasswordLeft.jpeg"
         alt="Forgot Password Left"
         quality="80"
         format="webp"
@@ -22,7 +22,7 @@
       <!-- Icon -->
       <div class="flex mb-4">
         <NuxtImg
-          src="/games/ForgotPasswordMainEmail.svg"
+          src="/games/ForgotPasswordLock.svg"
           alt="Main Icon"
           quality="80"
           densities="x1"
@@ -48,18 +48,20 @@
           loading="lazy"
           class="absolute left-3 top-11 -translate-y-1/2 text-inputsIn"
         />
-        <label class="block mb-1 text-sm">New Password</label>
+        <label class="block mb-1 text-sm text-inputsIn ">New Password</label>
         <input
           :type="showNewPassword ? 'text' : 'password'"
           v-model="newPassword"
           placeholder="New Password"
-          class="w-full bg-bgDark rounded-md py-2 pl-10 pr-10 focus:outline-none placeholder:text-inputsIn focus:ring-1 focus:ring-primary"
+          class="w-full bg-bgDark rounded-md py-2 pl-10 pr-10 outline outline-1 outline-mainText/80 focus:outline-none text-inputsIn 
+           placeholder:text-inputsIn focus:ring-1 focus:ring-primary"
         />
-        <i
-          :class="showNewPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"
-          class="absolute right-3 top-11 -translate-y-1/2 text-inputsIn cursor-pointer"
-          @click="showNewPassword = !showNewPassword"
-        ></i>
+      
+         <Icon
+              :name="showNewPassword ? 'heroicons:eye-slash' : 'heroicons:eye'"
+              class="w-4 h-4 absolute right-3 top-11 -translate-y-1/2 text-inputsIn cursor-pointer"
+               @click="showNewPassword = !showNewPassword"
+            />
       </div>
 
       <!-- Confirm Password -->
@@ -72,18 +74,19 @@
           loading="lazy"
           class="absolute left-3 top-11 -translate-y-1/2 text-inputsIn"
         />
-        <label class="block mb-1 text-sm">Confirm New Password</label>
+        <label class="block mb-1 text-sm text-inputsIn ">Confirm New Password</label>
         <input
           :type="showConfirmPassword ? 'text' : 'password'"
           v-model="confirmPassword"
           placeholder="Confirm New Password"
-          class="w-full bg-bgDark rounded-md py-2 pl-10 pr-10 focus:outline-none placeholder:text-inputsIn focus:ring-1 focus:ring-primary"
+          class="w-full bg-bgDark rounded-md py-2 pl-10 pr-10 outline outline-1 outline-mainText/80
+           focus:outline-none text-inputsIn placeholder:text-inputsIn focus:ring-1 focus:ring-primary"
         />
-        <i
-          :class="showConfirmPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"
-          class="absolute right-3 top-11 -translate-y-1/2 text-inputsIn cursor-pointer"
-          @click="showConfirmPassword = !showConfirmPassword"
-        ></i>
+         <Icon
+              :name="showConfirmPassword ? 'heroicons:eye-slash' : 'heroicons:eye'"
+              class="w-4 h-4 absolute right-3 top-11 -translate-y-1/2 text-inputsIn cursor-pointer"
+               @click="showConfirmPassword = !showConfirmPassword"
+            />
       </div>
 
       <!-- Error -->
@@ -115,10 +118,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '~/stores/userStore'
 
 const router = useRouter()
-const userStore = useUserStore()
 
 const newPassword = ref('')
 const confirmPassword = ref('')
@@ -140,37 +141,61 @@ const saveNewPassword = async () => {
     return
   }
 
-  // ✅ Get the user identifier (email or username) from localStorage
+  // Email or username
   const identifier = localStorage.getItem('resetIdentifier')
 
-  if (!identifier) {
-    error.value = 'Something went wrong. Please restart the reset process.'
+  // Reset Code → jo OTP user ne dala tha
+  const resetCode = localStorage.getItem('resetCode')
+
+  if (!identifier || !resetCode) {
+    error.value = 'Something went wrong. Please restart the process.'
     return
   }
 
   loading.value = true
 
-  // Simulate delay for demo realism
-  await new Promise(resolve => setTimeout(resolve, 800))
+  try {
+    const formData = new FormData()
+    formData.append('reset_code', resetCode)
+    formData.append('new_password', newPassword.value)
 
-  // ✅ Use your Pinia store action
-  const result = userStore.resetPassword(identifier, newPassword.value)
+    const res = await $fetch(
+      'https://api.egamestore.com/api/users/resetPassword',
+      {
+        method: 'POST',
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || ''}`
+        }
+      }
+    )
 
-  loading.value = false
+    console.log('Reset Password Response:', res)
 
-  if (!result.success) {
-    error.value = result.message
-    return
+    if (res?.status === true) {
+      // Clear identifiers
+      localStorage.removeItem('resetIdentifier')
+      localStorage.removeItem('resetCode')
+
+      router.push('/auth/changedsuccessfully')
+    } else {
+      error.value = res?.errors?.[0] || res?.message || 'Failed to reset password.'
+    }
+  } catch (err) {
+    console.log('Reset Password Error:', err)
+
+    if (err?.data?.errors) {
+      error.value = Object.values(err.data.errors)[0][0]
+    } else {
+      error.value = err?.data?.message || 'Something went wrong.'
+    }
   }
 
-  // Clear resetIdentifier
-  localStorage.removeItem('resetIdentifier')
-
-  // ✅ Redirect to success page
-  router.push('/auth/changedsuccessfully')
+  loading.value = false
 }
 
 definePageMeta({
   layout: 'auth'
 })
 </script>
+

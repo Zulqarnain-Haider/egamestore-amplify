@@ -18,9 +18,7 @@
               class="input flex justify-between items-center cursor-pointer select-none pr-10"
               @click="toggleDropdown"
             >
-              <span class="truncate"
-              :class="form.reason ? 'text-mainText' : 'text-onFooter/50'"
-              >
+              <span class="truncate" :class="form.reason ? 'text-mainText' : 'text-onFooter/50'">
                 {{ form.reason || 'Select' }}
               </span>
               <Icon
@@ -36,18 +34,21 @@
                 v-if="dropdownOpen"
                 class="absolute w-full bg-bgDark py-2 rounded-xl mt-1 z-20 shadow-lg overflow-hidden"
               >
+                <li v-if="loadingReasons" class="px-4 py-2 text-sm text-onFooter text-center">
+                  Loading reasons...
+                </li>
+                <li v-else-if="reasonsError" class="px-4 py-2 text-sm text-error text-center">
+                  Failed to load reasons
+                </li>
                 <li
-                  v-for="(r, index) in ticketStore.reasons"
-                  :key="r"
-                  @click="selectReason(r)"
+                  v-else
+                  v-for="(r, index) in reasons"
+                  :key="r.id"
+                  @click="selectReason(r.name, r.id)"
                   class="px-4 py-2 text-sm cursor-pointer transition-colors duration-200"
-                  :class="[
-                        index === highlightedIndex
-                      ? 'bg-primary/20 text-mainText'
-                      : 'text-mainText hover:bg-primary/20'
-                  ]"
+                  :class="[index === highlightedIndex ? 'bg-primary/20 text-mainText' : 'text-mainText hover:bg-primary/20']"
                 >
-                  {{ r }}
+                  {{ r.name }}
                 </li>
               </ul>
             </transition>
@@ -70,10 +71,7 @@
                 @click.stop="triggerFile"
                 class="flex items-center gap-2 mr-3 bg-mainText px-6 py-2 rounded-md"
               >
-                <NuxtImg
-                 src="/wallet/TicketUpload.svg" 
-                 densities="x1" quality="80" loading="lazy"
-                  />
+                <NuxtImg src="/wallet/TicketUpload.svg" densities="x1" quality="80" loading="lazy" />
               </button>
               <span v-if="fileName">{{ fileName }}</span>
               <span v-else class="text-onFooter">
@@ -81,7 +79,7 @@
                 to upload or drop files here
               </span>
             </div>
-            <input ref="fileInput" type="file" class="hidden" @change="onFileChange" />
+            <input ref="fileInput" type="file" class="hidden" @change="onFileChange" multiple />
           </div>
         </div>
 
@@ -105,7 +103,7 @@
       <!-- Submit -->
       <div class="flex justify-center font-poppins mt-4">
         <button
-          @click="submit"
+          @click="submitTicket"
           class="bg-primary text-white px-10 py-3 rounded-full hover:opacity-90 transition"
         >
           Send Message
@@ -113,19 +111,13 @@
       </div>
 
       <!-- Guest Note -->
-      <p
-        v-if="!isLoggedIn"
-        class="text-center text-onFooter mt-2 underline cursor-pointer font-poppins"
-      >
+      <p v-if="!isLoggedIn" class="text-center text-onFooter mt-2 underline cursor-pointer font-poppins">
         Don't have an account?
         <NuxtLink to="/auth/signup" class="text-primary">Signup</NuxtLink>
       </p>
 
       <!-- Previous Tickets -->
-      <section
-        v-if="ticketStore.tickets.length"
-        class="mt-10 bg-bgDark border border-onMainText rounded-xl py-4 font-poppins px-0"
-      >
+      <section v-if="ticketStore.tickets.length" class="mt-10 bg-bgDark border border-onMainText rounded-xl py-4 font-poppins px-0">
         <h3 class="text-lg font-semibold mb-4 px-4 pb-4 border-b border-onMainText">
           Previous Tickets
         </h3>
@@ -144,9 +136,7 @@
               <tr
                 v-for="(t, i) in ticketStore.tickets"
                 :key="t.id"
-                :class="['hover:bg-bgLight/30 transition',
-                i === 0 ? '' : 'border-t border-onMainText'
-              ]"
+                :class="['hover:bg-bgLight/30 transition', i === 0 ? '' : 'border-t border-onMainText']"
               >
                 <td class="py-4 px-4">
                   <button class="text-mainText hover:text-primary" @click="openConversation(t.id)">
@@ -154,17 +144,12 @@
                   </button>
                 </td>
                 <td class="px-4">{{ t.orderId || '—' }}</td>
-                <td class="text-onFooter px-4">{{ formatDate(t.createdAt) }}</td>
+                <td class="text-onFooter px-4">{{ formatDate(t.created_at) }}</td>
                 <td class="px-4">
-  <span
-    :class="t.status === 'active'
-      ? 'text-green-600 py-1 rounded-full text-sm'
-      : 'text-onFooter py-1 rounded-full text-sm'"
-  >
-    {{ t.status === 'active' ? 'Active' : 'Closed' }}
-  </span>
-</td>
-
+                  <span :class="t.status === 'active' ? 'text-green-600 py-1 rounded-full text-sm' : 'text-onFooter py-1 rounded-full text-sm'">
+                    {{ t.status === 'active' ? 'Active' : 'Closed' }}
+                  </span>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -179,11 +164,12 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useTicketStore } from '~/stores/ticketStore.js'
 import { useUserStore } from '~/stores/userStore.js'
 import { useRouter } from 'vue-router'
+import { useToast } from '#imports'
 
 const ticketStore = useTicketStore()
 const userStore = useUserStore()
 const router = useRouter()
-const { $toast } = useNuxtApp()
+const toast = useToast()
 
 const highlightedIndex = ref(0)
 const dropdownOpen = ref(false)
@@ -191,10 +177,15 @@ const fileInput = ref(null)
 const fileName = ref('')
 const errors = ref({})
 
+const reasons = ref([])
+const loadingReasons = ref(false)
+const reasonsError = ref(false)
+
 const form = ref({
   name: userStore.currentUser?.name || '',
   email: userStore.currentUser?.email || '',
   reason: '',
+  reasonId: null,
   subject: '',
   message: '',
   orderId: '',
@@ -203,59 +194,51 @@ const form = ref({
 
 const isLoggedIn = computed(() => !!userStore.currentUser)
 
-function toggleDropdown() {
-  dropdownOpen.value = !dropdownOpen.value
-    if (dropdownOpen.value) highlightedIndex.value = 0 // first item highlighted
-}
-
-onMounted(() => {
-  if (process.client) window.addEventListener('keydown', handleKey)
-})
-
-onBeforeUnmount(() => {
-  if (process.client) window.removeEventListener('keydown', handleKey)
-})
-
-function handleKey(e) {
-  if (dropdownOpen.value ) 
-  if(['ArrowUp', 'ArrowDown', 'Enter'].includes(e.key)) {
-    e.preventDefault()
-
-    if (e.key === 'ArrowDown') {
-      highlightedIndex.value =
-        (highlightedIndex.value + 1) % ticketStore.reasons.length
-    } else if (e.key === 'ArrowUp') {
-      highlightedIndex.value =
-        (highlightedIndex.value - 1 + ticketStore.reasons.length) %
-        ticketStore.reasons.length
-    } else if (e.key === 'Enter') {
-      const r = ticketStore.reasons[highlightedIndex.value]
-      selectReason(r)
+async function fetchReasons() {
+  loadingReasons.value = true
+  reasonsError.value = false
+  try {
+    const response = await $fetch('https://api.egamestore.com/api/reasons', {
+      headers: { lang: 'en' }
+    })
+    if (response.status && response.data) {
+      reasons.value = response.data
+    } else {
+      reasonsError.value = true
+      toast.error({ title: 'Error', message: 'Failed to load ticket reasons', position: 'topCenter', duration: 3000 })
     }
+  } catch (err) {
+    reasonsError.value = true
+    toast.error({ title: 'Connection Error', message: 'Unable to load reasons. Please refresh.', position: 'topCenter', duration: 4000 })
+  } finally {
+    loadingReasons.value = false
   }
 }
 
-function selectReason(r) {
-  form.value.reason = r
+function toggleDropdown() {
+  dropdownOpen.value = !dropdownOpen.value
+  if (dropdownOpen.value) highlightedIndex.value = 0
+}
+
+function selectReason(name, id) {
+  form.value.reason = name
+  form.value.reasonId = id
   dropdownOpen.value = false
 }
 
-function triggerFile() {
-  fileInput.value?.click()
-}
+function triggerFile() { fileInput.value?.click() }
+
 function onFileChange(e) {
-  const f = e.target.files?.[0]
-  if (!f) return
-  fileName.value = f.name
-  form.value.attachments.push({ name: f.name, size: f.size, fileType: f.type })
+  const files = Array.from(e.target.files)
+  files.forEach(f => {
+    form.value.attachments.push({ file: f, name: f.name, size: f.size })
+  })
+  fileName.value = form.value.attachments.map(f => f.name).join(', ')
+  toast.success({ title: 'File Attached', message: fileName.value, position: 'topCenter', duration: 2000 })
 }
 
 function formatDate(dt) {
-  try {
-    return new Date(dt).toLocaleDateString()
-  } catch {
-    return dt
-  }
+  try { return new Date(dt).toLocaleDateString() } catch { return dt }
 }
 
 function validateForm() {
@@ -268,55 +251,47 @@ function validateForm() {
   return Object.keys(errors.value).length === 0
 }
 
-function submit() {
-  if (!validateForm()) {
-    $toast.error('Please fix the highlighted fields.', {
-      autoClose: 2000,
-      position: 'top-right',
-      theme: 'dark',
-    })
-    return
+async function submitTicket() {
+  if (!validateForm()) return
+  try {
+    const payload = {
+      name: form.value.name,
+      email: form.value.email,
+      subject: form.value.subject,
+      message: form.value.message,
+      reasonId: form.value.reasonId,
+      orderId: form.value.orderId,
+      attachments: form.value.attachments.map(f => f.file || f)
+    }
+    const response = await ticketStore.createTicket(payload)
+    if (response.status) {
+      toast.success({ title: 'Success', message: 'Ticket created successfully', position: 'topCenter', duration: 2500 })
+      router.push({ path: '/contact/conversation', query: { id: response.data.uuid } })
+    } else throw new Error(response.message || 'Failed to create ticket')
+  } catch (err) {
+    toast.error({ title: 'Error', message: err.message, position: 'topCenter', duration: 3000 })
   }
-
-  const ticketId = ticketStore.createTicket({ ...form.value })
-
-  $toast.success('Ticket created successfully!', {
-    autoClose: 2000,
-    position: 'top-right',
-    theme: 'dark',
-  })
-
-  router.push({ path: '/contact/conversation', query: { id: ticketId } })
 }
 
 function openConversation(id) {
   const ticket = ticketStore.getTicketById(id)
-  if (ticket.status === 'closed') {
-    $toast.error('This ticket is closed and cannot be reopened.', {
-      autoClose: 2000,
-      position: 'top-right',
-      theme: 'dark'
-    })
+  if (!ticket || ticket.status === 'closed') {
+    toast.error({ title: 'Ticket Closed', message: 'This ticket is closed and cannot be reopened', position: 'topCenter', duration: 3000 })
     return
   }
   router.push({ path: '/contact-us/chat', query: { id } })
 }
+
+let reasonsFetched = false
+onMounted(() => {
+  if (isLoggedIn.value) ticketStore.fetchTickets()
+  if (!reasonsFetched) { fetchReasons(); reasonsFetched = true }
+})
 </script>
 
 <style scoped>
-.input {
-  @apply w-full px-3 py-3 rounded-xl bg-bgDark text-sm sm:text-base outline-none transition duration-200 placeholder:text-onFooter/50 border border-transparent focus:border-primary;
-}
-.label {
-  @apply block text-[15px] text-mainText mb-2;
-}
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 0.2s ease;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-  transform: translateY(-5px);
-}
+.input { @apply w-full px-3 py-3 rounded-xl bg-bgDark text-sm sm:text-base outline-none transition duration-200 placeholder:text-onFooter/50 border border-transparent focus:border-primary; }
+.label { @apply block text-[15px] text-mainText mb-2; }
+.fade-enter-active, .fade-leave-active { transition: all 0.2s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; transform: translateY(-5px); }
 </style>

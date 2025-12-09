@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="userStore.currentUser"
+    v-if="userStore.currentUser && userStore.currentUser.activation_str === 'active'"
     class="min-h-screen font-poppins text-mainText flex flex-col items-center py-10 animate-fadeIn"
   >
     <!-- Profile Card -->
@@ -21,7 +21,8 @@
         <div
           class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
         >
-          <i class="fa-solid fa-camera text-white text-xl"></i>
+       <Icon name="heroicons-outline:camera" class="text-white text-xl" />
+       <!-- <Icon name="heroicons:camera" class="text-white text-xl" /> -->
         </div>
 
         <input
@@ -47,6 +48,21 @@
         </div>
       </div>
     </div>
+
+
+ 
+<!--ave Changes Button -->
+<div class="w-[90%] max-w-6xl mt-8 flex justify-end">
+  <AppButton
+    @click="saveChanges"
+    variant="primary"
+    :width="160"
+    :height="44"
+    extraClass="px-3 py-2 text-sm sm:text-base rounded-lg"
+  >
+    Save Changes
+  </AppButton>
+</div>
 
     <!-- Info Section -->
     <div class="w-[90%] max-w-6xl mt-10">
@@ -129,6 +145,11 @@
             @close="showPasswordModal = false"
           />
 
+            <ProfileSaveSuccessModal
+           :visible="showSuccessModal"
+       @close="showSuccessModal = false"
+            />
+
           <div>
             <label class="block text-sm text-onMainText mb-1">Birthday date</label>
             <input
@@ -175,44 +196,75 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch, onMounted } from 'vue'
 import { useUserStore } from '~/stores/userStore'
+import { useToast } from '#imports'
+import { useRouter } from 'vue-router'
 
+definePageMeta({
+  middleware: 'profile-guard'
+})
+
+const toast = useToast()
+const router = useRouter()
 const userStore = useUserStore()
 
 // Reactive user object
 const user = reactive({
-  fullName: userStore.currentUser?.fullName || '',
-  username: userStore.currentUser?.username || '',
-  email: userStore.currentUser?.email || '',
-  bio: userStore.currentUser?.bio || '',
-  phone: userStore.currentUser?.phone || '',
-  dob: userStore.currentUser?.dob || '',
-  avatar: userStore.currentUser?.avatar || '',
-  memberSince: userStore.currentUser?.memberSince || new Date().getFullYear(),
+  fullName: '',
+  username: '',
+  email: '',
+  bio: '',
+  phone: '',
+  dob: '',
+  avatar: '',
+  memberSince: new Date().getFullYear()
 })
 
-// Watch for updates
+// Preview image
+const previewImage = ref('/games/ProfileAvatar.png')
+
+// Sync user from store
 watch(
   () => userStore.currentUser,
   (newUser) => {
-    if (newUser) Object.assign(user, newUser)
+    if (!newUser) return
+    Object.assign(user, newUser)
+    previewImage.value = newUser.avatar || '/games/ProfileAvatar.png'
   },
   { immediate: true }
 )
 
-// Preview image logic: fallback if empty or contains '&'
-const previewImage = ref(
-  user.avatar && !user.avatar.includes('&') ? user.avatar : '/games/ProfileAvatar.png'
-)
+// Save Changes
+const showSuccessModal = ref(false)
+const saveChanges = async () => {
+  try {
+    const res = await userStore.updateUser(user)
 
-watch(
-  () => user.avatar,
-  (val) => {
-    previewImage.value = val && !val.includes('&') ? val : '/games/ProfileAvatar.png'
+    if (res.success) {
+      showSuccessModal.value = true
+      toast.success({
+        title: 'Success!',
+        message: 'Profile updated successfully',
+        position: 'topCenter'
+      })
+    } else {
+      toast.error({
+        title: 'Error!',
+        message: res.message || 'Failed to update profile',
+        position: 'topCenter'
+      })
+    }
+  } catch (err) {
+    toast.error({
+      title: 'Error!',
+      message: 'Unexpected error occurred',
+      position: 'topCenter'
+    })
   }
-)
+}
 
+// Avatar Upload
 const fileInput = ref(null)
 const triggerFileInput = () => fileInput.value?.click()
 
@@ -230,6 +282,7 @@ const handleFileUpload = (e) => {
 
 const showPasswordModal = ref(false)
 </script>
+
 
 <style scoped>
 input[type='date']::-webkit-calendar-picker-indicator {

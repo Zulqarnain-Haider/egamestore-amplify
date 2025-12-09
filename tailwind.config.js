@@ -25,6 +25,7 @@ module.exports = {
         onError: "#FFFFFF", // text on error
         chatStart: "#E53644", // right side (darker red)
         chatEnd: "#FF6916", // left side (orange)
+        inputsIn: "#979797"
       },
       backgroundImage: {
         "dark-gradient":

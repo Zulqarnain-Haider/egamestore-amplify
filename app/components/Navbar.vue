@@ -75,7 +75,7 @@
 
       <!-- Cart -->
       <NuxtLink to="/cart" class="flex items-center">
-        <Icon name="mdi:cart-outline" class="w-4 h-4 text-onPrimary hover:text-primary/90 cursor-pointer" />
+        <Icon name="mdi:cart-outline" class="w-5 h-5 text-mainText hover:text-primary/90 cursor-pointer" />
       </NuxtLink>
 
       <!-- Login / Profile -->
@@ -86,7 +86,9 @@
 
       <div v-else class="relative" ref="profileRef">
         <NuxtImg 
-          :src="userStore.currentUser?.avatar || '/games/ProfileAvatar.png'"
+          :src="userStore.currentUser?.avatar && !userStore.currentUser?.avatar.includes('&')
+             ? userStore.currentUser.avatar 
+          :'/games/ProfileAvatar.png'"
           class="w-9 h-9 rounded-full object-cover cursor-pointer"
           @click="toggleDropdown('profile')"
         />
@@ -217,14 +219,14 @@ const links = [
 // Computed
 // =====================
 const isLoggedIn = computed(() => !!userStore.currentUser)
-const isActive = (p) => route.path === p
+const isActive = (path) => route.path.startsWith === (path)
 
 // =====================
 // Logout
 // =====================
 const logoutUser = () => {
   userStore.logout()
-  router.push('/profile')
+  router.push('/')
 }
 
 // =====================

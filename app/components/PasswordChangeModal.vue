@@ -192,23 +192,14 @@ const showConfirm = ref(false)
 const errors = ref({})
 const globalError = ref('')
 
-const handleSave = () => {
-errors.value = {}
+
+const handleSave = async () => {
+  errors.value = {}
   globalError.value = ''
-  const storedUser = userStore.currentUser
 
-  if (!storedUser) {
-    globalError.value = 'No user found. Please login first.'
-    return
-  }
-
-  // Validation
-  if (!currentPassword.value) errors.value.current = 'Please enter your current password.'
-  else if (currentPassword.value !== storedUser.password)
-    errors.value.current = 'Incorrect current password.'
-
-  if (!newPassword.value) errors.value.new = 'Please enter a new password.'
-  if (!confirmPassword.value) errors.value.confirm = 'Please confirm your new password.'
+  if (!currentPassword.value) errors.value.current = 'Please enter current password.'
+  if (!newPassword.value) errors.value.new = 'Please enter new password.'
+  if (!confirmPassword.value) errors.value.confirm = 'Please confirm new password.'
   else if (newPassword.value !== confirmPassword.value)
     errors.value.confirm = 'New passwords do not match.'
 
@@ -217,9 +208,20 @@ errors.value = {}
     return
   }
 
-  // Update password
-  userStore.updatePassword(newPassword.value)
-  setTimeout(() => (success.value = true), 400)
+  try {
+    const res = await userStore.updatePassword({
+      old_password: currentPassword.value,
+      new_password: newPassword.value
+    })
+
+    if (res.success) {
+      success.value = true
+    } else {
+      globalError.value = res.message || 'Failed to update password.'
+    }
+  } catch (err) {
+    globalError.value = err.message || 'Something went wrong.'
+  }
 }
 
 const closeModal = () => {

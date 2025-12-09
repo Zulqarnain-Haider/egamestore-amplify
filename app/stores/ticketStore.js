@@ -1,181 +1,170 @@
-// ~/stores/ticketStore.js
 import { defineStore } from 'pinia'
+import axios from 'axios'
+import { useUserStore } from '~/stores/userStore.js'
 
 export const useTicketStore = defineStore('ticket', {
   state: () => ({
-    tickets: [
-      // example ticket (will show in Previous Tickets)
-      {
-        id: 101,
-        subject: 'Missing download link',
-        name: 'Hamza',
-        email: 'hamza@example.com',
-        reason: 'Order issue',
-        status: 'active', // open | closed
-        createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        orderId: '12345'
-      },
-      {
-    id: 102,
-    subject: 'Payment not confirmed',
-    name: 'Hamza',
-    email: 'hamza@example.com',
-    reason: 'Payment problem',
-    status: 'active',
-    createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    orderId: '67890'
-  },
-  {
-    id: 103,
-    subject: 'Login',
-    name: 'Hamza',
-    email: 'hamza@example.com',
-    reason: 'Payment problem',
-    status: 'active',
-    createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    orderId: '67890'
-  }
-    ],
-    messages: {
-      // keyed by ticket id
-      101: [
-        {
-          id: Date.now() - 1000 * 60 * 60,
-          sender: 'support',
-          text: "Hello! I'm Alex from support. I see your order and will help.",
-          time: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
-          avatar: '/wallet/AkexChatImg.png'
-        },
-        {
-          id: Date.now() - 1000 * 60 * 30,
-          sender: 'user',
-          text: "I bought the game but didn't receive the link.",
-          time: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
-          avatar: '/wallet/UserChatImg.png'
-        }
-      ],
-       102: [
-    {
-      id: Date.now() - 120000,
-      sender: 'support',
-      text: 'Hello! We noticed your payment is still processing.',
-      time: new Date(Date.now() - 120000).toISOString(),
-      avatar: '/wallet/AkexChatImg.png'
-    },
-    {
-      id: Date.now() - 60000,
-      sender: 'user',
-      text: 'Okay, I’ll wait — thanks!',
-      time: new Date(Date.now() - 60000).toISOString(),
-      avatar: '/wallet/UserChatImg.png'
-    }
-  ]
-    },
-    selectedTicketId: null,
-    reasons: [
-      'Order issue',
-      'Payment problem',
-      'Account / Login',
-      'Technical support',
-      'Other'
-    ],
+    tickets: [],
+    ticketDetails: null,
+    replies: [],
+    loading: false,
+    error: null,
   }),
-  getters: {
-    getTicketById: (state) => (id) => state.tickets.find(t => Number(t.id) === Number(id)),
-    getMessagesFor: (state) => (id) => state.messages?.[id] ?? []
-  },
+
   actions: {
-    loadFromStorage() {
-  if (process.client) {
-    try {
-      const t = JSON.parse(localStorage.getItem('tickets') || 'null')
-      const m = JSON.parse(localStorage.getItem('ticket_messages') || 'null')
-      const sid = JSON.parse(localStorage.getItem('selected_ticket') || 'null')
-      if (Array.isArray(t)) this.tickets = t
-      if (m && typeof m === 'object') this.messages = m
-      if (sid) this.selectedTicketId = sid
-    } catch (e) {
-      console.warn('Failed to load from localStorage', e)
-    }
-  }
-},
+    // -----------------------------
+    // 1) GET TICKET LIST (GET)
+    // -----------------------------
+    async fetchTickets() {
+      const userStore = useUserStore()
+      this.loading = true
 
-    saveToStorage() {
-      if (process.client) {
-      localStorage.setItem('tickets', JSON.stringify(this.tickets))
-      localStorage.setItem('ticket_messages', JSON.stringify(this.messages))
-      localStorage.setItem('selected_ticket', JSON.stringify(this.selectedTicketId))
-}
-    },
+      try {
+        const res = await $fetch("https://api.egamestore.com/api/users/tickets", {
+          headers: {
+            Authorization: `Bearer ${userStore.token}`,
+            lang: "en",
+          },
+        })
 
-    createTicket(payload) {
-      // payload: { name, email, reason, subject, message, orderId, attachments }
-      const id = Date.now()
-      const ticket = {
-        id,
-        subject: payload.subject || 'No subject',
-        name: payload.name || 'Guest',
-        email: payload.email || '',
-        reason: payload.reason || 'Other',
-        status: 'active',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        orderId: payload.orderId ?? null,
-        attachments: payload.attachments ?? []
-      }
-      this.tickets.unshift(ticket)
-      // initial message
-      this.messages[id] = [
-        {
-          id: Date.now(),
-          sender: 'user',
-          text: payload.message || '',
-          time: new Date().toISOString(),
-          avatar: payload.avatar || '/wallet/UserChatImg.png'
+        if (res.status && res.data?.tickets) {
+          this.tickets = res.data.tickets
         }
-      ]
-      this.selectedTicketId = id
-      this.saveToStorage()
-      return id
-    },
-
-    addMessage(ticketId, msg) {
-      if (!this.messages[ticketId]) this.messages[ticketId] = []
-      this.messages[ticketId].push({
-        id: Date.now() + Math.floor(Math.random()*1000),
-        sender: msg.sender,
-        text: msg.text,
-        time: new Date().toISOString(),
-        avatar: msg.avatar ?? (msg.sender === 'user' ? '/wallet/UserChatImg.png' : '/wallet/AkexChatImg.png')
-      })
-      const t = this.tickets.find(x => Number(x.id) === Number(ticketId))
-      if (t) t.updatedAt = new Date().toISOString()
-
-      this.saveToStorage()
-    },
-
-    selectTicket(id) {
-      this.selectedTicketId = Number(id)
-      this.saveToStorage()
-    },
-
-    closeTicket(id) {
-      const t = this.tickets.find(x => Number(x.id) === Number(id))
-      if (t) {
-        t.status = 'closed'
-        t.updatedAt = new Date().toISOString()
-        this.saveToStorage()
+      } catch (err) {
+        console.error("❌ Fetch tickets error:", err)
+      } finally {
+        this.loading = false
       }
     },
 
-    clearAll() {
-      this.tickets = []
-      this.messages = {}
-      this.selectedTicketId = null
-      this.saveToStorage()
-    }
-  }
-}) 
+    // -----------------------------
+    // 2) CREATE TICKET (POST)
+    // -----------------------------
+    async createTicket(form) {
+      const formData = new FormData()
+      formData.append("name", form.name)
+      formData.append("email", form.email)
+      formData.append("subject", form.subject)
+      formData.append("message", form.message)
+      formData.append("reason_id", form.reasonId)
+
+      if (form.orderId) formData.append("order_id", form.orderId)
+
+      form.attachments.forEach(file => {
+        formData.append("images[]", file)
+      })
+
+      try {
+        const res = await axios.post(
+          "https://api.egamestore.com/api/users/tickets",
+          formData,
+          {
+            headers: {
+              lang: "ar",
+              "Content-Type": "multipart/form-data",
+            },
+          },
+        )
+
+        return res.data
+      } catch (err) {
+        console.error("❌ Ticket create error:", err)
+        throw err
+      }
+    },
+
+    // -----------------------------
+    // 3) GET SINGLE TICKET DETAILS (GET)
+    // -----------------------------
+    async fetchTicketDetails(uuid) {
+      const userStore = useUserStore()
+      this.loading = true
+
+      try {
+        const res = await $fetch(`https://api.egamestore.com/api/users/tickets/${uuid}`, {
+          headers: {
+            Authorization: `Bearer ${userStore.token}`,
+            lang: "en",
+          },
+        })
+
+        if (res.status) {
+          this.ticketDetails = res.data
+          this.replies = res.data.replies || []
+        }
+      } catch (err) {
+        console.error("❌ Ticket details error:", err)
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // -----------------------------
+    // 4) SEND REPLY IN CHAT (POST)
+    // -----------------------------
+    async sendReply(uuid, message, images = []) {
+      const userStore = useUserStore()
+      const formData = new FormData()
+
+      if (message) formData.append("message", message)
+      images.forEach(img => formData.append("images[]", img))
+
+      try {
+        const res = await axios.post(
+          `https://api.egamestore.com/api/users/tickets/${uuid}/reply`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${userStore.token}`,
+              lang: "en",
+              "Content-Type": "multipart/form-data",
+            },
+          },
+        )
+
+        if (res.data.status) {
+          this.replies.push(res.data.data)
+        }
+
+        return res.data
+      } catch (err) {
+        console.error("❌ Reply error:", err)
+        throw err
+      }
+    },
+
+    // -----------------------------
+    // 5) CLOSE TICKET (POST)
+    // -----------------------------
+    async closeTicket(uuid, message) {
+      const userStore = useUserStore()
+      const formData = new FormData()
+
+      if (message) formData.append("message", message)
+
+      try {
+        const res = await axios.post(
+          `https://api.egamestore.com/api/users/tickets/${uuid}/close`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${userStore.token}`,
+              lang: "en",
+              "Content-Type": "multipart/form-data",
+            },
+          },
+        )
+
+        return res.data
+      } catch (err) {
+        console.error("❌ Close ticket error:", err)
+        throw err
+      }
+    },
+
+    // Get ticket by id
+    getTicketById(id) {
+      return this.tickets.find(t => t.id === id)
+    },
+  },
+})

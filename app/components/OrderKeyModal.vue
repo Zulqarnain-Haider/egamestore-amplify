@@ -85,7 +85,8 @@
               :height="42"
               extraClass="text-sm flex items-center rounded-full justify-center gap-2"
             >
-              <i class="fa-solid fa-question-circle"></i> How to redeem
+            <Icon name="heroicons-solid:question-mark-circle" class="text-xl text-white" />
+             How to redeem
             </AppButton>
           </div>
         </div>
@@ -96,6 +97,9 @@
 
 <script setup>
 import { watch } from 'vue'
+import { useToast } from '#imports'
+
+const toast = useToast()
 
 const props = defineProps({
   visible: Boolean,
@@ -107,6 +111,15 @@ const emit = defineEmits(['close'])
 
 const copyKey = () => {
   navigator.clipboard.writeText(props.orderKey)
+
+  toast.success({
+    title: 'Success!',
+    message: 'Key Copied Successfully!',
+    position: 'topRight',
+    duration: 3000,
+    pauseOnHover: true,
+    class: 'bg-[#1E1F22] text-white border-l-4 border-green-500',
+  })
 }
 
 watch(

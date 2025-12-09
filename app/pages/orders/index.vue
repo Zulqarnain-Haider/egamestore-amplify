@@ -198,11 +198,11 @@
             </div>
 
             <p
-              class="text-primary text-sm font-medium cursor-pointer hover:underline mt-2 sm:mt-0 flex items-center gap-1"
+              class="text-primary text-sm font-medium items-center cursor-pointer hover:underline mt-2 sm:mt-0 flex"
                 @click="goToDetails(order)"
                 >
               {{ order.detailsText }}
-              <i class="fa-solid fa-chevron-right text-primary"></i>
+              <Icon name="heroicons-chevron-right-20-solid" class="text-primary text-xl" />
             </p>
           </div>
         </div>

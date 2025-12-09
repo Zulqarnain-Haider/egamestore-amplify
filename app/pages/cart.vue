@@ -89,40 +89,38 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue'
-import { useOrdersStore } from '~/stores/ordersStore.js'
+import { onMounted, computed } from 'vue'
+import { useCartStore } from '~/stores/cartStore.js'
 import { useCart } from '~/composables/useCart.js'
 
-const ordersStore = useOrdersStore()
-const { removeFromCart } = useCart()
+const cartStore = useCartStore()
+const { removeCard } = useCart()
 
 onMounted(() => {
-  ordersStore.loadOrdersFromStorage()
+  cartStore.fetchCart({})
 })
 
-// Computed values
-const cartItems = computed(() => ordersStore.cart)
+const cartItems = computed(() => cartStore.items)
 const subtotal = computed(() =>
-  ordersStore.cart.reduce((acc, item) => acc + item.price * item.quantity, 0)
+  cartItems.value.reduce((a, item) => a + (item.price || 0), 0)
 )
+
 const shipping = computed(() => 600)
 const tax = computed(() => 137)
 const total = computed(() => subtotal.value + shipping.value + tax.value)
 
-// Cart functions
-const increaseQty = (item) => {
-  ordersStore.updateQuantity(item.id, item.quantity + 1)
+const increaseQty = async (item) => {
+  await cartStore.addOrUpdateCard(item.id, item.qty + 1, 'update')
 }
 
-const decreaseQty = (item) => {
-  if (item.quantity > 1) {
-    ordersStore.updateQuantity(item.id, item.quantity - 1)
+const decreaseQty = async (item) => {
+  if (item.qty > 1) {
+    await cartStore.addOrUpdateCard(item.id, item.qty - 1, 'update')
   }
 }
 
-const removeItem = (id) => {
-  // use composable so toast is shown and store is updated
-  removeFromCart(id)
+const removeItem = async (id) => {
+  await removeCard(id)
 }
 </script>
 

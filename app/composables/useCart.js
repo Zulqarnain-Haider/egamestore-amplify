@@ -1,11 +1,10 @@
-// composables/useCart.js
-import { useOrdersStore } from '~/stores/ordersStore.js'
+import { useCartStore } from '~/stores/cartStore'
+import { useToast } from '#imports'
 
 export function useCart() {
-  const store = useOrdersStore()
-  
+  const store = useCartStore()
+
   const getToast = () => {
-    // only call useToast on client, and only if it exists
     if (import.meta.client && typeof useToast === 'function') {
       return useToast()
     }
@@ -27,14 +26,12 @@ export function useCart() {
         message: 'Added to cart!',
         position: 'topRight',
         duration: 3000,
-        pauseOnHover: true,     // Pause on hover
-
-
+        pauseOnHover: true,
       })
     }
   }
 
-  const removeFromCart = (id) => {
+  const removeCard = (id) => {
     store.removeFromCart(id)
 
     const toast = getToast()
@@ -44,11 +41,10 @@ export function useCart() {
         message: 'Item removed from cart',
         position: 'topRight',
         duration: 1500,
-        pauseOnHover: true,     // Pause on hover
-
+        pauseOnHover: true,
       })
     }
   }
 
-  return { addToCart, removeFromCart }
+  return { addToCart, removeCard }
 }

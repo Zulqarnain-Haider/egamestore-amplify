@@ -19,11 +19,11 @@
         <li v-if="settings.instagram_link">
           <a :href="settings.instagram_link" target="_blank"><Icon name="mdi:instagram" class="w-12 h-12 bg-rose-700"/></a></li>
 
-        <li v-if="settings.x_link">
-          <a :href="settings.x_link" target="_blank"><Icon name="mdi:youtube" class="w-12 h-12 bg-red-700"/></a></li>
-          
         <li v-if="settings.youtube_link">
-          <a :href="settings.youtube_link" target="_blank" class=""><Icon name="simple-icons:x" class="w-9 h-9 bg-white"/></a></li>
+          <a :href="settings.youtube_link" target="_blank"><Icon name="mdi:youtube" class="w-12 h-12 bg-red-700"/></a></li>
+          
+        <li v-if="settings.x_link">
+          <a :href="settings.x_link" target="_blank" class=""><Icon name="simple-icons:x" class="w-9 h-9 bg-white"/></a></li>
         </ul>
       </div>
 

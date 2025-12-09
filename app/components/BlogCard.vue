@@ -65,6 +65,8 @@ const tagClass = computed(() => {
   switch (props.tag?.toLowerCase()) {
     case 'features':
       return 'bg-orange-600'
+       case 'general':
+      return 'bg-orange-600'
     case 'patch notes':
       return 'bg-green-600'
     case 'esports':

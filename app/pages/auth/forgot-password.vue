@@ -22,7 +22,7 @@
       <!-- Icon -->
       <div class="flex mb-4">
         <NuxtImg
-          src="/games/ForgotPasswordLock.png"
+          src="/games/ForgotPasswordLock.svg"
           alt=""
           quality="80"
           densities="x1"
@@ -62,33 +62,58 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import axios from 'axios'
 
-const email = ref('')
-const error = ref('')
-const router = useRouter()
 
-const handleSubmit = () => {
+const email = ref("");
+const error = ref("");
+const loading = ref(false);
+const router = useRouter();
+
+const handleSubmit = async () => {
+  error.value = "";
+
   if (!email.value.trim()) {
-    error.value = 'Please enter your email.'
-    return
+    error.value = "Please enter your email.";
+    return;
   }
 
-  if (process.client) {
-    const users = JSON.parse(localStorage.getItem('users') || '[]')
-    const exists = users.find(
-      u => u.email === email.value || u.phone === email.value
-    )
+  loading.value = true;
 
-    if (!exists) {
-      error.value = 'No account found with this email or phone.'
-      return
+  try {
+    const formData = new FormData();
+    formData.append("email", email.value);
+
+    const res = await $fetch("https://api.egamestore.com/api/users/requestPasswordReset", {
+      method: "POST",
+      body: formData,
+    });
+
+    console.log("Forgot Password Response:", res);
+
+    if (res?.status === true) {
+      // ✔ Email send successful
+      localStorage.setItem("otpType", "reset");
+      localStorage.setItem("resetIdentifier", email.value);
+      router.push("/auth/otp-verification?type=reset");
+    } else {
+      // ❌ API ne false return kiya
+      error.value = res?.errors?.[0] || res?.message || "Something went wrong.";
     }
+  } catch (err) {
+    console.log("Forgot Error:", err);
 
-    error.value = ''
-    localStorage.setItem('resetIdentifier', email.value)
-    router.push('/auth/otp-verification')
+    // Network/API validation error
+    if (err?.data?.errors) {
+      error.value = Object.values(err.data.errors)[0][0];
+    } else {
+      error.value = "Unable to process request.";
+    }
   }
-}
+
+  loading.value = false;
+};
 </script>
+

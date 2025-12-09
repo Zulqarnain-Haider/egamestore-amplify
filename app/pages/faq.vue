@@ -78,11 +78,25 @@
               />
               <h4 class="text-lg font-semibold mb-2">{{ card.title }}</h4>
               <p class="text-sm text-onFooter mb-4">{{ card.description }}</p>
-              <button
+
+              
+  <!-- Live Chat button -->
+  <NuxtLink
+    v-if="card.title === 'Live Chat'"
+    to="/contact-us"
+    :class="['text-white px-6 py-2 rounded-lg hover:opacity-90 transition-all duration-200', card.color]"
+  >
+    {{ card.buttonText }}
+  </NuxtLink>
+
+  <!-- Email / Phone buttons -->
+              <button v-else
+              type="button"
                 :class="[
                     'text-white px-6 py-2 rounded-lg hover:opacity-90 transition-all duration-200',
                 card.color
-             ]"
+                ]"
+               @click="handleCardAction(card.action)"
               >
                 {{ card.buttonText }}
               </button>
@@ -97,6 +111,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 
+const config = useRuntimeConfig()
+
 const faqs = ref([])
 const loading = ref(true)
 const error = ref(false)
@@ -107,21 +123,27 @@ const helpCards = ref([
     title: 'Live Chat',
     description: 'Available 24/7',
     buttonText: 'Start Chat',
-    color: 'bg-violet-600'       //  (Violet)
+    color: 'bg-violet-600',
+    action: null,
+       //  (Violet)
   },
   {
     icon: '/wallet/FaqEmail.svg',
     title: 'Email Support',
     description: 'Response within 24h',
     buttonText: 'Send Email',
-    color: 'bg-cyan-600'     //  Cyan
+    color: 'bg-cyan-600',
+    action: null,
+     //  Cyan
   },
   {
     icon: '/wallet/FaqPhone.svg',
     title: 'Phone Support',
     description: 'Mon-Fri 9AM–9PM',
     buttonText: 'Call Now',
-    color: 'bg-yellow-600'      // Yellow
+    color: 'bg-yellow-600',
+    action: null,
+      // Yellow
   },
 ])
 
@@ -130,7 +152,7 @@ const helpCards = ref([
 async function fetchFaqs() {
   try {
     console.log('Fetching FAQs...')
-    const response = await $fetch('https://api.egamestore.com/api/web/faqs', {
+    const response = await $fetch(`${config.public.apiBase}/web/faqs`, {
       headers: { lang: 'en' },
     })
 
@@ -174,11 +196,47 @@ function useFallbackData() {
   ]
 }
 
-onMounted(fetchFaqs)
+function handleCardAction(action) {
+  if (!action) return
+  // Open email client or phone dialer
+  window.open(action, '_self')
+}
+
 
 function toggleFaq(index) {
   faqs.value[index].open = !faqs.value[index].open
 }
+
+
+// Fetch settings (for Email & Phone buttons)
+const settings = ref({})
+
+async function fetchSettings() {
+  try {
+    const res = await fetch(`${config.public.apiBase}/settings`, {
+      headers: { lang: 'en' },
+    })
+    const result = await res.json()
+    if (result.status && result.data) {
+      settings.value = result.data
+
+      // Update helpCards with email & phone actions dynamically
+      helpCards.value = helpCards.value.map(card => {
+        if (card.title === 'Email Support') card.action = `mailto:${settings.value.email}`
+        if (card.title === 'Phone Support') card.action = `tel:${settings.value.phone}`
+        return card
+      })
+    }
+  } catch (err) {
+    console.error('Failed to fetch settings for help cards:', err)
+  }
+}
+
+onMounted(() =>  {
+  fetchFaqs()
+  fetchSettings()
+})
+
 </script>
 
 <style scoped>
