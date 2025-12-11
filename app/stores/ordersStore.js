@@ -38,6 +38,11 @@ export const useOrdersStore = defineStore('orders', {
       }
     },
 
+    applyDiscount(amount) {
+  this.discount = amount
+},
+
+
     //Add new order
     addOrder(order) {
       this.orders.push(order)
