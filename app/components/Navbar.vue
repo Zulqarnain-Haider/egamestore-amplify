@@ -17,14 +17,18 @@
 
       <!-- Nav links (desktop) -->
       <ul class="hidden xl:flex items-center gap-4 2xl:gap-6 font-medium text-[17px] 2xl:text-[19px]">
-        <li v-for="(link, i) in links" :key="i" class="relative transition-all">
-          <NuxtLink :to="link.path" :class="isActive(link.path) ? 'text-primary' : 'hover:text-primary'"
-            class="transition-colors">
+        <li v-for="(link, i) in links" :key="i" class="relative transition-all group">
+          <NuxtLink 
+            :to="link.path" 
+            :class="isActive(link.path) ? 'text-primary' : 'hover:text-primary'"
+            class="transition-colors"
+          >
             {{ link.label }}
           </NuxtLink>
           <span
             class="absolute left-1/3 -translate-x-1/2 bottom-[-3px] h-[2px] bg-primary rounded transition-all duration-300"
-            :class="isActive(link.path) ? 'w-3/5' : 'w-0 group-hover:w-3/5'"></span>
+            :class="isActive(link.path) ? 'w-3/5' : 'w-0 group-hover:w-3/5'">
+          </span>
         </li>
       </ul>
 
@@ -35,7 +39,6 @@
 
     <!-- ========== RIGHT SECTION ========== -->
     <div class="flex items-center gap-2 sm:gap-3 md:gap-4">
-
       <!-- Mobile search -->
       <Icon name="mdi:search" class="xl:hidden w-6 h-6 text-primary hover:text-primary/90" @click="showSearch = true" />
 
@@ -116,13 +119,18 @@
             <NuxtImg src="/games/EGAMESTORE-logo.png" alt="EGAMESTORE Logo" class="h-6 w-auto" 
             format="webp" densities="x1 x2" quality="80" preload />
             
-            <Icon name="mdi:close" class="h-7 w-7 text-primary" @click="isOpen = false" />
+            <Icon name="mdi:close" class="h-7 w-7 text-primary cursor-pointer" @click="isOpen = false" />
           </div>
 
           <!-- Sidebar Links -->
           <ul class="flex flex-col gap-4 px-6 py-4 font-medium font-poppins text-lg">
             <li v-for="(link, i) in links" :key="i">
-              <NuxtLink :to="link.path" @click="handleSidebarLinkClick" :class="isActive(link.path) ? 'text-primary' : 'hover:text-primary'" class="block py-2 transition-colors">
+              <NuxtLink 
+                :to="link.path" 
+                @click="handleSidebarLinkClick" 
+                :class="isActive(link.path) ? 'text-primary' : 'hover:text-primary'" 
+                class="block py-2 transition-colors"
+              >
                 {{ link.label }}
               </NuxtLink>
             </li>
@@ -179,75 +187,73 @@ const router = useRouter()
 const route = useRoute()
 const userStore = useUserStore()
 
-// =====================
-// Reactive states
-// =====================
-const isOpen = ref(false)               // Sidebar open
-const showSearch = ref(false)           // Search overlay
-const showLangDropdown = ref(false)     // Desktop Language
-const showCurrencyDropdown = ref(false) // Desktop Currency
-const showProfileDropdown = ref(false)  // Desktop Profile
+// States
+const isOpen = ref(false)
+const showSearch = ref(false)
+const showLangDropdown = ref(false)
+const showCurrencyDropdown = ref(false)
+const showProfileDropdown = ref(false)
+const showMobileLangDropdown = ref(false)
+const showMobileCurrencyDropdown = ref(false)
 
-const showMobileLangDropdown = ref(false)      // Mobile Language
-const showMobileCurrencyDropdown = ref(false)  // Mobile Currency
-
-// =====================
 // Refs for outside click
-// =====================
 const langRef = ref(null)
 const currencyRef = ref(null)
 const profileRef = ref(null)
 const mobileLangRef = ref(null)
 const mobileCurrencyRef = ref(null)
 
-// =====================
-// Links
-// =====================
+// Category ID mapping (from your existing code)
+const categoryMap = {
+  pc: 50,        // PC Games category_id
+  xbox: 2,       // Xbox category_id
+  playstation: 1, // PlayStation category_id
+  nintendo: 5,   // Nintendo category_id
+}
+
+// Links with proper category IDs
 const links = [
   { label: "Home", path: "/" },
-  { label: "PC Games", path: "/category/pc" },
-  { label: "Xbox", path: "/category/xbox" },
-  { label: "PlayStation", path: "/category/playstation" },
-  { label: "Nintendo", path: "/category/nintendo" },
-  { label: "Gift Cards", path: "/category/gifts" },
-  { label: "Deals", path: "/category/deals" },
-  { label: "Pre-orders", path: "/category/preorders" },
+  { label: "PC Games", path: `/category/${categoryMap.pc}` },
+  { label: "Xbox", path: `/category/${categoryMap.xbox}` },
+  { label: "PlayStation", path: `/category/${categoryMap.playstation}` },
+  { label: "Nintendo", path: `/category/${categoryMap.nintendo}` },
+  { label: "Gift Cards", path: "/gifts" },
+  { label: "Deals", path: "/deals" },
+  { label: "Pre-orders", path: "/preorders" },
   { label: "Blog", path: "/blogs" },
 ]
 
-// =====================
-// Computed
-// =====================
 const isLoggedIn = computed(() => !!userStore.currentUser)
-const isActive = (path) => route.path.startsWith === (path)
 
-// =====================
-// Logout
-// =====================
+// Check if current route is active
+const isActive = (path) => {
+  if (path === '/') return route.path === '/'
+  return route.path === path
+}
+
 const logoutUser = () => {
   userStore.logout()
   router.push('/')
 }
 
-// =====================
 // Sidebar overflow
-// =====================
 watch(isOpen, (v) => {
   if (process.client) document.body.style.overflow = v ? "hidden" : "auto"
 })
-onMounted(() => { if (process.client) document.body.style.overflow = "auto" })
-onBeforeUnmount(() => { if (process.client) document.body.style.overflow = "auto" })
 
-// =====================
-// Sidebar link click
-// =====================
+onMounted(() => { 
+  if (process.client) document.body.style.overflow = "auto" 
+})
+
+onBeforeUnmount(() => { 
+  if (process.client) document.body.style.overflow = "auto" 
+})
+
 const handleSidebarLinkClick = () => {
   setTimeout(() => { isOpen.value = false }, 100)
 }
 
-// =====================
-// Dropdown toggles
-// =====================
 const toggleDropdown = (type) => {
   switch(type) {
     case 'lang': showLangDropdown.value = !showLangDropdown.value; break
@@ -258,9 +264,6 @@ const toggleDropdown = (type) => {
   }
 }
 
-// =====================
-// Outside click handler
-// =====================
 const handleClickOutside = (e) => {
   if (langRef.value && !langRef.value.contains(e.target)) showLangDropdown.value = false
   if (currencyRef.value && !currencyRef.value.contains(e.target)) showCurrencyDropdown.value = false
@@ -268,12 +271,10 @@ const handleClickOutside = (e) => {
   if (mobileLangRef.value && !mobileLangRef.value.contains(e.target)) showMobileLangDropdown.value = false
   if (mobileCurrencyRef.value && !mobileCurrencyRef.value.contains(e.target)) showMobileCurrencyDropdown.value = false
 }
+
 onMounted(() => document.addEventListener('click', handleClickOutside))
 onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
 
-// =====================
-// Selection handlers
-// =====================
 const selectLang = (lang) => { 
   console.log('Language:', lang)
   showLangDropdown.value = false
@@ -291,7 +292,6 @@ const selectProfileOption = (path) => {
   router.push(path)
 }
 </script>
-
 
 <style scoped>
 .slide-enter-active,

@@ -173,10 +173,34 @@
             <p class="text-green-600">${{ total.toFixed(2) }}</p>
           </div>
 
-          <p class="mt-4 text-xs max-w-xs text-mainText">
-            Have a coupon? <span class="text-primary underline cursor-pointer">Click here to enter your code</span>
+          <p class="mt-4 text-xs max-w-xs text-mainText"
+          @click="showCouponInput = !showCouponInput">
+            Have a coupon?
+             <span class="text-primary underline cursor-pointer">Click here to enter your code</span>
           </p>
 
+<!-- Coupon Input Field -->
+<div v-if="showCouponInput" class="mt-3 flex items-center gap-3">
+  <input
+    v-model="couponCode"
+    type="text"
+    placeholder="Enter coupon code"
+    class="w-full px-3 py-2 rounded-lg bg-bgDark text-sm outline-none border border-outline focus:border-primary"
+  />
+  
+  <button
+    @click="applyCoupon"
+    class="px-4 py-2 bg-primary text-white rounded-lg text-sm hover:opacity-90 transition"
+  >
+    Apply
+  </button>
+</div>
+
+<!-- Success or Error Message -->
+<p v-if="couponMessage" :class="couponSuccess ? 'text-green-500' : 'text-error'" class="text-xs mt-1">
+  {{ couponMessage }}
+</p>
+           
           <div class="flex justify-center items-center mt-10">
             <AppButton
               @click="placeOrder"
@@ -347,6 +371,82 @@ function selectPayment(method) {
     position: 'topCenter',
     duration: 2000
   })
+}
+
+
+const showCouponInput = ref(false)
+const couponCode = ref('')
+const couponMessage = ref('')
+const couponSuccess = ref(false)
+
+
+async function applyCoupon() {
+  couponMessage.value = ''
+  couponSuccess.value = false
+
+  const token = localStorage.getItem('token')
+
+  if (!token) {
+    toast.error({
+      title: 'Login Required',
+      message: 'Please login to apply coupon',
+      position: 'topCenter'
+    })
+    return
+  }
+
+  try {
+    const response = await $fetch('https://api.egamestore.com/api/users/points-summary', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        lang: 'en'
+      },
+      params: {
+        status: 'all'
+      }
+    })
+
+    console.log("Coupon API Response:", response)
+
+    // 👉 Backend ne coupon code diya hoga testing ke liye
+    // Example: "TEST10"
+    const backendCoupon = "TESTTT" // <-- TEST coupon yahan rakho
+
+    if (couponCode.value.trim().toUpperCase() === backendCoupon) {
+      couponSuccess.value = true
+      couponMessage.value = 'Coupon applied successfully!'
+
+      // Dummy: apply 10% discount
+      const discount = subtotal.value * 0.10
+      ordersStore.applyDiscount(discount)
+
+      toast.success({
+        title: 'Coupon Applied',
+        message: 'Your discount has been added!',
+        position: 'topCenter'
+      })
+    } else {
+      couponMessage.value = 'Invalid coupon code'
+      couponSuccess.value = false
+
+      toast.error({
+        title: 'Invalid Coupon',
+        message: 'Please enter a valid coupon.',
+        position: 'topCenter'
+      })
+    }
+  } catch (err) {
+    console.log("Coupon Error:", err)
+    couponMessage.value = 'Unable to apply coupon right now'
+    couponSuccess.value = false
+
+    toast.error({
+      title: 'Error',
+      message: 'Failed to verify coupon',
+      position: 'topCenter'
+    })
+  }
 }
 
 // ===================
