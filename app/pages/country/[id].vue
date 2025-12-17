@@ -48,9 +48,16 @@
         </div>
 
         <!-- Loading -->
-        <div v-if="loading" class="text-center py-20 text-onMainText">
+        <!-- <div v-if="loading" class="text-center py-20 text-onMainText">
           Loading...
-        </div>
+        </div> -->
+
+      <!-- Loading State ko yeh se replace karo -->
+<div v-if="loading" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
+  <GameCardSkeleton v-for="n in 8" :key="n" />
+</div>
+
+<!-- Baaki sab same rahega -->
 
         <!-- Products Grid -->
         <div

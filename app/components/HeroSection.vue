@@ -2,7 +2,7 @@
   <section class="relative w-full overflow-hidden">
     <!-- Background Image (Covers full width of screen) -->
     <NuxtImg 
-      src="/games/Hero.bg.jpeg" 
+      src="/games/Hero.bg.png" 
       alt="Hero Background" 
       format="webp" 
       quality="80"

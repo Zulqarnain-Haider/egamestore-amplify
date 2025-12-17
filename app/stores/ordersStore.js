@@ -1,139 +1,190 @@
-// stores/ordersStore.js
 import { defineStore } from 'pinia'
+import { useUserStore } from '~/stores/userStore.js' // Add this
 
 export const useOrdersStore = defineStore('orders', {
   state: () => ({
-    //Initialize safely (server has no localStorage)
-    orders: process.client ? JSON.parse(localStorage.getItem('orders') || '[]') : [],
-    selectedOrder: process.client ? JSON.parse(localStorage.getItem('selectedOrder') || 'null') : null,
-    cart: process.client ? JSON.parse(localStorage.getItem('cart') || '[]') : [],
-
-    //Moved inside state so Pinia tracks it reactively
-    checkoutData: process.client
-      ? JSON.parse(localStorage.getItem('checkoutData') || '{"billing": {}, "paymentMethod": null}')
-      : { billing: {}, paymentMethod: null }
+    orders: [],
+    selectedOrder: null,
+    loading: false,
+    error: null,
+    pagination: { current_page: 1, last_page: 1, per_page: 15, total: 0 }
   }),
 
-  getters: {
-    cartCount: (state) =>
-      state.cart?.reduce((acc, item) => acc + (item.quantity || 0), 0) || 0,
-    cartTotal: (state) =>
-      state.cart?.reduce((acc, item) => acc + item.price * item.quantity, 0) || 0
-  },
-
   actions: {
-    //Checkout data
-    setCheckoutData(data) {
-      this.checkoutData = data
-      if (process.client) {
-        localStorage.setItem('checkoutData', JSON.stringify(data))
+    // Fetch orders list with pagination/filters
+    async fetchOrders(status = 'all', page = 1, perPage = 15) {
+      this.loading = true
+      this.error = null
+      
+      try {
+        const userStore = useUserStore()
+        if (!userStore.token) throw new Error('User not authenticated')
+        
+        const response = await $fetch('https://api.egamestore.com/api/users/orders/pagination', {
+          params: { status, per_page: perPage, page },
+          headers: { 
+            'Authorization': `Bearer ${userStore.token}`,
+            'Accept-language': 'en'
+          }
+        })
+        
+        if (response.status && response.data) {
+          this.orders = response.data.orders.map(order => this.mapOrder(order))
+          this.pagination = response.data
+        } else {
+          this.error = 'No orders found'
+          this.orders = []
+        }
+      } catch (err) {
+        console.error('Fetch Orders Error:', err)
+        this.error = err.message || 'Failed to load orders'
+        this.orders = []
+      } finally {
+        this.loading = false
       }
     },
 
-    //Set all orders (for API or static)
-    setOrders(data) {
-      this.orders = data
-      if (process.client) {
-        localStorage.setItem('orders', JSON.stringify(this.orders))
+    // Fetch order details
+    async fetchOrderDetails(orderId) {
+      this.loading = true
+      this.error = null
+      
+      try {
+        const userStore = useUserStore()
+        if (!userStore.token) throw new Error('User not authenticated')
+        
+        const response = await $fetch(`https://api.egamestore.com/api/users/orders/${orderId}`, {
+          headers: { 
+            'Authorization': `Bearer ${userStore.token}`,
+            'Accept-language': 'en'
+          }
+        })
+        
+        if (response.status && response.data) {
+          this.selectedOrder = this.mapOrderDetails(response.data)
+        } else {
+          this.error = 'Order not found'
+          this.selectedOrder = null
+        }
+      } catch (err) {
+        console.error('Fetch Order Details Error:', err)
+        this.error = err.message || 'Failed to load order details'
+        this.selectedOrder = null
+      } finally {
+        this.loading = false
       }
     },
 
-    applyDiscount(amount) {
-  this.discount = amount
-},
-
-
-    //Add new order
-    addOrder(order) {
-      this.orders.push(order)
-      if (process.client) {
-        localStorage.setItem('orders', JSON.stringify(this.orders))
+    // Fetch codes for an order item
+    async fetchOrderCodes(itemId) {
+      try {
+        const userStore = useUserStore()
+        if (!userStore.token) throw new Error('User not authenticated')
+        
+        const response = await $fetch(`https://api.egamestore.com/api/users/orders/items/${itemId}/codes`, {
+          headers: { 
+            'Authorization': `Bearer ${userStore.token}`,
+            'Accept-language': 'en'
+          }
+        })
+        
+        if (response.status && response.data) {
+          return response.data // [{ hash_code, actual_code }]
+        }
+        return []
+      } catch (err) {
+        console.error('Fetch Codes Error:', err)
+        return []
       }
     },
 
-    //Get single order by ID
-    getOrderById(id) {
-      return this.orders.find((o) => o.id === Number(id))
+    // Create order
+    async createOrder(orderData) {
+      try {
+        const userStore = useUserStore()
+        if (!userStore.token) throw new Error('User not authenticated')
+        
+        const response = await $fetch('https://api.egamestore.com/api/users/orders', {
+          method: 'POST',
+          body: orderData, // FormData
+          headers: { 
+            'Authorization': `Bearer ${userStore.token}`
+          }
+        })
+        
+        if (response.status && response.data) {
+          // Add to orders list
+          this.orders.unshift(this.mapOrder(response.data))
+          return response.data
+        }
+        throw new Error('Failed to create order')
+      } catch (err) {
+        console.error('Create Order Error:', err)
+        throw err
+      }
     },
 
-    //Set selected order
+    // Map API order to UI format (same as before)
+    mapOrder(apiOrder) {
+      return {
+        id: apiOrder.id,
+        title: apiOrder.name,
+        code: apiOrder.name.replace('#', ''),
+        status: this.mapStatus(apiOrder.status),
+        date: new Date(apiOrder.created_at).toLocaleDateString('en-US', {
+          year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+        }),
+        price: apiOrder.total_price,
+        platform: 'N/A',
+        region: apiOrder.details?.country || 'N/A',
+        delivery: 'Instant',
+        image: apiOrder.images?.[0] || '/games/default.png',
+        primaryBtn: apiOrder.status === 'completed' ? 'View Key' : 'Processing',
+        secondaryBtn: 'Order again',
+        detailsText: 'View Details',
+        location: `${apiOrder.details?.city || ''}, ${apiOrder.details?.country || ''}`,
+        paymentMethod: apiOrder.payment_method,
+        key: '',
+        serial: ''
+      }
+    },
+
+    mapOrderDetails(apiOrder) {
+      return {
+        ...this.mapOrder(apiOrder),
+        items: apiOrder.cards?.map(item => ({
+          id: item.id,
+          name: item.name,
+          img: item.img,
+          qty: item.qty,
+          price: item.total_price,
+          codes: item.codes
+        })) || []
+      }
+    },
+
+    mapStatus(apiStatus) {
+      const map = {
+        'ملغى': 'Cancelled',
+        'completed': 'Completed',
+        'processing': 'Processing',
+        'on-hold': 'On Hold',
+        'shipped': 'Shipped',
+        'refunded': 'Refunded'
+      }
+      return map[apiStatus] || apiStatus
+    },
+
     setSelectedOrder(order) {
       this.selectedOrder = order
-      if (process.client) {
-        localStorage.setItem('selectedOrder', JSON.stringify(order))
-      }
     },
 
-    //Clear selected order
     clearSelectedOrder() {
       this.selectedOrder = null
-      if (process.client) {
-        localStorage.removeItem('selectedOrder')
-      }
     },
 
-    //Sync data from localStorage (on refresh)
-    loadOrdersFromStorage() {
-      if (process.client) {
-        try {
-          const stored = JSON.parse(localStorage.getItem('orders') || '[]')
-          const selected = JSON.parse(localStorage.getItem('selectedOrder') || 'null')
-          const cartData = JSON.parse(localStorage.getItem('cart') || '[]')
-          const checkout = JSON.parse(localStorage.getItem('checkoutData') || '{"billing": {}, "paymentMethod": null}')
-
-          this.orders = stored
-          this.selectedOrder = selected
-          this.cart = cartData
-          this.checkoutData = checkout
-        } catch (e) {
-          console.error('Failed to load from localStorage:', e)
-        }
-      }
-    },
-
-    //Add item to cart
-    addToCart(product) {
-      const existing = this.cart.find((p) => p.id === product.id)
-      if (existing) {
-        existing.quantity += 1
-      } else {
-        this.cart.push({
-          ...product,
-          quantity: 1,
-          addedAt: new Date().toISOString()
-        })
-      }
-
-      if (process.client) {
-        localStorage.setItem('cart', JSON.stringify(this.cart))
-      }
-    },
-
-    //Remove from cart
-    removeFromCart(id) {
-      this.cart = this.cart.filter((p) => p.id !== id)
-      if (process.client) {
-        localStorage.setItem('cart', JSON.stringify(this.cart))
-      }
-    },
-
-    //Update quantity
-    updateQuantity(id, qty) {
-      const item = this.cart.find((p) => p.id === id)
-      if (item) {
-        item.quantity = Math.max(1, qty)
-        if (process.client) {
-          localStorage.setItem('cart', JSON.stringify(this.cart))
-        }
-      }
-    },
-
-    //Clear entire cart
-    clearCart() {
-      this.cart = []
-      if (process.client) {
-        localStorage.removeItem('cart')
-      }
+    getOrderById(id) {
+      return this.orders.find(o => o.id === Number(id))
     }
   }
 })

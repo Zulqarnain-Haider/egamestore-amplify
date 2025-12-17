@@ -51,7 +51,7 @@
       Please <NuxtLink to="/auth/login" class="text-primary underline">sign in</NuxtLink> to add a review.
     </div> -->
 
-    <!-- 🔹 Reviews List -->
+    <!-- Reviews List -->
     <div v-if="reviews.length" class="space-y-8 max-h-[650px] overflow-y-auto scrollbar-hide pr-2">
       <div
         v-for="r in reviews"
@@ -60,7 +60,7 @@
       >
         <div class="flex items-center gap-4 mb-3">
           <div class="space-y-5">
-                    <!--⭐Rating -->
+                    <!--Rating -->
             <div class="flex text-yellow-400 text-sm mt-1">
               <template v-for="star in 5" :key="star">
                 <i
@@ -110,7 +110,7 @@ const newReview = ref({
   rating: 0
 })
 
-// ⭐ Add new review logic
+// Add new review logic
 function addReview() {
   if (!newReview.value.text || newReview.value.rating === 0) {
     alert('Please add rating and comment.')
@@ -134,7 +134,7 @@ function addReview() {
   newReview.value.rating = 0
 }
 
-// 📅 Format date (2025-10-24 → Oct 24, 2025)
+// Format date (2025-10-24 → Oct 24, 2025)
 function formatDate(dateStr) {
   const d = new Date(dateStr)
   const date =  d.toLocaleDateString('en-US', 

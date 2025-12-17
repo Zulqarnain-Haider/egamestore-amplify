@@ -4,7 +4,7 @@
       <!-- Background Image -->
       <!-- Background Image – Desktop -->
 <NuxtImg
-  src="/games/Tournaments.New.bg.jpeg"
+  src="/games/Tournaments.New.bg.png"
   densities="x1"
   quality="80"
   format="webp"
@@ -70,7 +70,7 @@
         <!-- Default Background Vector -->
         <NuxtImg 
         densities="x1" quality="80" format="webp" preload 
-        src="/games/BigTournamentVector.jpeg" alt="vector"
+        src="/games/BigTournamentVector.png" alt="vector"
           class="absolute inset-0 w-full h-full object-contain z-0 pointer-events-none select-none hidden sm:block" />
 
         <!--Mobile Background Vector -->

@@ -217,7 +217,7 @@
   </div>
 </template>
 
-<script setup>
+<!-- <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useOrdersStore } from '~/stores/ordersStore.js'
 import { navigateTo } from '#app'
@@ -507,6 +507,100 @@ function placeOrder() {
     return
   }
 
+  // Show loading
+  const loadingToast = toast.loading({
+    title: 'Placing Order',
+    message: 'Please wait...',
+    position: 'topCenter'
+  })
+
+
+   try {
+    // Prepare FormData for API
+    const formData = new FormData()
+    
+    // Personal details
+    formData.append('full_name', `${form.value.firstName} ${form.value.lastName}`)
+    formData.append('country', 'Egypt') // Static
+    formData.append('city', form.value.city)
+    formData.append('street_address', form.value.address)
+    formData.append('phone', '01129609891') // Static phone
+    formData.append('ip_address', '192.168.1.1') // Static IP
+    
+    // Shipping & Payment
+    formData.append('shipping_method', 1) // Default
+    formData.append('payment_id', selectedPaymentId.value)
+    formData.append('wallet_number', '01129609891') // Static
+    formData.append('payment_method', selectedPaymentMethod.value.id)
+    
+    // Coupon & Points
+    if (couponCode.value) formData.append('coupon', couponCode.value)
+    formData.append('redeem_points', 0)
+    
+    // Products (for cart items)
+    cartItems.value.forEach((item, index) => {
+      formData.append('product_id', item.id)
+      formData.append('qty', item.quantity)
+      if (index === 0) formData.append('is_buy_now', 1)
+    })
+    
+    // Call API
+    const result = await ordersStore.createOrder(formData)
+    
+    // Success
+    toast.dismiss(loadingToast)
+    toast.success({
+      title: 'Order Placed',
+      message: `Order #${result.order_id} created successfully!`,
+      position: 'topCenter',
+      duration: 3000
+    })
+    
+    // Clear cart & redirect
+    ordersStore.clearCart()
+    setTimeout(() => navigateTo('/orders'), 1500)
+    
+  } catch (err) {
+    toast.dismiss(loadingToast)
+    console.error('Place Order Error:', err)
+    
+    toast.error({
+      title: 'Order Failed',
+      message: err.message || 'Failed to place order. Try again.',
+      position: 'topCenter',
+      duration: 4000
+    })
+  }
+}
+    
+    // Call API
+    const result = await ordersStore.createOrder(formData)
+    
+    // Success
+    toast.dismiss(loadingToast)
+    toast.success({
+      title: 'Order Placed',
+      message: `Order #${result.order_id} created successfully!`,
+      position: 'topCenter',
+      duration: 3000
+    })
+    
+    // Clear cart & redirect
+    ordersStore.clearCart()
+    setTimeout(() => navigateTo('/orders'), 1500)
+    
+  } catch (err) {
+    toast.dismiss(loadingToast)
+    console.error('Place Order Error:', err)
+    
+    toast.error({
+      title: 'Order Failed',
+      message: err.message || 'Failed to place order. Try again.',
+      position: 'topCenter',
+      duration: 4000
+    })
+  }
+
   const order = {
     id: Date.now(),
     ...form.value,
@@ -536,7 +630,350 @@ onMounted(() => {
   ordersStore.loadOrdersFromStorage()
   fetchPaymentMethods()
 })
+</script> -->
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useOrdersStore } from '~/stores/ordersStore.js'
+import { navigateTo } from '#app'
+import { useToast } from '#imports'
+
+const ordersStore = useOrdersStore()
+const toast = useToast()
+
+// Cart & Totals
+const cartItems = computed(() => ordersStore.cart)
+const subtotal = computed(() => ordersStore.cart.reduce((acc, item) => acc + (Number(item.price) || 0) * (item.quantity || 1), 0))
+const shipping = computed(() => 9.5)
+const total = computed(() => subtotal.value + shipping.value)
+
+// Form
+const form = ref({
+  firstName: '',
+  lastName: '',
+  address: '',
+  city: '',
+  state: '',
+  postalCode: '',
+  cardName: '',
+  cardNumber: '',
+  expiry: '',
+  cvc: '',
+})
+
+// Payment States
+const selectedPaymentId = ref(null)
+const selectedPaymentMethod = ref(null)
+const paymentMethods = ref([])
+const loadingPayments = ref(false)
+const paymentsError = ref(false)
+const errors = ref({})
+
+// Check if selected payment requires card details
+const selectedPaymentRequiresCard = computed(() => {
+  if (!selectedPaymentMethod.value) return false
+  const name = selectedPaymentMethod.value.name?.toLowerCase() || ''
+  return name.includes('card') || name.includes('visa') || name.includes('stripe') || name.includes('credit')
+})
+
+// Helper
+function inputClass(field) {
+  return [
+    'input',
+    errors.value[field] ? 'border-error focus:border-error' : 'focus:border-primary focus:ring-1 focus:ring-primary',
+  ]
+}
+
+// ===================
+// Fetch Payment Methods
+// ===================
+async function fetchPaymentMethods() {
+  loadingPayments.value = true
+  paymentsError.value = false
+  
+  try {
+    const token = localStorage.getItem('token')
+    
+    if (!token) {
+      toast.error({
+        title: 'Authentication Required',
+        message: 'Please login to continue',
+        position: 'topCenter',
+        duration: 3000
+      })
+      setTimeout(() => navigateTo('/auth/login'), 1500)
+      return
+    }
+
+    const response = await $fetch('https://api.egamestore.com/api/payments', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept-language': 'en'
+      },
+      params: {
+        platform: 'web',
+        is_buy_now: 1,
+        card_id: 3679,
+        qty: 1
+      }
+    })
+
+    console.log('✅ Payment Methods Response:', response)
+
+    if (response.status && response.data) {
+      paymentMethods.value = response.data
+      
+      if (paymentMethods.value.length > 0) {
+        selectPayment(paymentMethods.value[0])
+      }
+      
+      toast.success({
+        title: 'Payment Methods Loaded',
+        message: `${paymentMethods.value.length} payment options available`,
+        position: 'topCenter',
+        duration: 2000
+      })
+    } else {
+      paymentsError.value = true
+      toast.error({
+        title: 'Payment Error',
+        message: response.message || 'Failed to load payment methods',
+        position: 'topCenter',
+        duration: 4000
+      })
+    }
+  } catch (error) {
+    paymentsError.value = true
+    console.error('❌ Payment Methods Error:', error)
+    
+    if (error.statusCode === 401 || error.statusCode === 403) {
+      toast.error({
+        title: 'Session Expired',
+        message: 'Please login again',
+        position: 'topCenter',
+        duration: 3000
+      })
+      setTimeout(() => navigateTo('/auth/login'), 1500)
+    } else {
+      toast.error({
+        title: 'Connection Error',
+        message: 'Unable to load payment methods. Please try again.',
+        position: 'topCenter',
+        duration: 4000
+      })
+    }
+  } finally {
+    loadingPayments.value = false
+  } 
+}
+
+// ===================
+// Select Payment
+// ===================
+function selectPayment(method) {
+  selectedPaymentId.value = method.id
+  selectedPaymentMethod.value = method
+  
+  console.log('Selected Payment:', method)
+  
+  toast.success({
+    title: 'Payment Selected',
+    message: `${method.name} selected`,
+    position: 'topCenter',
+    duration: 2000
+  })
+}
+
+const showCouponInput = ref(false)
+const couponCode = ref('')
+const couponMessage = ref('')
+const couponSuccess = ref(false)
+
+async function applyCoupon() {
+  couponMessage.value = ''
+  couponSuccess.value = false
+
+  const token = localStorage.getItem('token')
+
+  if (!token) {
+    toast.error({
+      title: 'Login Required',
+      message: 'Please login to apply coupon',
+      position: 'topCenter'
+    })
+    return
+  }
+
+  try {
+    const response = await $fetch('https://api.egamestore.com/api/users/points-summary', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Accept-language': 'en'
+      },
+      params: {
+        status: 'all'
+      }
+    })
+
+    console.log("Coupon API Response:", response)
+
+    const backendCoupon = "TESTTT"
+
+    if (couponCode.value.trim().toUpperCase() === backendCoupon) {
+      couponSuccess.value = true
+      couponMessage.value = 'Coupon applied successfully!'
+
+      const discount = subtotal.value * 0.10
+      ordersStore.applyDiscount(discount)
+
+      toast.success({
+        title: 'Coupon Applied',
+        message: 'Your discount has been added!',
+        position: 'topCenter'
+      })
+    } else {
+      couponMessage.value = 'Invalid coupon code'
+      couponSuccess.value = false
+
+      toast.error({
+        title: 'Invalid Coupon',
+        message: 'Please enter a valid coupon.',
+        position: 'topCenter'
+      })
+    }
+  } catch (err) {
+    console.log("Coupon Error:", err)
+    couponMessage.value = 'Unable to apply coupon right now'
+    couponSuccess.value = false
+
+    toast.error({
+      title: 'Error',
+      message: 'Failed to verify coupon',
+      position: 'topCenter'
+    })
+  }
+}
+
+// ===================
+// Form Validation
+// ===================
+function validateForm() {
+  errors.value = {}
+
+  if (!form.value.firstName) errors.value.firstName = 'First name is required.'
+  if (!form.value.lastName) errors.value.lastName = 'Last name is required.'
+  if (!form.value.address) errors.value.address = 'Address is required.'
+  if (!form.value.city) errors.value.city = 'City is required.'
+  if (!form.value.state) errors.value.state = 'State is required.'
+  if (!form.value.postalCode) errors.value.postalCode = 'Postal code is required.'
+
+  if (selectedPaymentRequiresCard.value) {
+    if (!form.value.cardName) errors.value.cardName = "Cardholder's name is required."
+    if (!form.value.cardNumber) errors.value.cardNumber = 'Card number is required.'
+    if (!form.value.expiry) errors.value.expiry = 'Expiry is required.'
+    if (!form.value.cvc) errors.value.cvc = 'CVC is required.'
+  }
+
+  if (!selectedPaymentId.value) {
+    toast.error({
+      title: 'Payment Required',
+      message: 'Please select a payment method',
+      position: 'topCenter',
+      duration: 3000
+    })
+    return false
+  }
+
+  if (!ordersStore.cart.length) {
+    toast.error({
+      title: 'Cart Empty',
+      message: 'Your cart is empty.',
+      position: 'topCenter',
+      duration: 3000
+    })
+    return false
+  }
+
+  return Object.keys(errors.value).length === 0
+}
+
+// ===================
+// Place Order
+// ===================
+async function placeOrder() {
+  if (!validateForm()) {
+    toast.error({
+      title: 'Validation Error',
+      message: 'Please fill all required fields',
+      position: 'topCenter',
+      duration: 3000
+    })
+    return
+  }
+
+  const loadingToast = toast.loading({
+    title: 'Placing Order',
+    message: 'Please wait...',
+    position: 'topCenter'
+  })
+
+  try {
+    const formData = new FormData()
+    
+    formData.append('full_name', `${form.value.firstName} ${form.value.lastName}`)
+    formData.append('country', 'Egypt')
+    formData.append('city', form.value.city)
+    formData.append('street_address', form.value.address)
+    formData.append('phone', '01129609891')
+    formData.append('ip_address', '192.168.1.1')
+    
+    formData.append('shipping_method', 1)
+    formData.append('payment_id', selectedPaymentId.value)
+    formData.append('wallet_number', '01129609891')
+    formData.append('payment_method', selectedPaymentMethod.value.id)
+    
+    if (couponCode.value) formData.append('coupon', couponCode.value)
+    formData.append('redeem_points', 0)
+    
+    cartItems.value.forEach((item, index) => {
+      formData.append('product_id', item.id)
+      formData.append('qty', item.quantity)
+      if (index === 0) formData.append('is_buy_now', 1)
+    })
+    
+    const result = await ordersStore.createOrder(formData)
+    
+    toast.dismiss(loadingToast)
+    toast.success({
+      title: 'Order Placed',
+      message: `Order #${result.order_id} created successfully!`,
+      position: 'topCenter',
+      duration: 3000
+    })
+    
+    ordersStore.clearCart()
+    setTimeout(() => navigateTo('/orders'), 1500)
+    
+  } catch (err) {
+    toast.dismiss(loadingToast)
+    console.error('Place Order Error:', err)
+    
+    toast.error({
+      title: 'Order Failed',
+      message: err.message || 'Failed to place order. Try again.',
+      position: 'topCenter',
+      duration: 4000
+    })
+  }
+}
+
+onMounted(() => {
+  ordersStore.loadOrdersFromStorage()
+  fetchPaymentMethods()
+})
 </script>
+
 
 <style scoped>
 .input {

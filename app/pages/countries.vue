@@ -6,8 +6,11 @@
       <Icon
           name="heroicons-chevron-right-20-solid" class="text-mainText w-7 h-7"/>
       <NuxtLink :to="`/category/${categoryId}`" class="hover:text-primary">{{ categoryName }}</NuxtLink>
-      -
-      <span class="text-mainText">Select Country</span>
+      <Icon
+          name="heroicons-chevron-right-20-solid" class="text-mainText w-7 h-7"/>
+      <span class="text-mainText">
+       {{ subcategoryName }}
+     </span>
     </div>
 
     <!-- Page Title -->
@@ -48,15 +51,20 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useCategoriesStore } from '~/stores/categoriesStore.js'
 import { useCountriesStore } from '~/stores/countriesStore.js'
 
 const route = useRoute()
 const router = useRouter()
+
 const countriesStore = useCountriesStore()
+const categoriesStore = useCategoriesStore()
 
 const countries = ref([])
 const loading = ref(true)
 const error = ref(null)
+
+const subcategoryName = ref('')
 
 const categoryId = computed(() => route.query.category)
 const subcategoryId = computed(() => route.query.subcategory)
@@ -80,9 +88,23 @@ const fetchData = async () => {
   
   try {
     const idToUse = subcategoryId.value || categoryId.value
+
     await countriesStore.fetchCountries(idToUse)
     countries.value = countriesStore.countries
     
+    // If subcategory exists → fetch children & find name
+    if (subcategoryId.value) {
+      await categoriesStore.fetchChildren(categoryId.value)
+
+      const found = categoriesStore.childrenCategories.find(
+        c => String(c.id) === String(subcategoryId.value)
+      )
+
+      subcategoryName.value = found ? found.name : ''
+    } else {
+      subcategoryName.value = ''
+    }
+
     console.log('✅ Countries loaded:', countries.value.length)
     
     if (!countries.value.length) {

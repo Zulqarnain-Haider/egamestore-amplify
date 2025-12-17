@@ -5,7 +5,7 @@
     <!-- Left Image -->
     <div class="w-full md:w-1/2 flex justify-center mb-8 md:mb-0 z-10">
       <NuxtImg
-        src="/games/ForgotPasswordLeft.jpeg"
+        src="/games/ForgotPasswordLeft.png"
         alt="Forgot Password Left"
         quality="80"
         format="webp"

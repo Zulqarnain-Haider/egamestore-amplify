@@ -5,7 +5,7 @@
       <NuxtLink to="/" class="hover:text-primary text-mainText">Home</NuxtLink>
        <Icon
           name="heroicons-chevron-right-20-solid" class="text-mainText w-7 h-7"/>
-      <span class="text-mainText">{{ categoryName }} - Sub Categories </span>
+      <span class="text-mainText">{{ categoryName }}</span>
     </div>
 
     <!-- Page Title -->
