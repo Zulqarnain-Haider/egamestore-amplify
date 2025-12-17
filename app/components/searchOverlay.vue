@@ -2,8 +2,11 @@
   <transition name="fade">
     <div
       v-if="show"
-      class="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex justify-center items-start pt-40"
+      class="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex justify-center items-start pt-40 overflow-y-auto"
       @click.self="close"
+      @wheel.prevent
+      @touchmove.prevent
+      @scroll.prevent
     >
       <div class="relative w-full max-w-2xl">
         <!-- Wrapper with consistent horizontal padding -->
@@ -15,7 +18,7 @@
             <Icon name="mdi:magnify" class="text-primary w-6 h-6 mr-2" />
             <input
               v-model="query"
-              @input="filterSuggestions"
+              @input="debouncedSearch"
               @keyup.enter="handleEnter"
               type="text"
               placeholder="Search games..."
@@ -33,24 +36,36 @@
 
         <!-- Suggestions Dropdown -->
         <div class="px-4">
+          <!-- Loading State -->
+          <div
+            v-if="loadingSuggestions && query"
+            class="bg-bgNav mt-3 border border-outline rounded-lg p-4 text-center"
+          >
+            <Icon name="mdi:loading" class="w-6 h-6 text-primary animate-spin mx-auto" />
+            <p class="text-onMainText text-sm mt-2">Searching...</p>
+          </div>
+
+          <!-- Suggestions List -->
           <ul
-            v-if="filtered.length && query"
+            v-else-if="filtered.length && query"
             class="bg-bgNav mt-3 border border-outline rounded-lg shadow-lg overflow-y-auto"
             style="max-height: 300px"
+            @wheel.stop
+            @touchmove.stop
           >
             <li
-              v-for="(game, index) in filtered"
+              v-for="game in filtered"
               :key="game.id"
               class="px-4 py-2 flex items-center gap-3 cursor-pointer hover:bg-outline transition"
-              @click="goToResult(game.title)"
+              @click="goToResult(game.name)"
             >
               <NuxtImg
-                :src="game.image"
+                :src="game.img"
                 alt=""
                 class="w-10 h-10 rounded-md object-cover"
                 loading="lazy"
               />
-              <span class="text-mainText font-poppins text-sm">{{ game.title }}</span>
+              <span class="text-mainText font-poppins text-sm">{{ game.name }}</span>
             </li>
           </ul>
 
@@ -59,7 +74,7 @@
             v-else-if="query && !loadingSuggestions && filtered.length === 0"
             class="bg-bgNav mt-3 border border-outline rounded-lg p-4 text-center text-onMainText text-sm"
           >
-            No games found for “{{ query }}”
+            No games found for "{{ query }}"
           </div>
         </div>
       </div>
@@ -68,45 +83,80 @@
 </template>
 
 <script setup>
-import { ref, watch, nextTick } from 'vue';
-import { useRouter } from 'vue-router';
-import productsData from '../../data/products.json';
+import { ref, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
+import { useRouter } from 'vue-router'
 
 const props = defineProps({
   show: Boolean,
 })
 const emits = defineEmits(['close'])
 
+const config = useRuntimeConfig()
 const router = useRouter()
 const query = ref('')
 const filtered = ref([])
 const loadingSuggestions = ref(false)
 const searchInput = ref(null)
 
-// Cache all products
-const allProducts = ref([])
+let debounceTimer = null
 
-async function loadAllProducts() {
-  if (allProducts.value.length) return
-  allProducts.value = Array.isArray(productsData) ? productsData : []
+// Lock/unlock body scroll
+const lockScroll = () => {
+  if (process.client) {
+    document.body.style.overflow = 'hidden'
+    document.body.style.paddingRight = `${window.innerWidth - document.documentElement.clientWidth}px`
+  }
 }
 
-// Filter suggestions
-const filterSuggestions = async () => {
-  const q = query.value.trim().toLowerCase()
-  if (!q) {
+const unlockScroll = () => {
+  if (process.client) {
+    document.body.style.overflow = ''
+    document.body.style.paddingRight = ''
+  }
+}
+
+// Debounced search function
+const debouncedSearch = () => {
+  clearTimeout(debounceTimer)
+  debounceTimer = setTimeout(() => {
+    fetchSuggestions()
+  }, 400) // Wait 400ms after user stops typing
+}
+
+// Fetch suggestions from API
+const fetchSuggestions = async () => {
+  const searchTerm = query.value.trim()
+  
+  if (!searchTerm) {
     filtered.value = []
     return
   }
 
   loadingSuggestions.value = true
-  await loadAllProducts()
 
-  filtered.value = allProducts.value
-    .filter((g) => g.title?.toLowerCase().includes(q))
-    .slice(0, 8)
+  try {
+    const response = await $fetch(`${config.public.apiBase}/products/search`, {
+      params: {
+        search: searchTerm
+      }
+    })
 
-  loadingSuggestions.value = false
+    if (response.status && response.data) {
+      // Combine products and cards from the API response
+      const products = response.data.products?.products || []
+      const cards = response.data.cards?.cards || []
+      
+      // Merge both arrays and limit to 8 results
+      filtered.value = [...products, ...cards].slice(0, 8)
+    } else {
+      filtered.value = []
+    }
+  } catch (error) {
+    console.error('Search error:', error)
+    filtered.value = []
+  } finally {
+    loadingSuggestions.value = false
+  }
 }
 
 // Go to search page on Enter
@@ -121,9 +171,9 @@ const handleEnter = async () => {
 }
 
 // Click on suggestion
-const goToResult = async (title) => {
+const goToResult = async (name) => {
   emits('close')
-  await router.push(`/search?q=${encodeURIComponent(title)}`)
+  await router.push(`/search?q=${encodeURIComponent(name)}`)
   query.value = ''
   filtered.value = []
 }
@@ -133,18 +183,32 @@ const close = () => {
   emits('close')
   query.value = ''
   filtered.value = []
+  clearTimeout(debounceTimer)
 }
 
-// Focus input when opened
+// Focus input when opened and handle scroll lock
 watch(
   () => props.show,
   async (val) => {
     if (val) {
+      lockScroll()
       await nextTick()
       searchInput.value?.focus()
+    } else {
+      unlockScroll()
+      // Clear when closing
+      query.value = ''
+      filtered.value = []
+      clearTimeout(debounceTimer)
     }
   }
 )
+
+// Cleanup on unmount
+onBeforeUnmount(() => {
+  unlockScroll()
+  clearTimeout(debounceTimer)
+})
 </script>
 
 <style scoped>
@@ -169,5 +233,18 @@ ul::-webkit-scrollbar-thumb {
 
 ul::-webkit-scrollbar-thumb:hover {
   background-color: rgba(255, 255, 255, 0.3);
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
 }
 </style>
