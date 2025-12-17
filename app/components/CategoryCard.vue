@@ -1,36 +1,46 @@
 <template>
   <div 
-    class="border border-onOutline rounded-lg p-3 hover:shadow-lg hover:border-primary transition-all cursor-pointer group"
+    class="rounded-xl p-3 cursor-pointer group transition-all
+           bg-bgLight border border-[#3A3F45]
+           hover:border-primary hover:shadow-[0_0_12px_#FF6A16AA] hover:scale-[1.02]"
     @click="handleClick"
   >
-    <NuxtImg 
-     densities="x1"
-     format="webp"
-     loading="lazy"
-      :src="category.logo" 
-      :alt="category.name" 
-      class="w-full h-32 sm:h-40 object-cover rounded-md mb-2 group-hover:scale-105 transition-transform" 
-    />
-    <div class="font-semibold text-center items-center text-mainText bg-primary rounded-md p-1 transition-colors">
-    <h3 class="text-sm ">
-      {{ category.name }}
-    </h3>
+    <!-- Image Wrapper: True 1200x630 Aspect Ratio -->
+    <div class="w-full aspect-[1200/630] overflow-hidden rounded-lg">
+      <NuxtImg 
+        densities="x1"
+        format="webp"
+        loading="lazy"
+        :src="category.logo"
+        :alt="category.name"
+        class="w-full h-full object-cover"
+      />
+    </div>
+
+    <!-- Title -->
+    <div 
+      class="font-semibold text-center mt-3 text-onPrimary 
+             bg-primary py-2 rounded-md tracking-wide"
+    >
+      <h3 
+        class="uppercase 
+               text-[10px] sm:text-xs md:text-sm lg:text-base 
+               leading-tight px-1 break-words"
+      >
+        {{ category.name }}
+      </h3>
     </div>
   </div>
 </template>
 
 <script setup>
 const props = defineProps({
-  category: { 
-    type: Object, 
-    required: true 
-  }
+  category: { type: Object, required: true }
 })
 
 const emit = defineEmits(['select'])
 
 const handleClick = () => {
-  console.log('Category clicked:', props.category)
-  emit('select', props.category.id)  // Yeh hi chahiye – parent handle karega
+  emit('select', props.category.id)
 }
 </script>
