@@ -352,12 +352,31 @@ const handleSignup = async () => {
     dob: finalDob,
     agree_sms: form.value.agree_sms ? 1 : 0,
   }
-console.log("from singup",form.value.phone)
+  console.log("from singup",form.value.phone)
   const res = await userStore.signup(payload) 
 
   if (!res.success) {
     globalError.value = res.message
-    toast.error({ title: 'Error!', message: res.message, position: 'topCenter' })
+  
+    // Show main message
+    toast.error({
+      title: 'Error!',
+      message: res.message,
+      position: 'topCenter',
+    })
+  
+    // Show each validation error
+    if (res.errors && res.errors.length > 0) {
+      res.errors.forEach(err => {
+        toast.error({
+          title: "Validation Error",
+          message: err,
+          position: "topCenter",
+          duration: 3500
+        })
+      })
+    }
+  
     return
   }
 

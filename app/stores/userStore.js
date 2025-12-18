@@ -93,7 +93,13 @@ export const useUserStore = defineStore('user', {
               'Content-Type': 'multipart/form-data' },
         })
 
-        if (!res.data?.status) return { success: false, message: res.data?.message }
+        if (!res.data?.status) {
+          return { 
+            success: false, 
+            message: res.data?.message,
+            errors: res.data?.errors || [] 
+          }
+        }
 
         const token = res.data.data?.token
         this.token = token

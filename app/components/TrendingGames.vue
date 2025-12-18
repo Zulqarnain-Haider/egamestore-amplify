@@ -89,7 +89,7 @@ const updateWidth = () => { windowWidth.value = getWindowWidth() }
 // Fetch latest products
 async function fetchTrendingGames() {
   try {
-    const result = await $fetch(`${config.public.apiBase}/products/latest?limit=2`, {
+    const result = await $fetch(`${config.public.apiBase}/products/latest?limit=30`, {
       headers: {
          "Accept-language" :'en',
 
