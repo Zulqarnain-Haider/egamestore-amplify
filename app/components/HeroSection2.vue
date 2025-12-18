@@ -58,7 +58,7 @@
       >
          <NuxtImg
          densities="x1" quality="80" format="webp" preload
-          src="/games/HeroSection2.Right.jpeg"
+          src="/games/HeroSection2.Right.png"
           alt="Hero Section Right"
           class="w-[85%] sm:w-[75%] md:w-[70%] lg:w-[92%] xl:w-[100%] object-contain"
         />

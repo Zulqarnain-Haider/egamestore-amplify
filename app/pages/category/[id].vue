@@ -1,13 +1,12 @@
 <template>
-  <div class="min-h-screen text-mainText font-poppins flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
-    <div class="w-full max-w-7xl">
-      
-      <!-- Breadcrumb -->
-      <div class="mb-6 text-lg flex items-center gap-1">
-        <NuxtLink to="/" class="hover:text-primary text-mainText">Home</NuxtLink>
-        <Icon name="heroicons-chevron-right-20-solid" class="text-mainText w-7 h-7" />
-        <span class="text-mainText">{{ categoryName }}</span>
-      </div>
+  <div class="min-h-screen px-4 sm:px-6 lg:px-8 mb-10 lg:mb-12">
+    <!-- Breadcrumb -->
+    <div class="mb-6 text-lg flex items-center gap-1 border-b border-primary">
+      <NuxtLink to="/" class="hover:text-primary text-mainText">Home</NuxtLink>
+       <Icon
+          name="heroicons-chevron-right-20-solid" class="text-mainText w-7 h-7"/>
+      <span class="text-mainText">{{ categoryName }}</span>
+    </div>
 
       <!-- Loading State -->
       <div v-if="loading" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">

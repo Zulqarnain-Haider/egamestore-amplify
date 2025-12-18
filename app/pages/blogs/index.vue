@@ -62,12 +62,12 @@
       <BlogCard
         v-for="(blog, i) in blogs"
         :key="i"
-        :image="blog.img"
+        :image="blog.img || blog.image"
         :tag="blog.tags?.[0]?.name || 'General'"
         :title="blog.title"
         :description="shortDesc(blog.desc)"
         :author="blog.author?.name || 'Admin'"
-        :authorImage="blog.author?.img || '/blogs/BlogUser1.jpg'"
+        :authorImage="blog.author?.img || '/games/BlogUser1.jpg'"
         :time="formatDate(blog.created_at)"
         :slug="blog.slug"
       />

@@ -33,11 +33,11 @@
     <!-- Pre-Order CTA: Calendar + Button -->
     <div class="flex justify-between items-center mt-3 gap-2 text-white text-xs sm:text-[11px] lg:text-[13px] xl:text-[14px]">
       <!-- Calendar + Date -->
-      <div class="flex items-center justify-center text-onMainText gap-2 md:gap-1 whitespace-nowrap">
+      <div class="flex items-center text-onMainText gap-2 md:gap-1 whitespace-nowrap">
         <Icon name="material-symbols:calendar-month"
-          class="w-4 h-4 sm:w-3 sm:h-3 lg:h-4 lg:w-4 opacity-80"
+          class="w-4 h-4 sm:w-3 sm:h-3 lg:h-4 lg:w-4 opacity-80 self-center"
         />
-        <span>{{ product.releaseDate }}</span>
+        <span class="flex items-center">{{ product.releaseDate }}</span>
       </div>
 
       <!-- Pre-Order Button with Arrow -->

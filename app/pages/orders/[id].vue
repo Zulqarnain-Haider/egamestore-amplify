@@ -197,6 +197,8 @@
       @close="showModal = false"
       :orderKey="order.key || ''"
       :serial="order.serial || ''"
+      :itemId="order.items?.[0]?.id || null"
+      @codesFetched="handleCodesFetched"
     />
   </div>
 </template>
@@ -208,27 +210,15 @@ import { useOrdersStore } from '~/stores/ordersStore.js'
 
 const route = useRoute()
 const router = useRouter()
-const showModal = ref(false)
 const ordersStore = useOrdersStore()
 
-// Load orders safely on mount (browser only)
-onMounted(() => {
-  if (import.meta.client) {
-    ordersStore.loadOrdersFromStorage()
-  }
-})
-
-const order = computed(() => {
-  return (
-    ordersStore.selectedOrder ||
-    ordersStore.getOrderById(route.params.id) ||
-    null
-  )
-})
+const showModal = ref(false)
+const order = computed(() => ordersStore.selectedOrder)
+const loading = computed(() => ordersStore.loading)
+const error = computed(() => ordersStore.error)
 
 const otherOrders = computed(() => {
-  if (!ordersStore.orders?.length) return []
-  return ordersStore.orders.filter((o) => o.id !== order.value?.id)
+  return ordersStore.orders.filter(o => o.id !== order.value?.id)
 })
 
 const goBack = () => {
@@ -236,9 +226,31 @@ const goBack = () => {
   router.push('/orders')
 }
 
-const openKeyModal = () => {
+const openKeyModal = async () => {
+  if (order.value?.items?.length) {
+    // Fetch codes for first item (or loop through items)
+    const codes = await ordersStore.fetchOrderCodes(order.value.items[0].id)
+    if (codes.length) {
+      order.value.key = codes[0].actual_code
+      order.value.serial = codes[0].hash_code
+    }
+  }
   showModal.value = true
 }
+
+const handleCodesFetched = (codeData) => {
+  if (order.value) {
+    order.value.key = codeData.actual_code
+    order.value.serial = codeData.hash_code
+  }
+}
+
+onMounted(() => {
+  const orderId = route.params.id
+  if (!order.value || order.value.id !== Number(orderId)) {
+    ordersStore.fetchOrderDetails(orderId)
+  }
+})
 </script>
 
 <style scoped>

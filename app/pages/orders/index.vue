@@ -232,150 +232,48 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useOrdersStore } from '~/stores/ordersStore.js'
 
-
-const router = useRouter()
 const ordersStore = useOrdersStore()
-
-onMounted(() => {
-ordersStore.setOrders(orders.value)
-})
-
-const showModal = ref(false)
-const selectedOrder = ref({ key: '', serial: '' })
-
-function openKeyModal(order) {
-  selectedOrder.value = { key: order.key, serial: order.serial }
-  showModal.value = true
-}
-
-function goToDetails(order) {
-      ordersStore.setSelectedOrder(order)
-      router.push(`/orders/${order.id}`)
-}
 
 const searchQuery = ref('')
 const page = ref(1)
+const statusFilter = ref('all') // For API filter
 
-const orders = ref([
-  {
-    id: 1,
-    title: 'Cyberpunk 2077 - Ultimate Edition',
-    code: 'GP-2024-001',
-    status: 'Completed' || 'Delivered',
-    date: 'January 15, 2024 at 3:42 PM',
-    price: 59.99,
-    platform: 'Steam',
-    region: 'Global',
-    delivery: 'Instant',
-    image: '/games/Orders1.png',
-    primaryBtn: 'View Key',
-    secondaryBtn: 'Order again',
-    detailsText: 'View Details',
-    location: 'Gulberg III, Karachi',
-    paymentMethod: 'GooglePay'
-  },
-  {
-    id: 2,
-    title: 'Call of Duty: Modern Warfare III',
-    code: 'GP-2024-002',
-    status: 'Processing',
-    date: 'January 14, 2024 at 7:23 PM',
-    price: 69.99,
-    platform: 'Battle.net',
-    region: 'Global',
-    delivery: 'Within 5 min',
-    image: '/games/Orders2.png',
-    primaryBtn: 'Processing',
-    secondaryBtn: 'Email',
-    detailsText: 'View Details',
-    location: 'Gulberg III, US, America-ined',
-    paymentMethod: 'Cash on Delivery'
-  },
-  {
-    id: 3,
-    title: 'GTA VI - Deluxe Edition',
-    code: 'GP-2024-003',
-    status: 'Processing',
-    date: 'January 13, 2024 at 1:45 PM',
-    price: 89.99,
-    platform: 'Rockstar',
-    region: 'Global',
-    delivery: 'Within 1 day',
-    image: '/games/Orders3.png',
-    primaryBtn: 'Processing',
-    secondaryBtn: 'Play Now',
-    detailsText: 'View Details',
-    location: 'Gulberg III, Karachi',
-    paymentMethod: 'PayPal'
-  },
-  {
-    id: 4,
-    title: 'Cyberpunk 2077 - Ultimate Edition',
-    code: 'GP-2024-001',
-    status: 'Completed' || 'Delivered',
-    date: 'January 15, 2024 at 3:42 PM',
-    price: 59.99,
-    platform: 'Steam',
-    region: 'Global',
-    delivery: 'Instant',
-    image: '/games/Orders4.png',
-    primaryBtn: 'View Key',
-    secondaryBtn: 'Order again',
-    detailsText: 'View Details',
-    location: 'Gulberg III, Lahore',
-    paymentMethod: 'Cash on Delivery'
-  },
-  {
-    id: 5,
-    title: 'Call of Duty: Modern Warfare III',
-    code: 'GP-2024-002',
-    status: 'Processing',
-    date: 'January 14, 2024 at 7:23 PM',
-    price: 69.99,
-    platform: 'Battle.net',
-    region: 'Global',
-    delivery: 'Within 5 min',
-    image: '/games/Orders5.png',
-    primaryBtn: 'Processing',
-    secondaryBtn: 'Email',
-    detailsText: 'View Details',
-    location: 'Gulberg III, Karachi',
-    paymentMethod: 'Cash on Delivery'
-  },
-  {
-    id: 6,
-    title: 'GTA VI - Deluxe Edition',
-    code: 'GP-2024-003',
-    status: 'Completed' || 'Delivered',
-    date: 'January 13, 2024 at 1:45 PM',
-    price: 89.99,
-    platform: 'Rockstar',
-    region: 'Global',
-    delivery: 'Within 1 day',
-    image: '/games/Orders3.png',
-    primaryBtn: 'Processing',
-    secondaryBtn: 'Email',
-    detailsText: 'View Details',
-    location: 'Gulberg III, Lahore',
-    paymentMethod: 'Cash on Delivery'
-  }
-])
+const orders = computed(() => ordersStore.orders)
+const loading = computed(() => ordersStore.loading)
+const error = computed(() => ordersStore.error)
+const pagination = computed(() => ordersStore.pagination)
 
-const statsCards = ref([
-  { icon: '/games/OrdersIcon1.png', value: 24, label: 'Total Orders' },
-  { icon: '/games/OrdersIcon2.png', value: 22, label: 'Completed' },
-  { icon: '/games/OrdersIcon3.png', value: 2, label: 'Processing' },
-  { icon: '/games/OrdersIcon4.png', value: '$1,247', label: 'Total Spent' }
-])
+const perPage = computed(() => pagination.value.per_page || 15)
+const total = computed(() => pagination.value.total || 0)
 
-const perPage = 5
 const paginatedOrders = computed(() => {
-  const start = (page.value - 1) * perPage
-  return orders.value.slice(start, start + perPage)
+  // API already paginated, so return all
+  return orders.value
+})
+
+// Stats (API se calculate karo or static rakho)
+const statsCards = ref([
+  { icon: '/games/OrdersIcon1.png', value: total.value, label: 'Total Orders' },
+  { icon: '/games/OrdersIcon2.png', value: orders.value.filter(o => o.status === 'Completed').length, label: 'Completed' },
+  { icon: '/games/OrdersIcon3.png', value: orders.value.filter(o => o.status === 'Processing').length, label: 'Processing' },
+  { icon: '/games/OrdersIcon4.png', value: orders.value.reduce((sum, o) => sum + o.price, 0).toFixed(2), label: 'Total Spent' }
+])
+
+const goToDetails = (order) => {
+  ordersStore.setSelectedOrder(order)
+  router.push(`/orders/${order.id}`)
+}
+
+onMounted(() => {
+  ordersStore.fetchOrders(statusFilter.value, page.value, perPage.value)
+})
+
+// Watch for page/status changes
+watch([page, statusFilter], () => {
+  ordersStore.fetchOrders(statusFilter.value, page.value, perPage.value)
 })
 </script>
 

@@ -4,7 +4,8 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
 
   css: ["~/assets/css/tailwind.css",
-    "~/assets/css/toast.css"
+    "~/assets/css/toast.css",
+    "~/assets/css/global.css"
   ],
 
   modules: [

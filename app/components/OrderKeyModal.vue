@@ -98,20 +98,22 @@
 <script setup>
 import { watch } from 'vue'
 import { useToast } from '#imports'
+import { useOrdersStore } from '~/stores/ordersStore.js' // Add this
 
 const toast = useToast()
+const ordersStore = useOrdersStore()
 
 const props = defineProps({
   visible: Boolean,
   orderKey: { type: String, default: 'jklsd-hfksj-fjse2-0384j' },
-  serial: { type: String, default: 'jjdkjdk435tnkjlkowopweo439=' }
+  serial: { type: String, default: 'jjdkjdk435tnkjlkowopweo439=' },
+  itemId: { type: Number, default: null } // Add this prop for item ID
 })
 
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'codesFetched']) // Add emit for codes
 
 const copyKey = () => {
   navigator.clipboard.writeText(props.orderKey)
-
   toast.success({
     title: 'Success!',
     message: 'Key Copied Successfully!',
@@ -122,13 +124,24 @@ const copyKey = () => {
   })
 }
 
+// Fetch codes when modal opens
 watch(
   () => props.visible,
-  (isVisible) => {
+  async (isVisible) => {
     document.body.style.overflow = isVisible ? 'hidden' : 'auto'
+    
+    if (isVisible && props.itemId) {
+      try {
+        const codes = await ordersStore.fetchOrderCodes(props.itemId)
+        if (codes.length) {
+          emit('codesFetched', codes[0]) // Emit codes to parent
+        }
+      } catch (err) {
+        console.error('Failed to fetch codes:', err)
+      }
+    }
   }
 )
-
 </script>
 
 <style scoped>

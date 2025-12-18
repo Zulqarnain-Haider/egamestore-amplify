@@ -23,7 +23,7 @@ export const useTicketStore = defineStore('ticket', {
         const res = await $fetch("https://api.egamestore.com/api/users/tickets", {
           headers: {
             Authorization: `Bearer ${userStore.token}`,
-            lang: "en",
+            'Accept-language': "en",
           },
         })
 
@@ -60,7 +60,7 @@ export const useTicketStore = defineStore('ticket', {
           formData,
           {
             headers: {
-              lang: "ar",
+              'Accept-language': "en",
               "Content-Type": "multipart/form-data",
             },
           },
@@ -84,7 +84,7 @@ export const useTicketStore = defineStore('ticket', {
         const res = await $fetch(`https://api.egamestore.com/api/users/tickets/${uuid}`, {
           headers: {
             Authorization: `Bearer ${userStore.token}`,
-            lang: "en",
+            'Accept-language': "en",
           },
         })
 
@@ -116,7 +116,7 @@ export const useTicketStore = defineStore('ticket', {
           {
             headers: {
               Authorization: `Bearer ${userStore.token}`,
-              lang: "en",
+              'Accept-language': "en",
               "Content-Type": "multipart/form-data",
             },
           },
@@ -149,7 +149,7 @@ export const useTicketStore = defineStore('ticket', {
           {
             headers: {
               Authorization: `Bearer ${userStore.token}`,
-              lang: "en",
+             'Accept-language': "en",
               "Content-Type": "multipart/form-data",
             },
           },

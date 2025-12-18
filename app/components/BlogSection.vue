@@ -145,7 +145,7 @@ const loadBlogs = async () => {
      server: false,
      headers: { Accept: "application/json" },
      query: {
-        type: "news",      // <-- REQUIRED
+        type: "blog",      // <-- REQUIRED
         per_page: 25       // optional
       }
      }
@@ -157,7 +157,7 @@ const loadBlogs = async () => {
       id: post.id,
       slug: post.slug,
       title: post.title,
-      category: post.tags?.[0]?.name || "News",
+      category: post.tags?.[0]?.name || "Blog",
       image: post.img?.startsWith("/")
         ? config.public.apiBase.replace('/api', "") + post.img
         : post.img
