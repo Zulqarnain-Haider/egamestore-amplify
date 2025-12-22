@@ -38,7 +38,7 @@
         />
       </div>
 
-      <!-- Description (HTML rendered) -->
+      <!-- Description -->
       <article
         class="prose prose-invert max-w-none text-gray-200"
         v-html="post.desc"
@@ -48,13 +48,17 @@
       <div class="mt-10 border-t border-gray-700 pt-5 text-sm text-gray-400 text-center">
         <p>Published on {{ formatDate(post.created_at) }}</p>
         <p v-if="post.author?.name">By {{ post.author.name }}</p>
+
         <NuxtImg
-        densities="x1" quality="80" format="webp" loading="lazy"
-    v-if="post.author?.image"
-    :src="post.author.image"
-    alt="author"
-    class="w-10 h-10 rounded-full mx-auto mt-2"
-  />
+          v-if="post.author?.image"
+          densities="x1"
+          quality="80"
+          format="webp"
+          loading="lazy"
+          :src="post.author.image"
+          alt="author"
+          class="w-10 h-10 rounded-full mx-auto mt-2"
+        />
       </div>
     </section>
   </div>
@@ -67,27 +71,29 @@ import { computed } from 'vue'
 const config = useRuntimeConfig()
 const route = useRoute()
 
+/* =========================
+   ROUTE PARAMS
+========================= */
+const postId = computed(() => Number(route.params.id))
 
-// Use slug or id dynamically
-const slugOrId = route.params.slug
-
-
-// Decide API endpoint dynamically
-const apiEndpoint = computed(() => {
-  // Agar slugOrId pure number hai, fetch by id
-  return !isNaN(Number(slugOrId))
-    ? `${config.public.apiBase}/posts/${slugOrId}`
-    : `${config.public.apiBase}/posts/slug/${slugOrId}`
-})
-
-// Fetch single blog by slug
-const { data, pending, error } = await useFetch(apiEndpoint.value,
-    { headers: { Accept: 'application/json' } }
+/* =========================
+   FETCH BY ID (SSR SAFE)
+========================= */
+const { data, pending, error } = await useFetch(
+  () => `${config.public.apiBase}/posts/${postId.value}`,
+  {
+    headers: { Accept: 'application/json' }
+  }
 )
 
-// Extract post object safely
+/* =========================
+   DATA
+========================= */
 const post = computed(() => data.value?.data || {})
 
+/* =========================
+   HELPERS
+========================= */
 const formatDate = (dateStr) => {
   if (!dateStr) return ''
   const date = new Date(dateStr)

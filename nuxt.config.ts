@@ -39,14 +39,7 @@ toast: {
   runtimeConfig: {
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE,
-
-       // Firebase credentials
-      firebaseApiKey: process.env.NUXT_PUBLIC_FIREBASE_API_KEY,
-      firebaseAuthDomain: process.env.NUXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-      firebaseProjectId: process.env.NUXT_PUBLIC_FIREBASE_PROJECT_ID,
-      firebaseStorageBucket: process.env.NUXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-      firebaseMessagingSenderId: process.env.NUXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-      firebaseAppId: process.env.NUXT_PUBLIC_FIREBASE_APP_ID,
+      googleClientId: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_ID,
     }
   },
   
@@ -126,9 +119,21 @@ toast: {
   //NITRO (SERVER) OPTIMIZATIONS
   nitro: {
     compressPublicAssets: true, // Enable compression
+    preset: 'static', 
     prerender: {
-      crawlLinks: true,
-      routes: ['/'] // Add important routes to prerender
+      routes: [
+        '/',          // home
+        '/faq',
+        '/contact-us',
+        '/news-blog',
+        '/category/1',
+        '/category/2',
+        '/category/5',
+        '/category/50',
+      ],
+  
+      // ✅ Do NOT fail build on missing images
+      failOnError: false
     }
   },
 

@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="flex items-center justify-between px-5 sm:px-7 lg:px-8 mb-6">
       <h2 class="text-2xl font-semibold text-white font-vazirmatn">Blog Posts</h2>
-      <NuxtLink to="/blogs"
+      <NuxtLink to="/news-blog"
         class="text-primary text-lg font-vazirmatn flex items-center cursor-pointer hover:text-primary transition"
       >
         View All

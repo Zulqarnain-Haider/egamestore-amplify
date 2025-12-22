@@ -32,9 +32,9 @@
         <h3 class="text-lg font-semibold text-outline mb-3">Quick Links</h3>
         <ul class="space-y-3">
         <li><NuxtLink to="/" class="hover:text-primary">Home</NuxtLink></li>
-        <li><NuxtLink to="/category/gifts" class="hover:text-primary">Gift Cards</NuxtLink></li>
-        <li><NuxtLink to="/category/deals" class="hover:text-primary">Deals</NuxtLink></li>
-        <li><NuxtLink to="/blogs" class="hover:text-primary">Blog</NuxtLink></li>
+        <li><NuxtLink to="/games?type=giftcards" class="hover:text-primary">Gift Cards</NuxtLink></li>
+        <li><NuxtLink to="/games?type=deals" class="hover:text-primary">Deals</NuxtLink></li>
+        <li><NuxtLink to="/news-blog" class="hover:text-primary">Blog</NuxtLink></li>
         </ul>
       </div>
 
@@ -42,9 +42,9 @@
       <div>
         <h3 class="text-lg font-semibold text-outline mb-3">Resources</h3>
         <ul class="space-y-3">
-        <li><NuxtLink to="/category/trending" class="hover:text-primary">Trending Games</NuxtLink></li>
-        <li><NuxtLink to="/category/upcoming" class="hover:text-primary">Upcoming Games</NuxtLink></li>
-        <li><NuxtLink to="" class="hover:text-primary">Reviews</NuxtLink></li>
+        <li><NuxtLink to="/games?type=latest" class="hover:text-primary">Trending Games</NuxtLink></li>
+        <li><NuxtLink to="/games?type=preorders" class="hover:text-primary">Upcoming Games</NuxtLink></li>
+        <li><NuxtLink to="/contact-us" class="hover:text-primary">Contact us</NuxtLink></li>
         <li><NuxtLink to="/faq" class="hover:text-primary">FAQ</NuxtLink></li>
         </ul>
       </div>
@@ -53,10 +53,10 @@
       <div>
         <h3 class="text-lg font-semibold text-outline mb-3">Explore</h3>
         <ul class="space-y-3">
-        <li><NuxtLink to="/category/pc" class="hover:text-primary">PC Games</NuxtLink></li>
-        <li><NuxtLink to="/category/playstation" class="hover:text-primary">PlayStations</NuxtLink></li>
-        <li><NuxtLink to="/category/nintendo" class="hover:text-primary">Nintendo</NuxtLink></li>
-        <li><NuxtLink to="/category/xbox" class="hover:text-primary">Xbox</NuxtLink></li>
+        <li><NuxtLink to="/category/50" class="hover:text-primary">PC Games</NuxtLink></li>
+        <li><NuxtLink to="/category/2" class="hover:text-primary">PlayStations</NuxtLink></li>
+        <li><NuxtLink to="/category/1" class="hover:text-primary">Nintendo</NuxtLink></li>
+        <li><NuxtLink to="/category/5" class="hover:text-primary">Xbox</NuxtLink></li>
         </ul>
       </div>
 

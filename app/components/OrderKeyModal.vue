@@ -6,13 +6,13 @@
       backdrop-blur-sm flex items-center justify-center z-[9999] overflow-hidden
        !m-0 !p-0 w-screen h-screen"
     >
-      <!--Main Popup Card -->
+      <!-- ================= Main Popup Card ================= -->
       <div
         class="relative flex flex-col items-center justify-center text-center
          w-[90%] max-w-md sm:max-w-lg
          overflow-hidden p-8 md:p-10 animate-fadeIn"
       >
-        <!--Background Image -->
+        <!-- Background Image -->
         <NuxtImg
           src="/games/PopupMainCard.png"
           alt="Popup Background"
@@ -23,33 +23,64 @@
           class="absolute inset-0 w-full h-full object-contain object-center z-0"
         />
 
-        <!-- Content -->
-        <div class="relative z-10 flex flex-col scale-75 md:scale-90 font-poppins items-center justify-center w-full space-y-5">
+        <!-- ================= Content ================= -->
+        <div
+          class="relative z-10 flex flex-col scale-75 md:scale-90 font-poppins items-center justify-center w-full space-y-5"
+        >
           <!-- Heading -->
-          <h2 class="text-xl sm:text-2xl font-semibold text-mainText">Your Code</h2>
+          <h2 class="text-xl sm:text-2xl font-semibold text-mainText">
+            Your Code
+          </h2>
 
-          <!-- Key Box -->
+          <!-- ================= Codes List ================= -->
+          <!-- NEW: supports multiple codes (old Vue behavior) -->
           <div
-            class="w-full border border-outline rounded-xl font-normal py-4 px-4 text-center"
+            v-if="resolvedCodes.length"
+            class="w-full border border-outline rounded-xl py-4 px-4 text-left max-h-40 overflow-y-auto"
           >
-            <p class="text-xl sm:text-2xl break-all">
-              {{ orderKey || 'XXXX-XXXX-XXXX-XXXX' }}
-            </p>
+            <div
+              v-for="(item, index) in resolvedCodes"
+              :key="index"
+              class="mb-3 last:mb-0"
+            >
+              <p class="text-sm text-onMainText">PIN:</p>
+              <p class="text-lg break-all font-semibold text-mainText">
+                {{ item.code }}
+              </p>
+
+              <p class="text-sm text-onMainText mt-1">Serial:</p>
+              <p class="text-sm break-all text-gray-100">
+                {{ item.serial }}
+              </p>
+            </div>
           </div>
 
-          <!-- Serial Box -->
-          <div
-            class="w-full rounded-xl py-2 px-4 text-center"
-          >
-            <p class="text-sm font-semibold sm:text-base text-mainText">
-              Serial:
-              <span class="text-gray-100 font-normal tex-sm">
-                {{ serial || 'XXXXXXXXXXXXXXX' }}
-              </span>
-            </p>
-          </div>
+          <!-- ================= Legacy Fallback (DO NOT REMOVE) ================= -->
+          <!-- This keeps backward compatibility -->
+          <template v-else>
+            <!-- Key Box -->
+            <div
+              class="w-full border border-outline rounded-xl font-normal py-4 px-4 text-center"
+            >
+              <p class="text-xl sm:text-2xl break-all">
+                {{ orderKey || 'XXXX-XXXX-XXXX-XXXX' }}
+              </p>
+            </div>
 
-          <!-- Copy & Close Buttons -->
+            <!-- Serial Box -->
+            <div
+              class="w-full rounded-xl py-2 px-4 text-center"
+            >
+              <p class="text-sm font-semibold sm:text-base text-mainText">
+                Serial:
+                <span class="text-gray-100 font-normal tex-sm">
+                  {{ serial || 'XXXXXXXXXXXXXXX' }}
+                </span>
+              </p>
+            </div>
+          </template>
+
+          <!-- ================= Copy & Close Buttons ================= -->
           <div class="flex justify-between items-center w-full gap-3">
             <AppButton
               variant="outline"
@@ -58,9 +89,9 @@
               extraClass="text-sm flex items-center rounded-full justify-center"
               @click="copyKey"
             >
-               Copy
+              Copy
             </AppButton>
-  <!-- <i class="fa-solid fa-copy"></i> -->
+
             <AppButton
               variant="outline"
               full
@@ -68,25 +99,31 @@
               extraClass="text-sm flex items-center rounded-full justify-center"
               @click="$emit('close')"
             >
-               Close
+              Close
             </AppButton>
-            <!-- <i class="fa-solid fa-xmark"></i> -->
           </div>
 
-          <!-- Bottom Buttons -->
+          <!-- ================= Bottom Buttons ================= -->
           <div class="flex items-center w-full gap-3">
-            <button class="w-full py-3 text-onError bg-error/70 hover:bg-red/80 rounded-full text-sm flex items-center justify-center gap-2">
-                Report problem
-            </button> 
+            <button
+              class="w-full py-3 text-onError bg-error/70 hover:bg-red/80 rounded-full text-sm flex items-center justify-center gap-2"
+              @click="reportProblem"
+            >
+              Report problem
+            </button>
 
             <AppButton
               variant="primary"
               full
               :height="42"
               extraClass="text-sm flex items-center rounded-full justify-center gap-2"
+              @click="goToRedeem"
             >
-            <Icon name="heroicons-solid:question-mark-circle" class="text-xl text-white" />
-             How to redeem
+              <Icon
+                name="heroicons-solid:question-mark-circle"
+                class="text-xl text-white"
+              />
+              How to redeem
             </AppButton>
           </div>
         </div>
@@ -96,49 +133,91 @@
 </template>
 
 <script setup>
-import { watch } from 'vue'
-import { useToast } from '#imports'
-import { useOrdersStore } from '~/stores/ordersStore.js' // Add this
+import { computed, watch } from 'vue'
+import { useToast, useRouter } from '#imports'
+import { useOrdersStore } from '~/stores/ordersStore.js'
 
+/* ================= Setup ================= */
 const toast = useToast()
+const router = useRouter()
 const ordersStore = useOrdersStore()
 
+/* ================= Props (DO NOT REMOVE ANY) ================= */
 const props = defineProps({
   visible: Boolean,
-  orderKey: { type: String, default: 'jklsd-hfksj-fjse2-0384j' },
-  serial: { type: String, default: 'jjdkjdk435tnkjlkowopweo439=' },
-  itemId: { type: Number, default: null } // Add this prop for item ID
+
+  // Legacy single-code props (kept intentionally)
+  orderKey: { type: String, default: '' },
+  serial: { type: String, default: '' },
+
+  // NEW: multiple codes support
+  codes: { type: Array, default: () => [] },
+
+  // Legacy (kept, unused now)
+  itemId: { type: Number, default: null }
 })
 
-const emit = defineEmits(['close', 'codesFetched']) // Add emit for codes
+const emit = defineEmits(['close', 'codesFetched'])
 
+/* ================= Resolved Codes ================= */
+/**
+ * Priority:
+ * 1. codes[] (new system, multiple)
+ * 2. orderKey + serial (legacy fallback)
+ */
+const resolvedCodes = computed(() => {
+  if (Array.isArray(props.codes) && props.codes.length) {
+    return props.codes
+  }
+
+  if (props.orderKey) {
+    return [
+      {
+        code: props.orderKey,
+        serial: props.serial
+      }
+    ]
+  }
+
+  return []
+})
+
+/* ================= Actions ================= */
 const copyKey = () => {
-  navigator.clipboard.writeText(props.orderKey)
+  if (!resolvedCodes.value.length) return
+
+  const pins = resolvedCodes.value.map(c => c.code).join(', ')
+  navigator.clipboard.writeText(pins)
+
   toast.success({
     title: 'Success!',
-    message: 'Key Copied Successfully!',
+    message:
+      resolvedCodes.value.length > 1
+        ? 'All PINs copied!'
+        : 'PIN copied!',
     position: 'topRight',
     duration: 3000,
     pauseOnHover: true,
-    class: 'bg-[#1E1F22] text-white border-l-4 border-green-500',
+    class: 'bg-[#1E1F22] text-white border-l-4 border-green-500'
   })
 }
 
-// Fetch codes when modal opens
+const reportProblem = () => {
+  const orderId = ordersStore.selectedOrder?.id
+  router.push(orderId ? `/contact-us?order=${orderId}` : '/contact-us')
+}
+
+const goToRedeem = () => {
+  router.push('/product_activation')
+}
+
+/* ================= Watchers ================= */
 watch(
   () => props.visible,
-  async (isVisible) => {
-    document.body.style.overflow = isVisible ? 'hidden' : 'auto'
-    
-    if (isVisible && props.itemId) {
-      try {
-        const codes = await ordersStore.fetchOrderCodes(props.itemId)
-        if (codes.length) {
-          emit('codesFetched', codes[0]) // Emit codes to parent
-        }
-      } catch (err) {
-        console.error('Failed to fetch codes:', err)
-      }
+  (isVisible) => {
+    // SSR-safe body lock
+    if (process.client) {
+      document.body.style.overflow = isVisible ? 'hidden' : 'auto'
     }
   }
 )
@@ -153,5 +232,4 @@ watch(
 .fade-leave-to {
   opacity: 0;
 }
-
 </style>

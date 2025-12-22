@@ -77,8 +77,17 @@
       </div>
 
       <!-- Cart -->
-      <NuxtLink to="/cart" class="flex items-center">
-        <Icon name="mdi:cart-outline" class="w-5 h-5 text-mainText hover:text-primary/90 cursor-pointer" />
+      <NuxtLink to="/cart" class="relative flex items-center">
+        <Icon name="mdi:cart-outline"
+          class="w-5 h-5 text-mainText hover:text-primary/90 cursor-pointer" />
+        <span
+          v-if="cartCount > 0"
+          class="absolute -top-2 -right-2 min-w-[16px] h-[16px]
+                 px-1 text-[10px] font-bold rounded-full
+                 bg-primary text-white flex items-center justify-center"
+        >
+          {{ cartCount }}
+        </span>
       </NuxtLink>
 
       <!-- Login / Profile -->
@@ -101,6 +110,9 @@
           </li>
           <li @click="selectProfileOption('/orders')" class="px-2 py-2 text-sm text-mainText flex items-center font-semibold gap-1 hover:text-primary cursor-pointer w-full text-left">
             <Icon name="mdi:clipboard-list-outline" /> Orders
+          </li>
+          <li @click="selectProfileOption('/wallet')" class="px-2 py-2 text-sm text-mainText flex items-center font-semibold gap-1 hover:text-primary cursor-pointer w-full text-left">
+            <Icon name="mdi:wallet-outline" /> Wallet
           </li>
           <li @click="logoutUser" class="px-2 py-2 text-sm text-mainText flex items-center font-semibold gap-1 hover:text-primary cursor-pointer w-full text-left">
             <Icon name="mdi:logout" /> Logout
@@ -181,11 +193,14 @@
 <script setup>
 import { ref, watch, onMounted, onBeforeUnmount, computed } from "vue"
 import { useRoute, useRouter } from "vue-router"
+import { useCartStore } from '~/stores/cartStore'
 import { useUserStore } from '~/stores/userStore.js'
 
 const router = useRouter()
 const route = useRoute()
 const userStore = useUserStore()
+const cartStore = useCartStore()
+
 
 // States
 const isOpen = ref(false)
@@ -218,10 +233,10 @@ const links = [
   { label: "Xbox", path: `/category/${categoryMap.xbox}` },
   { label: "PlayStation", path: `/category/${categoryMap.playstation}` },
   { label: "Nintendo", path: `/category/${categoryMap.nintendo}` },
-  { label: "Gift Cards", path: "/gifts" },
-  { label: "Deals", path: "/deals" },
-  { label: "Pre-orders", path: "/preorders" },
-  { label: "Blog", path: "/blogs" },
+  { label: "Gift Cards", path: "/games?type=giftcards" },
+  { label: "Deals", path: "/games?type=deals" },
+  { label: "Pre-orders", path: "/games?type=preorders" },
+  { label: "Blog", path: "/news-blog" },
 ]
 
 const isLoggedIn = computed(() => !!userStore.currentUser)
@@ -236,6 +251,13 @@ const logoutUser = () => {
   userStore.logout()
   router.push('/')
 }
+
+// cart badge count
+onMounted(() => {
+  cartStore.fetchCart()
+})
+const cartCount = computed(() => cartStore.cartCount)
+
 
 // Sidebar overflow
 watch(isOpen, (v) => {
@@ -274,6 +296,7 @@ const handleClickOutside = (e) => {
 
 onMounted(() => document.addEventListener('click', handleClickOutside))
 onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
+
 
 const selectLang = (lang) => { 
   console.log('Language:', lang)

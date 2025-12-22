@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen text-mainText py-10 px-6 md:px-16 ">
+  <div class="min-h-screen text-mainText py-10 px-6 md:px-16">
     <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-10 font-poppins">
 
       <!--Left: Cart Items -->
@@ -21,21 +21,24 @@
             <!-- Title + Price -->
             <div class="text-mainText">
               <h2 class="text-lg">{{ item.title }}</h2>
-              <p class="text-base mt-1 font-semibold">{{ item.price }} EGP</p>
+              <p class="text-base mt-1 font-semibold">{{ item.price }} USD</p>
             </div>
 
             <!-- Qty Controls -->
             <div class="flex border items-center border-onMainText/30 rounded-xl overflow-hidden w-fit">
               <button @click="decreaseQty(item)" class="px-3 py-1 hover:bg-primary transition">-</button>
-              <span class="px-5 py-1 text-primary">{{ item.quantity }}</span>
+              <span class="px-5 py-1 text-primary">{{ item.qty }}</span>
               <button @click="increaseQty(item)" class="px-3 py-1 hover:bg-primary transition">+</button>
             </div>
 
             <!-- Extra Info -->
             <div class="flex flex-col flex-wrap gap-4 text-sm text-onMainText">
               <span class="text-orange-400 font-medium uppercase">{{ item.shipping || 'Free Shipping' }}</span>
-              <span class="text-lg text-yellow-400">{{ item.rating }}<span
-                  class="text-onFooter text-sm">/100</span></span>
+              <span class="text-lg text-yellow-400 flex items-center gap-1">
+                <NuxtImg src="/games/fi.jpg" alt="rating" quality="80" width="20" height="20" densities="x1"
+                  loading="lazy" class="w-4 h-4 sm:w-5 sm:h-5" />{{ item.rating }}<span
+                  class="text-onFooter text-sm">/100</span>
+              </span>
               <span class="text-green-600 font-medium">{{ item.stockStatus }}</span>
             </div>
           </div>
@@ -53,69 +56,99 @@
         <div class="space-y-3 text-sm">
           <div class="flex justify-between">
             <p>Sub Total:</p>
-            <p class="font-semibold">EGP{{ subtotal.toFixed(2) }}</p>
+            <p class="font-semibold">USD {{ cartTotal.toFixed(2) }}</p>
           </div>
           <hr class="text-mainText mb-2">
+          
+          <!-- <hr class="text-mainText mb-2">
           <div class="flex justify-between">
             <p>Shipping estimate:</p>
-            <p class="font-semibold">EGP{{ shipping.toFixed(2) }}</p>
+            <p class="font-semibold">USD 600</p>
           </div>
           <hr class="text-mainText">
           <div class="flex justify-between mb-2">
             <p>Tax estimate:</p>
-            <p class="font-semibold">EGP{{ tax.toFixed(2) }}</p>
+            <p class="font-semibold">USD 137</p>
           </div>
-          <hr class="text-mainText mb-3">
+          <hr class="text-mainText mb-3"> -->
         </div>
 
         <div class="flex justify-between text-sm font-semibold mt-2">
           <p>ORDER TOTAL:</p>
-          <p>EGP{{ total.toFixed(2) }}</p>
+          <p>USD {{ cartTotal.toFixed(2) }}</p>
         </div>
 
         <div class="flex justify-center">
-
-            <AppButton to="/checkout" variant="primary" extraClass="w-full mt-6 py-3 px-12 
+          <AppButton to="/checkout" variant="primary" extraClass="w-full mt-6 py-3 px-12 
           text-md rounded-full text-mainText font-medium hover:opacity-90 transition-all duration-300">
-              Checkout
-            </AppButton>
+            Checkout
+          </AppButton>
         </div>
       </div>
     </div>
-
-    <!--Toast Notification -->
-    
   </div>
 </template>
 
 <script setup>
 import { onMounted, computed } from 'vue'
-import { useCartStore } from '~/stores/cartStore.js'
-import { useCart } from '~/composables/useCart.js'
+import { useCartStore } from '~/stores/cartStore'
+import { useCart } from '~/composables/useCart'
 
 const cartStore = useCartStore()
-const { removeCard } = useCart()
+const { updateQty, removeCard } = useCart()
 
 onMounted(() => {
   cartStore.fetchCart({})
 })
 
-const cartItems = computed(() => cartStore.items)
-const subtotal = computed(() =>
-  cartItems.value.reduce((a, item) => a + (item.price || 0), 0)
+/**
+ * Normalize backend cart item to UI-friendly structure
+ */
+const cartItems = computed(() =>
+  cartStore.items.map(item => {
+    const hasDiscount =
+      item.price_after_discount &&
+      item.price_after_discount > 0 &&
+      item.price_after_discount < item.price
+
+    return {
+      id: item.id,
+      title: item.name,
+      image: item.img,
+      qty: item.qty,
+      price: hasDiscount ? item.price_after_discount : item.price,
+      oldPrice: hasDiscount ? item.price : null,
+
+      // Rating (same logic as product cards)
+      rating: item.reviews_avg_rating
+        ? Math.round(item.reviews_avg_rating)
+        : 0,
+
+      // Shipping logic
+      shipping:
+        item.delivery_time && item.delivery_time.length
+          ? item.delivery_time
+          : 'Free Shipping',
+
+      // Stock logic (ported from old Vue mixin)
+      stockStatus:
+        item.type === 2 || (item.type === 1 && item.stock === 0)
+          ? 'Out of stock'
+          : 'In stock'
+    }
+  })
 )
 
-const shipping = computed(() => 600)
-const tax = computed(() => 137)
-const total = computed(() => subtotal.value + shipping.value + tax.value)
+// Use API total directly from cart store
+const cartTotal = computed(() => cartStore.totalPrice || 0)
 
 const increaseQty = async (item) => {
-  await cartStore.addOrUpdateCard(item.id, item.qty + 1, 'update')
+  await updateQty(item, item.qty + 1)
 }
 
 const decreaseQty = async (item) => {
   if (item.qty > 1) {
-    await cartStore.addOrUpdateCard(item.id, item.qty - 1, 'update')
+    await updateQty(item, item.qty - 1)
   }
 }
 
@@ -123,7 +156,6 @@ const removeItem = async (id) => {
   await removeCard(id)
 }
 </script>
-
 
 <style scoped>
 .fade-enter-active,

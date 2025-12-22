@@ -8,19 +8,17 @@ export const useCountriesStore = defineStore('countries', {
   }),
   
   actions: {
-    async fetchCountries(categoryId) {
+    async fetchCountries(subcategoryId) {
       this.loading = true
       this.error = null
       
       try {
         const response = await $fetch('https://api.egamestore.com/api/countries', {
-          params: { category_id: categoryId },
-          headers: { 
-            'Accept-language': 'en'
-          }
+          params: { category_id: subcategoryId },
+          headers: { 'Accept-language': 'en' }
         })
         
-        console.log('✅ Countries:', response)
+        console.log('Countries:', response)
         
         if (response.status && response.data) {
           this.countries = response.data
@@ -29,7 +27,7 @@ export const useCountriesStore = defineStore('countries', {
           this.countries = []
         }
       } catch (err) {
-        console.error('❌ Fetch Countries Error:', err)
+        console.error('Fetch Countries Error:', err)
         this.error = err.message
         this.countries = []
       } finally {

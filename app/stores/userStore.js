@@ -5,344 +5,361 @@ import axios from 'axios'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    currentUser: null,
-    token: null,
+    token: null,              // auth token (cookie-backed)
+    currentUser: null,        // profile data
+    isActivated: false,       // ACTIVATION STATE (single source of truth)
+    isReady: false,           // auth bootstrap completed
   }),
 
   actions: {
-    // -----------------------------
-    // LOCAL STATE MANAGEMENT
-    // -----------------------------
-    setUser(user, token = null) {
-      this.currentUser = user
+    /* ------------------------------------
+     * Internal helpers
+     * ------------------------------------ */
+    setToken(token) {
       this.token = token
-      if (process.client) {
-        localStorage.setItem('user', JSON.stringify(user || null))
-        if (token) localStorage.setItem('token', token)
+      useCookie('user_token').value = token
+    },
+
+    clearAuth() {
+      this.token = null
+      this.currentUser = null
+      this.isActivated = false
+      this.isReady = true
+      useCookie('user_token').value = null
+    },
+
+    /* ------------------------------------
+     * Bootstrap from cookie
+     * ------------------------------------ */
+    async initAuth() {
+      const token = useCookie('user_token').value
+
+      if (!token) {
+        this.clearAuth()
+        return
       }
-      try {
-        const tokenCookie = useCookie('user_token')
-        if (token) tokenCookie.value = token
-      } catch (e) {}
+
+      this.token = token
+      await this.fetchProfile()
+      this.isReady = true
     },
 
-    loadUserFromStorage() {
-      if (!process.client) return
-      const u = localStorage.getItem('user')
-      const t = localStorage.getItem('token')
-      if (u) this.currentUser = JSON.parse(u)
-      if (t) this.token = t
-    },
-
-    // -----------------------------
-    // LOGIN
-    // -----------------------------
+    /* ------------------------------------
+     * LOGIN
+     * ------------------------------------ */
     async login(identifier, password) {
       const config = useRuntimeConfig()
+
       try {
         const formData = new FormData()
         formData.append('email', identifier)
         formData.append('password', password)
 
-        const res = await axios.post(`${config.public.apiBase}/users/login`, formData, {
-          headers: { 'Accept-language': 'en', 
-            "Accept": '*/*' },
-        })
+        const res = await axios.post(
+          `${config.public.apiBase}/users/login`,
+          formData,
+          { headers: { lang: 'en' } }
+        )
 
-        if (!res.data?.status) return { success: false, message: res.data?.message }
+        if (!res.data?.status) {
+          return { success: false, message: res.data?.message }
+        }
 
-        const token = res.data.data?.token
-        this.token = token
+        this.setToken(res.data.data.token)
 
-      
-    // Save basic user info
-    this.currentUser = { ...res.data.data }
-    localStorage.setItem('user', JSON.stringify(this.currentUser))
-    localStorage.setItem('token', token)
+        // activation state ONLY from login
+        this.isActivated = res.data.data.activation_str === 'Active'
 
-    // Check activation status
-    if (res.data.data.activation_str === 'waiting_Active') {
-      return { success: true, message: 'Account needs activation', otpRequired: true }
-    }
+        await this.fetchProfile()
 
-        // Fetch profile
-        await this.fetchUserProfile()
+        if (!this.isActivated) {
+          return { success: true, otpRequired: true }
+        }
 
-        return { success: true, message: 'Login successful' }
+        return { success: true }
       } catch (err) {
-        return { success: false, message: err.response?.data?.message || err.message }
+        return {
+          success: false,
+          message: err.response?.data?.message || 'Login failed',
+        }
       }
     },
 
-    // -----------------------------
-    // SIGNUP
-    // -----------------------------
-    async signup(newUser) {
+    /* ------------------------------------
+     * SIGNUP
+     * ------------------------------------ */
+    async signup(payload) {
       const config = useRuntimeConfig()
+
       try {
         const formData = new FormData()
-        formData.append('email', newUser.email)
-        formData.append('phone', newUser.phone)
-        formData.append('password', newUser.password)
-        formData.append('dob', newUser.dob)
-        formData.append('agree_sms', newUser.agree_sms)
+        Object.entries(payload).forEach(([k, v]) =>
+          formData.append(k, v)
+        )
 
-        const res = await axios.post(`${config.public.apiBase}/users/register`, formData, {
-          headers: { 'Accept-language': 'en',
-             'Accept': '*/*',
-              'Content-Type': 'multipart/form-data' },
-        })
+        const res = await axios.post(
+          `${config.public.apiBase}/users/register`,
+          formData,
+          { headers: { lang: 'en' } }
+        )
 
         if (!res.data?.status) {
-          return { 
-            success: false, 
+          return {
+            success: false,
             message: res.data?.message,
-            errors: res.data?.errors || [] 
+            errors: res.data?.errors || [],
           }
         }
 
-        const token = res.data.data?.token
-        this.token = token
-        localStorage.setItem('token', token)
+        this.setToken(res.data.data.token)
+        this.isActivated = false
 
-        const userObj = {
-          id: res.data.data?.id || null,
-          email: newUser.email,
-          phone: newUser.phone,
-          dob: newUser.dob,
-          avatar: '/games/ProfileAvatar.png',
-        }
-
-        this.setUser(userObj, token)
-        return { success: true, message: 'Signup successful' }
+        return { success: true, message: res.data.message }
       } catch (err) {
-        return { success: false, message: err.response?.data?.message || err.message }
+        return {
+          success: false,
+          message: err.response?.data?.message || 'Signup failed',
+          errors: err.response?.data?.errors || [],
+        }
       }
     },
 
-    // -----------------------------
-    // SOCIAL LOGIN
-    // -----------------------------
+    /* ------------------------------------
+     * SOCIAL LOGIN
+     * ------------------------------------ */
     async socialLogin(provider, oauthToken) {
       const config = useRuntimeConfig()
+
       try {
         const formData = new FormData()
         formData.append('provider', provider)
         formData.append('token', oauthToken)
 
-        const res = await axios.post(`${config.public.apiBase}/users/social-login`, formData, {
-          headers: { 'Accept-language': 'en',
-             'Accept': '*/*',
-              'Content-Type': 'multipart/form-data' },
-        })
+        const res = await axios.post(
+          `${config.public.apiBase}/users/social-login`,
+          formData,
+          { headers: { lang: 'en' } }
+        )
 
-        if (!res.data?.status) return { success: false, message: res.data?.message }
-
-        const token = res.data.data?.token
-        this.token = token
-        localStorage.setItem('token', token)
-
-        const userObj = {
-          id: res.data.data?.id || null,
-          email: res.data.data?.email || null,
-          phone: res.data.data?.phone || null,
-          dob: res.data.data?.dob || null,
-          avatar: res.data.data?.avatar || '/games/ProfileAvatar.png',
+        if (!res.data?.status) {
+          return { success: false, message: res.data?.message }
         }
 
-        this.setUser(userObj, token)
+        this.setToken(res.data.data.token)
+        this.isActivated = res.data.data.activation_str === 'Active'
 
-        return { success: true, message: 'Social login successful' }
+        await this.fetchProfile()
+
+        if (!this.isActivated) {
+          return { success: true, otpRequired: true }
+        }
+
+        return { success: true }
       } catch (err) {
-        return { success: false, message: err.response?.data?.message || err.message }
+        return {
+          success: false,
+          message: err.response?.data?.message || 'Social login failed',
+        }
       }
     },
 
-    // -----------------------------
-    // FETCH PROFILE
-    // -----------------------------
-    async fetchUserProfile() {
+    /* ------------------------------------
+     * PROFILE (display data only)
+     * ------------------------------------ */
+    async fetchProfile() {
       if (!this.token) return
+
       const config = useRuntimeConfig()
+
       try {
-        const res = await axios.get(`${config.public.apiBase}/users/getProfile`, {
-          headers: { Authorization: `Bearer ${this.token}` },
-        })
+        const res = await axios.get(
+          `${config.public.apiBase}/users/getProfile`,
+          {
+            headers: {
+              Authorization: `Bearer ${this.token}`,
+              lang: 'en',
+            },
+          }
+        )
+
         if (res.data?.status) {
-          const avatar = this.currentUser?.avatar || '/games/ProfileAvatar.png'
-          this.currentUser = { ...res.data.data, avatar }
-          localStorage.setItem('user', JSON.stringify(this.currentUser))
+          this.currentUser = res.data.data
+
+          // 🔑 IMPORTANT FIX:
+          // If profile loads successfully → user is activated
+          this.isActivated = true
         }
-      } catch (err) {
-        console.error('Fetch profile error:', err)
+      } catch {
+        this.clearAuth()
       }
     },
 
-    // -----------------------------
-    // UPDATE PROFILE
-    // -----------------------------
-    async updateUser(updatedUser) {
-      if (!this.currentUser) return { success: false, message: 'User not logged in' }
+    /* ------------------------------------
+     * UPDATE PROFILE (API fields only)
+     * ------------------------------------ */
+    async updateProfile(payload) {
       const config = useRuntimeConfig()
+
       try {
         const formData = new FormData()
-        formData.append('email', updatedUser.email || '')
-        formData.append('phone', updatedUser.phone || '')
-        formData.append('dob', updatedUser.dob || '')
+        formData.append('email', payload.email)
+        formData.append('phone', payload.phone)
+        formData.append('dob', payload.dob)
 
-        const res = await axios.post(`${config.public.apiBase}/users/updateProfile`, formData, {
-          headers: { Authorization: `Bearer ${this.token}` },
-        })
+        const res = await axios.post(
+          `${config.public.apiBase}/users/updateProfile`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${this.token}`,
+              lang: 'en',
+            },
+          }
+        )
 
-        if (!res.data?.status) return { success: false, message: res.data?.message }
-
-        this.currentUser = { ...this.currentUser, ...updatedUser }
-        localStorage.setItem('user', JSON.stringify(this.currentUser))
-        return { success: true, message: res.data?.message }
-      } catch (err) {
-        return { success: false, message: err.response?.data?.message || err.message }
-      }
-    },
-
-    // -----------------------------
-    // UPDATE AVATAR
-    // -----------------------------
-    async updateProfileImage(file) {
-      if (!this.currentUser) return { success: false, message: 'User not logged in' }
-      try {
-        let avatarUrl
-        if (file instanceof File) {
-          const reader = new FileReader()
-          await new Promise((resolve) => {
-            reader.onload = (e) => {
-              avatarUrl = e.target.result
-              resolve(true)
-            }
-            reader.readAsDataURL(file)
-          })
-        } else {
-          avatarUrl = file
+        if (!res.data?.status) {
+          return { success: false, message: res.data?.message }
         }
 
-        this.currentUser.avatar = avatarUrl
-        localStorage.setItem('user', JSON.stringify(this.currentUser))
-        return { success: true, message: 'Avatar updated locally' }
+        this.currentUser = {
+          ...this.currentUser,
+          ...res.data.data,
+        }
+
+        return { success: true }
       } catch (err) {
-        return { success: false, message: err.message }
+        return {
+          success: false,
+          message: err.response?.data?.message || 'Update failed',
+        }
       }
     },
 
-    // -----------------------------
-    // LOGOUT
-    // -----------------------------
-    async logout() {
-      if (!this.token) return
+    /* ------------------------------------
+     * CHANGE PASSWORD
+     * ------------------------------------ */
+    async updatePassword(oldPassword, newPassword) {
       const config = useRuntimeConfig()
-      try {
-        await axios.post(`${config.public.apiBase}/users/web/logout`, null, {
-          headers: { Authorization: `Bearer ${this.token}` },
-        })
-      } catch (err) {
-        console.warn('Logout API error:', err)
-      }
 
-      this.currentUser = null
-      this.token = null
-      if (process.client) {
-        localStorage.removeItem('user')
-        localStorage.removeItem('token')
-      }
       try {
-        const tokenCookie = useCookie('user_token')
-        tokenCookie.value = null
-      } catch (e) {}
+        const formData = new FormData()
+        formData.append('old_password', oldPassword)
+        formData.append('new_password', newPassword)
+
+        const res = await axios.post(
+          `${config.public.apiBase}/users/updatePassword`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${this.token}`,
+              lang: 'en',
+            },
+          }
+        )
+
+        if (!res.data?.status) {
+          return { success: false, message: res.data?.message }
+        }
+
+        return { success: true }
+      } catch (err) {
+        return {
+          success: false,
+          message: err.response?.data?.message || 'Password update failed',
+        }
+      }
     },
 
-
-    
-    // -----------------------------
-    // Activation & Reset helpers
-    // -----------------------------
+    /* ------------------------------------
+     * OTP / ACTIVATION
+     * ------------------------------------ */
     async activateAccount(code) {
-      // Not used by OTP.vue in this version (OTP.vue uses axios directly to preserve your pattern),
-      // but provided for completeness.
-      if (!this.token) return { success: false, message: 'Missing token' }
       const config = useRuntimeConfig()
+
       try {
         const formData = new FormData()
         formData.append('code', code)
-        const res = await axios.post(`${config.public.apiBase}/users/activeAccount`, formData, {
-          headers: { Authorization: `Bearer ${this.token}`, 
-          'Accept-language': 'en' },
-        })
-        if (!res.data?.status) return { success: false, message: res.data?.message }
 
-         // Mark user as active
-    this.currentUser.activation_str = 'active'
-    
-    // if server returned new token
-    if (res.data.data?.token) {
-      this.token = res.data.data.token
-    }
+        const res = await axios.post(
+          `${config.public.apiBase}/users/activeAccount`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${this.token}`,
+              lang: 'en',
+            },
+          }
+        )
 
-    this.setUser(this.currentUser, this.token) // update localStorage & cookie
+        if (!res.data?.status) {
+          return { success: false, message: res.data?.message }
+        }
 
-        return { success: true, data: res.data.data }
+        this.setToken(res.data.data.token)
+        this.isActivated = true
+        await this.fetchProfile()
+
+        return { success: true }
       } catch (err) {
-        return { success: false, message: err.response?.data?.message || err.message }
+        return {
+          success: false,
+          message: err.response?.data?.message || 'Invalid OTP',
+        }
       }
     },
 
+    /* ------------------------------------
+     * PASSWORD RESET
+     * ------------------------------------ */
     async requestPasswordReset(email) {
       const config = useRuntimeConfig()
-      try {
-        const formData = new FormData()
-        formData.append('email', email)
-        const res = await axios.post(`${config.public.apiBase}/users/requestPasswordReset`, formData, {
-          headers: { 'Accept-language': 'en' },
-        })
-        if (!res.data?.status) {
-         return { success: false, message: res.data?.message || 'Failed to request reset' }
-        }
-      } catch (err) {
-        return { success: false, message: err.response?.data?.message || err.message }
-      }
+
+      const formData = new FormData()
+      formData.append('email', email)
+
+      return axios.post(
+        `${config.public.apiBase}/users/requestPasswordReset`,
+        formData,
+        { headers: { lang: 'en' } }
+      )
     },
 
-    async resendCode(email) {
-      // resend activation code for currently signed user (requires token)
-      if (!this.token) return { success: false, message: 'No token available' }
+    async resendCode() {
       const config = useRuntimeConfig()
-      try {
-        const res = await axios.post(`${config.public.apiBase}/users/resendCode`, null, {
-          headers: { Authorization: `Bearer ${this.token}`, 'Accept-language': 'en' },
-        })
-        if (!res.data?.status) return { success: false, message: res.data?.message }
-        return { success: true, message: res.data?.message }
-      } catch (err) {
-        return { success: false, message: err.response?.data?.message || err.message }
-      }
+      return axios.post(
+        `${config.public.apiBase}/users/resendCode`,
+        null,
+        {
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+            lang: 'en',
+          },
+        }
+      )
     },
 
-    async updatePassword({ old_password, new_password }) {
-  if (!this.token) return { success: false, message: 'User not logged in' }
-  const config = useRuntimeConfig()
-  try {
-    const formData = new FormData()
-    formData.append('old_password', old_password)
-    formData.append('new_password', new_password)
+    /* ------------------------------------
+     * LOGOUT
+     * ------------------------------------ */
+    async logout() {
+      const config = useRuntimeConfig()
 
-    const res = await axios.post(`${config.public.apiBase}/users/updatePassword`, formData, {
-      headers: { Authorization: `Bearer ${this.token}` }
-    })
+      try {
+        await axios.post(
+          `${config.public.apiBase}/users/web/logout`,
+          null,
+          {
+            headers: {
+              Authorization: `Bearer ${this.token}`,
+              lang: 'en',
+            },
+          }
+        )
+      } catch (error) {
+        // ignore errors
+      }
 
-    if (!res.data?.status) return { success: false, message: res.data?.message }
-
-    return { success: true, message: res.data.message }
-  } catch (err) {
-    return { success: false, message: err.response?.data?.message || err.message }
-  }
-}
-
+      this.clearAuth()
+    },
   },
 })

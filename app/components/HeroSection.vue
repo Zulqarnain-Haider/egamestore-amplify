@@ -30,7 +30,7 @@
 
         <div class="flex flex-wrap justify-center lg:justify-start gap-3">
           <AppButton 
-            to="/category/deals" 
+            to="/games?type=deals" 
             variant="primary" 
             :width="0" 
             :height="48"
@@ -38,7 +38,7 @@
             Browse Deals
           </AppButton>
           <AppButton 
-            to="/category/trending" 
+            to="/games?type=latest" 
             variant="outline" 
             :width="0" 
             :height="48"
