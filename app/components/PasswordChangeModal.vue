@@ -188,47 +188,47 @@ const showCurrent = ref(false)
 const showNew = ref(false)
 const showConfirm = ref(false)
 
-
 const errors = ref({})
 const globalError = ref('')
-
 
 const handleSave = async () => {
   errors.value = {}
   globalError.value = ''
 
-  if (!currentPassword.value) errors.value.current = 'Please enter current password.'
-  if (!newPassword.value) errors.value.new = 'Please enter new password.'
-  if (!confirmPassword.value) errors.value.confirm = 'Please confirm new password.'
-  else if (newPassword.value !== confirmPassword.value)
-    errors.value.confirm = 'New passwords do not match.'
+  if (!currentPassword.value) errors.value.current = 'Enter current password'
+  if (!newPassword.value) errors.value.new = 'Enter new password'
+  if (!confirmPassword.value) errors.value.confirm = 'Confirm new password'
+  if (newPassword.value !== confirmPassword.value) {
+    errors.value.confirm = 'Passwords do not match'
+  }
 
-  if (Object.keys(errors.value).length > 0) {
-    globalError.value = 'Please fix the highlighted fields.'
+  if (Object.keys(errors.value).length) {
+    globalError.value = 'Please fix the errors'
     return
   }
 
-  try {
-    const res = await userStore.updatePassword({
-      old_password: currentPassword.value,
-      new_password: newPassword.value
-    })
+  const res = await userStore.updatePassword(
+    currentPassword.value,
+    newPassword.value
+  )
 
-    if (res.success) {
-      success.value = true
-    } else {
-      globalError.value = res.message || 'Failed to update password.'
-    }
-  } catch (err) {
-    globalError.value = err.message || 'Something went wrong.'
+  if (!res.success) {
+    globalError.value = res.message || 'Failed to update password'
+    return
   }
+
+  success.value = true
 }
 
 const closeModal = () => {
   success.value = false
+  currentPassword.value = ''
+  newPassword.value = ''
+  confirmPassword.value = ''
   emit('close')
 }
 </script>
+
 
 <style scoped>
 .fade-enter-active,

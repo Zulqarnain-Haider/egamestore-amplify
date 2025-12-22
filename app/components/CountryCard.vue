@@ -1,7 +1,7 @@
 <template>
   <div
     class="rounded-xl p-3 cursor-pointer group transition-all
-           bg-bgLight border border-[#3A3F45]
+           bg-bgLight border border-onOutline
            hover:border-primary hover:shadow-[0_0_12px_#FF6A16AA] hover:scale-[1.02]"
     @click="handleClick"
   >

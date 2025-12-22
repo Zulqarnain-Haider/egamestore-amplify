@@ -56,16 +56,21 @@
             <li
               v-for="game in filtered"
               :key="game.id"
-              class="px-4 py-2 flex items-center gap-3 cursor-pointer hover:bg-outline transition"
-              @click="goToResult(game.name)"
+              class="hover:bg-outline transition"
             >
-              <NuxtImg
-                :src="game.img"
-                alt=""
-                class="w-10 h-10 rounded-md object-cover"
-                loading="lazy"
-              />
-              <span class="text-mainText font-poppins text-sm">{{ game.name }}</span>
+              <NuxtLink
+                :to="`/product/${game.id}`"
+                class="px-4 py-2 flex items-center gap-3 cursor-pointer"
+                @click="close"
+              >
+                <NuxtImg
+                  :src="game.img"
+                  alt=""
+                  class="w-10 h-10 rounded-md object-cover"
+                  loading="lazy"
+                />
+                <span class="text-mainText font-poppins text-sm">{{ game.name }}</span>
+              </NuxtLink>
             </li>
           </ul>
 
@@ -83,7 +88,7 @@
 </template>
 
 <script setup>
-import { ref, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
+import { ref, watch, nextTick, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 
 const props = defineProps({
@@ -166,14 +171,6 @@ const handleEnter = async () => {
 
   emits('close')
   await router.push(`/search?q=${encodeURIComponent(searchTerm)}`)
-  query.value = ''
-  filtered.value = []
-}
-
-// Click on suggestion
-const goToResult = async (name) => {
-  emits('close')
-  await router.push(`/search?q=${encodeURIComponent(name)}`)
   query.value = ''
   filtered.value = []
 }

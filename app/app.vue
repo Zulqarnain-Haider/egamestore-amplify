@@ -7,12 +7,21 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue'
 import { useUserStore } from '~/stores/userStore'
+import { useCategoriesStore } from '~/stores/categoriesStore'
 
 const userStore = useUserStore()
+const categoriesStore = useCategoriesStore()
 
-if (process.client) {
-  userStore.loadUserFromStorage()
-}
+// Bootstrap auth from cookie (SSR-safe)
+await userStore.initAuth()
+
+onMounted(() => {
+  if (!categoriesStore.parentCategories.length) {
+    categoriesStore.fetchParentCategories()
+  }
+})
 </script>
+
 

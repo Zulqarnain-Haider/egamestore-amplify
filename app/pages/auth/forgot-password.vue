@@ -1,12 +1,13 @@
 <template>
   <section
-    class="min-h-screen flex flex-col md:flex-row -mt-[2.3rem] md:-mt-[2.3rem] items-center justify-center text-white px-4 md:px-10"
+    class="min-h-screen flex flex-col md:flex-row -mt-[2.3rem] md:-mt-[2.3rem]
+           items-center justify-center text-white px-4 md:px-10"
   >
     <!-- Left Image -->
     <div class="w-full md:w-1/2 flex justify-center mb-8 md:mb-0">
       <NuxtImg
         src="/games/ForgotPasswordLeft.png"
-        alt=""
+        alt="Forgot password illustration"
         quality="80"
         format="webp"
         densities="x1"
@@ -17,18 +18,20 @@
 
     <!-- Right Content -->
     <div
-      class="w-full md:w-1/2 flex flex-col justify-center font-inter max-w-md mx-auto rounded-3xl p-9 md:p-14"
+      class="w-full md:w-1/2 flex flex-col justify-center font-inter
+             max-w-md mx-auto rounded-3xl p-9 md:p-14"
     >
       <!-- Icon -->
       <div class="flex mb-4">
         <NuxtImg
           src="/games/ForgotPasswordLock.svg"
-          alt=""
+          alt="Forgot password lock icon"
           quality="80"
           densities="x1"
           loading="lazy"
           format="webp"
-       class="w-16 h-16" />
+          class="w-16 h-16"
+        />
       </div>
 
       <!-- Heading -->
@@ -41,79 +44,79 @@
 
       <!-- Email Input -->
       <div class="relative mb-4">
-        <Icon name="mdi-email"
+        <Icon
+          name="mdi-email"
           class="absolute left-3 top-5 -translate-y-1/2 w-5 h-5 text-primary"
         />
         <input
           v-model="email"
           type="email"
           placeholder="Enter your email"
-          class="w-full bg-bgDark rounded-md py-2 pl-10 pr-3 focus:outline-none focus:ring-1 focus:ring-primary"
+          class="w-full bg-bgDark rounded-md py-2 pl-10 pr-3
+                 focus:outline-none focus:ring-1 focus:ring-primary"
         />
-        <p v-if="error" class="text-red-500 text-sm mt-2">{{ error }}</p>
+        <p v-if="error" class="text-red-500 text-sm mt-2">
+          {{ error }}
+        </p>
       </div>
 
       <!-- Submit Button -->
-      <AppLink full class="h-9 font-semibold font-poppins mt-3" @click="handleSubmit">
-        Submit
+      <AppLink
+        full
+        class="h-9 font-semibold font-poppins mt-3"
+        :disabled="loading"
+        @click="handleSubmit"
+      >
+        {{ loading ? 'Sending...' : 'Submit' }}
       </AppLink>
     </div>
   </section>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import axios from 'axios'
+import { ref } from 'vue'
+import { navigateTo, useRuntimeConfig, useHead } from '#imports'
 
+definePageMeta({ layout: 'auth' })
 
-const email = ref("");
-const error = ref("");
-const loading = ref(false);
-const router = useRouter();
+useHead({
+  title: 'Forgot Password | eGameStore',
+  meta: [{ name: 'robots', content: 'noindex, nofollow' }],
+})
+
+const config = useRuntimeConfig()
+const email = ref('')
+const error = ref('')
+const loading = ref(false)
 
 const handleSubmit = async () => {
-  error.value = "";
-
-  if (!email.value.trim()) {
-    error.value = "Please enter your email.";
-    return;
+  error.value = ''
+  if (!email.value) {
+    error.value = 'Please enter your email.'
+    return
   }
 
-  loading.value = true;
+  loading.value = true
 
   try {
-    const formData = new FormData();
-    formData.append("email", email.value);
+    const fd = new FormData()
+    fd.append('email', email.value)
 
-    const res = await $fetch("https://api.egamestore.com/api/users/requestPasswordReset", {
-      method: "POST",
-      body: formData,
-    });
+    const res = await $fetch(
+      `${config.public.apiBase}/users/requestPasswordReset`,
+      { method: 'POST', body: fd }
+    )
 
-    console.log("Forgot Password Response:", res);
-
-    if (res?.status === true) {
-      // ✔ Email send successful
-      localStorage.setItem("otpType", "reset");
-      localStorage.setItem("resetIdentifier", email.value);
-      router.push("/auth/otp-verification?type=reset");
+    if (res?.status) {
+      localStorage.setItem('resetIdentifier', email.value)
+      navigateTo('/auth/otp-verification?type=reset')
     } else {
-      // ❌ API ne false return kiya
-      error.value = res?.errors?.[0] || res?.message || "Something went wrong.";
+      error.value = res.message
     }
-  } catch (err) {
-    console.log("Forgot Error:", err);
-
-    // Network/API validation error
-    if (err?.data?.errors) {
-      error.value = Object.values(err.data.errors)[0][0];
-    } else {
-      error.value = "Unable to process request.";
-    }
+  } catch {
+    error.value = 'Unable to process request.'
   }
 
-  loading.value = false;
-};
+  loading.value = false
+}
 </script>
-

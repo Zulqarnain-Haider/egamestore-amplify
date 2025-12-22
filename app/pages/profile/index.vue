@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="userStore.currentUser && userStore.currentUser.activation_str === 'active'"
+    v-if="userStore.currentUser && userStore.isActivated"
     class="min-h-screen font-poppins text-mainText flex flex-col items-center py-10 animate-fadeIn"
   >
     <!-- Profile Card -->
@@ -9,20 +9,22 @@
     >
       <!-- Avatar -->
       <div
-        class="relative w-20 aspect-square  rounded-full border-4 border-mainText overflow-hidden cursor-pointer group"
+        class="relative w-20 aspect-square rounded-full border-4 border-mainText overflow-hidden cursor-pointer group"
         @click="triggerFileInput"
       >
-         <NuxtImg
-         densities="x1" quality="80" format="webp" loading="lazy"
-         :src="previewImage"
+        <NuxtImg
+          densities="x1"
+          quality="80"
+          format="webp"
+          loading="lazy"
+          :src="previewImage"
           alt="User Avatar"
           class="w-full h-full object-cover bg-center transition-transform duration-300 group-hover:scale-105"
         />
         <div
           class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
         >
-       <Icon name="heroicons-outline:camera" class="text-white text-xl" />
-       <!-- <Icon name="heroicons:camera" class="text-white text-xl" /> -->
+          <Icon name="heroicons-outline:camera" class="text-white text-xl" />
         </div>
 
         <input
@@ -49,29 +51,30 @@
       </div>
     </div>
 
-
- 
-<!--ave Changes Button -->
-<div class="w-[90%] max-w-6xl mt-8 flex justify-end">
-  <AppButton
-    @click="saveChanges"
-    variant="primary"
-    :width="160"
-    :height="44"
-    extraClass="px-3 py-2 text-sm sm:text-base rounded-lg"
-  >
-    Save Changes
-  </AppButton>
-</div>
+    <!-- Save Button -->
+    <div class="w-[90%] max-w-6xl mt-8 flex justify-end">
+      <AppButton
+        @click="saveChanges"
+        variant="primary"
+        :width="160"
+        :height="44"
+        extraClass="px-3 py-2 text-sm sm:text-base rounded-lg"
+      >
+        Save Changes
+      </AppButton>
+    </div>
 
     <!-- Info Section -->
     <div class="w-[90%] max-w-6xl mt-10">
       <div class="flex items-center gap-2 mb-4">
-        <Icon name="mdi-account"  class="w-7 h-7 text-primary" />
-        <h3 class="text-lg font-semibold text-mainText">Personal Information</h3>
+        <Icon name="mdi-account" class="w-7 h-7 text-primary" />
+        <h3 class="text-lg font-semibold text-mainText">
+          Personal Information
+        </h3>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Left -->
         <div class="flex flex-col gap-6">
           <div>
             <label class="block text-sm text-onMainText mb-1">Full Name</label>
@@ -100,10 +103,11 @@
               rows="4"
               class="w-full bg-bgDark text-mainText px-4 py-3 rounded-lg outline-none resize-none focus:ring-2 focus:ring-primary"
               placeholder="Tell us about yourself..."
-            ></textarea>
+            />
           </div>
         </div>
 
+        <!-- Right -->
         <div class="flex flex-col gap-6">
           <div>
             <label class="block text-sm text-onMainText mb-1">Username</label>
@@ -145,13 +149,15 @@
             @close="showPasswordModal = false"
           />
 
-            <ProfileSaveSuccessModal
-           :visible="showSuccessModal"
-       @close="showSuccessModal = false"
-            />
+          <ProfileSaveSuccessModal
+            :visible="showSuccessModal"
+            @close="showSuccessModal = false"
+          />
 
           <div>
-            <label class="block text-sm text-onMainText mb-1">Birthday date</label>
+            <label class="block text-sm text-onMainText mb-1">
+              Birthday date
+            </label>
             <input
               v-model="user.dob"
               type="date"
@@ -163,7 +169,7 @@
     </div>
   </div>
 
-  <!-- If user not logged in -->
+  <!-- Not logged in -->
   <div
     v-else
     class="flex flex-col items-center justify-center min-h-screen text-center text-mainText animate-fadeIn"
@@ -173,7 +179,10 @@
     >
       <NuxtImg
         src="/games/ForgotPasswordLock.png"
-        densities="x1" quality="80" format="webp" loading="lazy"
+        densities="x1"
+        quality="80"
+        format="webp"
+        loading="lazy"
         alt="Lock Icon"
         class="w-20 h-20 mx-auto mb-6 opacity-90"
       />
@@ -196,20 +205,18 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, onMounted } from 'vue'
+import { ref, reactive, watch } from 'vue'
 import { useUserStore } from '~/stores/userStore'
-import { useToast } from '#imports'
-import { useRouter } from 'vue-router'
+import { useToast, useHead } from '#imports'
 
-definePageMeta({
-  middleware: 'profile-guard'
-})
+definePageMeta({ middleware: 'profile-guard' })
 
 const toast = useToast()
-const router = useRouter()
 const userStore = useUserStore()
 
-// Reactive user object
+const showPasswordModal = ref(false)
+const showSuccessModal = ref(false)
+
 const user = reactive({
   fullName: '',
   username: '',
@@ -218,71 +225,79 @@ const user = reactive({
   phone: '',
   dob: '',
   avatar: '',
-  memberSince: new Date().getFullYear()
+  memberSince: new Date().getFullYear(),
 })
 
-// Preview image
 const previewImage = ref('/games/ProfileAvatar.png')
 
-// Sync user from store
 watch(
   () => userStore.currentUser,
-  (newUser) => {
-    if (!newUser) return
-    Object.assign(user, newUser)
-    previewImage.value = newUser.avatar || '/games/ProfileAvatar.png'
+  (u) => {
+    if (!u) return
+    Object.assign(user, u)
+    previewImage.value = u.avatar || '/games/ProfileAvatar.png'
   },
   { immediate: true }
 )
 
-// Save Changes
-const showSuccessModal = ref(false)
 const saveChanges = async () => {
-  try {
-    const res = await userStore.updateUser(user)
+  const res = await userStore.updateProfile({
+    email: user.email,
+    phone: user.phone,
+    dob: user.dob,
+  })
 
-    if (res.success) {
-      showSuccessModal.value = true
-      toast.success({
-        title: 'Success!',
-        message: 'Profile updated successfully',
-        position: 'topCenter'
-      })
-    } else {
-      toast.error({
-        title: 'Error!',
-        message: res.message || 'Failed to update profile',
-        position: 'topCenter'
-      })
-    }
-  } catch (err) {
-    toast.error({
-      title: 'Error!',
-      message: 'Unexpected error occurred',
-      position: 'topCenter'
-    })
+  if (!res.success) {
+    toast.error(res.message || 'Failed to update profile')
+    return
   }
+
+  showSuccessModal.value = true
+  toast.success('Profile updated successfully')
 }
 
-// Avatar Upload
 const fileInput = ref(null)
 const triggerFileInput = () => fileInput.value?.click()
 
 const handleFileUpload = (e) => {
   const file = e.target.files[0]
   if (!file) return
+
   const reader = new FileReader()
-  reader.onload = (event) => {
-    const base64 = event.target.result
-    user.avatar = base64
-    userStore.updateProfileImage(base64)
+  reader.onload = (ev) => {
+    previewImage.value = ev.target.result
   }
   reader.readAsDataURL(file)
 }
 
-const showPasswordModal = ref(false)
-</script>
+useHead({
+  title: 'My Profile | eGameStore',
+  meta: [
+    {
+      name: 'robots',
+      content: 'noindex, nofollow',
+    },
+    {
+      name: 'description',
+      content: 'Manage your eGameStore profile, personal information, and account settings.',
+    },
 
+    // Open Graph (safe defaults)
+    {
+      property: 'og:title',
+      content: 'My Profile | eGameStore',
+    },
+    {
+      property: 'og:description',
+      content: 'Manage your eGameStore account settings and personal information.',
+    },
+    {
+      property: 'og:type',
+      content: 'website',
+    },
+  ],
+})
+</script>
 
 <style scoped>
 input[type='date']::-webkit-calendar-picker-indicator {

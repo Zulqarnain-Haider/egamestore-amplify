@@ -1,151 +1,261 @@
 <template>
-  <section class="font-poppins py-4 md:py-4 shadow-md">
-    <h2 class="text-xl md:text-2xl font-semibold mb-6">Customer Reviews</h2>
+  <section class="font-poppins py-4 shadow-md">
+    <h2 class="text-xl md:text-2xl font-semibold mb-6">
+      Customer Reviews
+    </h2>
 
-    <!-- Add Review Box
+    <!-- ADD REVIEW (logged in + purchased only) -->
     <div
-      v-if="currentUser"
-      class="flex gap-4 mb-8 "
+      v-if="canReview"
+      class="flex gap-4 mb-8"
     >
-      <img
-        :src="currentUser.avatar || '/users/default-avatar.png'"
-        alt="User Avatar"
+      <NuxtImg
+        :src="userAvatar"
+        alt="User"
         class="w-12 h-12 rounded-full object-cover"
+        densities="x1"
+        format="webp"
+        loading="lazy"
       />
+
       <div class="flex flex-col flex-1">
         <textarea
-          v-model="newReview.text"
+          v-model="newReview.comment"
           placeholder="Write your review..."
-          class="bg-transparent border border-outline rounded-lg px-3 py-2 w-full resize-none text-sm text-mainText focus:ring-2 focus:ring-outline"
+          class="bg-transparent border border-outline rounded-lg
+                 px-3 py-2 w-full resize-none text-sm text-mainText
+                 focus:ring-2 focus:ring-outline"
           rows="3"
         />
+
         <div class="flex items-center justify-between mt-3">
+          <!-- Rating -->
           <div class="flex items-center gap-1 text-yellow-400 text-sm">
             <template v-for="star in 5" :key="star">
               <i
                 class="cursor-pointer"
-                :class="[
-                  newReview.rating >= star
-                    ? 'fa-solid fa-star'
-                    : 'fa-regular fa-star'
-                ]"
+                :class="newReview.rating >= star
+                  ? 'fa-solid fa-star'
+                  : 'fa-regular fa-star'"
                 @click="newReview.rating = star"
-              ></i>
+              />
             </template>
           </div>
 
-          <UiButton
+          <AppButton
             variant="primary"
             :height="36"
             extraClass="px-5 py-2 text-xs rounded-lg"
-            @click="addReview"
+            :disabled="submitting"
+            @click="submitReview"
           >
-            Post Review
-          </UiButton>
+            {{ submitting ? 'Posting...' : 'Post Review' }}
+          </AppButton>
         </div>
       </div>
-    </div> -->
+    </div>
 
-    <!-- No user logged in -->
-    <!-- <div v-else class="text-lg text-onMainText mb-8 justify-center items-center">
-      Please <NuxtLink to="/auth/login" class="text-primary underline">sign in</NuxtLink> to add a review.
-    </div> -->
+    <!-- SKELETON LOADER -->
+    <div
+      v-if="loading"
+      class="space-y-6 animate-pulse"
+    >
+      <div
+        v-for="i in 3"
+        :key="i"
+        class="flex gap-4"
+      >
+        <div class="w-10 h-10 rounded-full bg-[#2A2E35]"></div>
+        <div class="flex-1 space-y-2">
+          <div class="h-4 w-24 bg-[#2A2E35] rounded"></div>
+          <div class="h-3 w-full bg-[#2A2E35] rounded"></div>
+          <div class="h-3 w-5/6 bg-[#2A2E35] rounded"></div>
+        </div>
+      </div>
+    </div>
 
-    <!-- Reviews List -->
-    <div v-if="reviews.length" class="space-y-8 max-h-[650px] overflow-y-auto scrollbar-hide pr-2">
+    <!-- REVIEWS LIST -->
+    <div
+      v-else-if="reviews.length"
+      class="space-y-8 max-h-[650px] overflow-y-auto scrollbar-hide pr-2"
+    >
       <div
         v-for="r in reviews"
         :key="r.id"
         class="rounded-md border-b border-outline pb-4"
       >
-        <div class="flex items-center gap-4 mb-3">
-          <div class="space-y-5">
-                    <!--Rating -->
-            <div class="flex text-yellow-400 text-sm mt-1">
-              <template v-for="star in 5" :key="star">
-                <i
-                  :class="[
-                    r.rating >= star ? 'fa-solid fa-star' : 'fa-regular fa-star'
-                  ]"
-                ></i>
-              </template>
-            </div>
-                    <!-- Review Text -->
-            <p class="text-sm text-mainText leading-relaxed">
-          {{ r.text }}
+        <!-- Rating -->
+        <div class="flex text-yellow-400 text-sm mb-2">
+          <template v-for="star in 5" :key="star">
+            <i
+              :class="r.rating >= star
+                ? 'fa-solid fa-star'
+                : 'fa-regular fa-star'"
+            />
+          </template>
+        </div>
+
+        <!-- Comment -->
+        <p class="text-sm text-mainText leading-relaxed">
+          {{ r.comment }}
         </p>
-                <!-- Date + Time -->
-          <p class="text-md text-onMainText">{{ formatDate(r.date) }}</p>
-                  <!-- User Info -->
-          <div class="flex items-center gap-3">
-           <NuxtImg 
-           densities="x1" quality="80" loading="lazy" format="webp"
-            :src="r.avatar || '/users/default-avatar.png'"
-            alt="User"
+
+        <!-- Date -->
+        <p class="text-sm text-onMainText mt-1">
+          {{ formatDate(r.created_at) }}
+        </p>
+
+        <!-- User -->
+        <div class="flex items-center gap-3 mt-3">
+          <NuxtImg
+            :src="reviewAvatar"
             class="w-10 h-10 rounded-full object-cover"
+            densities="x1"
+            format="webp"
+            loading="lazy"
           />
-           <h4 class="text-md">{{ r.name }}</h4>
-            </div>
-          </div>
+          <h4 class="text-md">
+            {{ r.user?.email || 'User' }}
+          </h4>
         </div>
       </div>
     </div>
 
-    <div v-else class="text-onMainText text-sm italic">No reviews yet.</div>
+    <p
+      v-else
+      class="text-onMainText text-sm italic"
+    >
+      No reviews yet.
+    </p>
   </section>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useUserStore } from '~/stores/userStore'
+import { useToast, useRuntimeConfig } from '#imports'
 
+const toast = useToast()
+const config = useRuntimeConfig()
+const userStore = useUserStore()
+
+/* ---------------- PROPS ---------------- */
 const props = defineProps({
-  reviews: Array,
-  currentUser: Object
+  product: {
+    type: Object,
+    required: true
+  },
+  reviews: {
+    type: Array,
+    default: () => []
+  },
+  loading: {
+    type: Boolean,
+    default: false
+  }
 })
 
-const emit = defineEmits(['update:reviews'])
+/* ---------------- STATE ---------------- */
+const submitting = ref(false)
 
 const newReview = ref({
-  text: '',
-  rating: 0
+  rating: 0,
+  comment: ''
 })
 
-// Add new review logic
-function addReview() {
-  if (!newReview.value.text || newReview.value.rating === 0) {
-    alert('Please add rating and comment.')
-    return
+/* ---------------- COMPUTED ---------------- */
+const cardId = computed(() => props.product?.id)
+
+const canReview = computed(() =>
+  userStore.currentUser &&
+  props.product?.user_has_purchased
+)
+
+/* AVATARS */
+const userAvatar = computed(() =>
+  userStore.currentUser?.avatar || '/games/Reviews.png'
+)
+
+const reviewAvatar = '/games/Reviews.png'
+
+/* ---------------- METHODS ---------------- */
+const submitReview = async () => {
+  if (!cardId.value) {
+    return toast.error({
+      title: 'Error',
+      message: 'Invalid product ID'
+    })
   }
 
-  const review = {
-    id: Date.now(),
-    name: props.currentUser?.name || 'Anonymous',
-    avatar: props.currentUser?.avatar || '/users/default-avatar.png',
-    rating: newReview.value.rating,
-    text: newReview.value.text,
-    date: new Date().toISOString()
+  if (newReview.value.rating < 1 || newReview.value.rating > 5) {
+    return toast.error({
+      title: 'Invalid rating',
+      message: 'Rating must be between 1 and 5'
+    })
   }
 
-  const updated = [...props.reviews, review]
-  emit('update:reviews', updated)
+  if (newReview.value.comment.length < 2) {
+    return toast.error({
+      title: 'Invalid comment',
+      message: 'Comment must be at least 2 characters'
+    })
+  }
 
-  // Reset form
-  newReview.value.text = ''
-  newReview.value.rating = 0
+  submitting.value = true
+
+  try {
+    const form = new FormData()
+    form.append('rating', newReview.value.rating)
+    form.append('comment', newReview.value.comment)
+
+    const res = await $fetch(
+      `${config.public.apiBase}/cards/${cardId.value}/reviews`,
+      {
+        method: 'POST',
+        body: form,
+        headers: {
+          Authorization: `Bearer ${userStore.token}`,
+          lang: 'en'
+        }
+      }
+    )
+
+    if (!res?.status) {
+      throw new Error(res?.message || 'Review failed')
+    }
+
+    toast.success({
+      title: 'Review submitted',
+      message: 'Thank you for your feedback'
+    })
+
+    newReview.value.rating = 0
+    newReview.value.comment = ''
+  } catch (err) {
+    toast.error({
+      title: 'Review error',
+      message: err.message || 'Could not submit review'
+    })
+  } finally {
+    submitting.value = false
+  }
 }
 
-// Format date (2025-10-24 → Oct 24, 2025)
-function formatDate(dateStr) {
-  const d = new Date(dateStr)
-  const date =  d.toLocaleDateString('en-US', 
-  { month: 'short', day: 'numeric',year: 'numeric' })
-
-   const time = d.toLocaleTimeString('en-US', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false // 24-hour format like 03:29, 14:45 etc.
-  })
-  return `${date} ${time}`
+const formatDate = (date) => {
+  const d = new Date(date)
+  return (
+    d.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    }) +
+    ' ' +
+    d.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    })
+  )
 }
 </script>
 

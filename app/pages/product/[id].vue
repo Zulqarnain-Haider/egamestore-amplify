@@ -1,77 +1,113 @@
 <template>
-  <div v-if="productStore.loading" class="min-h-screen text-mainText font-poppins">
+  <!-- ======================================
+       LOADING (SSR + CSR SAFE)
+       ====================================== -->
+  <div
+    v-if="productStore.loading"
+    class="min-h-screen text-mainText font-poppins"
+  >
     <div class="w-[90%] max-w-7xl mx-auto flex flex-col gap-10 animate-fadeIn">
       <ProductOverviewSkeleton />
     </div>
   </div>
-  
-  <div v-else-if="productStore.error" class="text-center py-10 text-onMainText">Error: {{ productStore.error }}</div>
-  <div v-else-if="!productStore.product" class="text-center py-10 text-onMainText">Product not found.</div>
 
-  <div v-else class="min-h-screen text-mainText font-poppins">
+  <!-- ======================================
+       ERROR (ONLY IF FETCH FAILED)
+       ====================================== -->
+  <div
+    v-else-if="productStore.error"
+    class="text-center py-10 text-onMainText"
+  >
+    {{ productStore.error }}
+  </div>
+
+  <!-- ======================================
+       PRODUCT CONTENT
+       ====================================== -->
+  <div
+    v-else
+    class="min-h-screen text-mainText font-poppins"
+  >
     <div class="w-[90%] max-w-7xl mx-auto flex flex-col gap-10 animate-fadeIn">
-      <!-- Conditionally show overview based on category -->
-      <div v-if="route.query.static">
-        <RelatedOverview :product="productStore.product" />
-      </div>
+      <!-- Product Overview -->
+      <ProductOverview :product="productStore.product" />
 
-      <div v-else>
-        <div v-if="productStore.product.category === 'preorders'">
-          <PreOrderOverview :product="productStore.product" />
-        </div>
-
-        <div v-else>
-          <ProductOverview :product="productStore.product" />
-        </div>
-      </div>
-
-      <!-- Highlights -->
+      <!-- Highlights (static) -->
       <ProductHighlights />
 
       <!-- Tabs -->
       <ProductTabs :product="productStore.product" />
 
+      <!-- FAQ (static) -->
       <ProductFAQ />
 
-      <!-- Related -->
-      <RelatedProducts :products="productStore.relatedProducts" class="mt-2" />
+      <!-- Related Products -->
+      <RelatedProducts
+        :products="productStore.relatedProducts"
+        :loading="productStore.loading"
+      />
 
-      <!-- Customer Reviews -->
-      <ProductReviews :reviews="productStore.product.reviews" :currentUser="currentUser" />
+      <!-- Reviews -->
+      <ProductReviews
+        :product="productStore.product"
+        :reviews="productStore.product.reviews"
+        :loading="productStore.loading"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+/**
+ * SSR FRIENDLY PRODUCT PAGE
+ * ----------------------------------
+ * This page fetches data on SERVER
+ * and avoids "Product not found" flashes.
+ */
+
 import { useRoute } from 'vue-router'
-import { useUserStore } from '~/stores/userStore'
 import { useProductStore } from '~/stores/productStore'
 import ProductOverviewSkeleton from '~/components/ProductOverviewSkeleton.vue'
 
 const route = useRoute()
-const userStore = useUserStore()
 const productStore = useProductStore()
 
-const currentUser = ref(null)
+/**
+ * Parse ID safely
+ */
+const id = Number(route.params.id)
 
-onMounted(() => {
-  currentUser.value = userStore.currentUser
-  const id = route.params.id
+/**
+ * SERVER-SIDE FETCH
+ * ----------------------------------
+ * Awaiting here ensures:
+ * - SSR renders full product HTML
+ * - Skeleton only appears when needed
+ */
+if (!Number.isNaN(id)) {
+  await productStore.fetchProduct(id)
+} else {
+  productStore.error = 'Invalid product'
+}
 
-  if (id.startsWith('related-')) {
-    productStore.product = {
-      id,
-      title: 'Minecraft Java Edition',
-      image: '/games/RelatedItem.png',
-      price: 1249.99,
-      rating: 80,
-      platforms: ['PC', 'Xbox', 'PlayStation'],
-      regions: ['Global']
-    }
-    productStore.relatedProducts = []
-  } else {
-    productStore.fetchProduct(Number(id))
+/**
+ * SEO META (SSR READY)
+ */
+useHead(() => {
+  const p = productStore.product
+
+  return {
+    title: p
+      ? `${p.name} | eGameStore`
+      : 'Product | eGameStore',
+    meta: [
+      {
+        name: 'description',
+        content: p?.desc
+          ? p.desc.replace(/<[^>]*>/g, '').slice(0, 160)
+          : 'Buy games at best prices on eGameStore'
+      }
+    ]
   }
 })
 </script>

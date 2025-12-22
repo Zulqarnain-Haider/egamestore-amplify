@@ -1,5 +1,5 @@
 {
-  "name": "E-Game-Stoore",
+  "name": "E-GameStore",
   "type": "module",
   "private": true,
   "scripts": {
@@ -32,6 +32,7 @@
     "swiper": "^12.0.3",
     "vue": "^3.5.24",
     "vue-router": "^4.6.3",
-    "vue-tel-input": "^6.0.5"
+    "vue-tel-input": "^6.0.5",
+    "vue3-google-login": "^2.0.34"
   }
 }
