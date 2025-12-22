@@ -15,16 +15,15 @@
                overflow-hidden
                white-space-normal
                textalign-truncate
-               shadow-2xl animate-fadeIn
-               bg-[url('/games/PopupMainCard.png')] bg-cover bg-center bg-no-repeat"
+               shadow-2xl animate-fadeIn"
       >
         <!-- Background -->
-        <!-- <NuxtImg
+        <NuxtImg
           src="/games/PopupMainCard.png"
           alt="Modal Background"
           class="absolute inset-0 w-full h-full object-contain z-0"
           preload
-        /> -->
+        />
 
         <!-- Content Wrapper -->
         <div

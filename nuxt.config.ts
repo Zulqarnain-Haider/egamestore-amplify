@@ -119,7 +119,6 @@ toast: {
   //NITRO (SERVER) OPTIMIZATIONS
   nitro: {
     compressPublicAssets: true, // Enable compression
-    preset: 'static', 
     prerender: {
       routes: [
         '/',          // home
@@ -130,10 +129,12 @@ toast: {
         '/category/2',
         '/category/5',
         '/category/50',
+        '/games?type=latest',
+        '/games?type=preorders',
+        '/games?type=giftcards',
+        '/games?type=deals',
+        '/games?type=bestsellers'
       ],
-  
-      // ✅ Do NOT fail build on missing images
-      failOnError: false
     }
   },
 
