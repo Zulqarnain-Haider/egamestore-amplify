@@ -18,7 +18,7 @@
       </div>
 
       <!-- bubble -->
-      <div
+      <div v-if="message.text != ''"
         :class="[
           'px-4 py-3 text-sm break-words font-inter max-w-96',
           isUser ? 'text-white' : 'text-mainText/70',
@@ -27,6 +27,21 @@
         :style="bubbleStyle"
       >
         {{ message.text }}
+      </div>
+      <div v-if="message.images?.length" class="mt-2 flex flex-wrap gap-2"
+      :class="[
+          'px-4 py-3 text-sm break-words font-inter max-w-96',
+          isUser ? 'text-white' : 'text-mainText/70',
+          isUser ? 'bg-chat-gradient' : 'bg-[#2E364A]'
+        ]"
+        :style="bubbleStyle">
+        <img
+          v-for="img in message.images"
+          :key="img.id || img.image"
+          :src="img.img || img.image"
+          class="w-32 h-32 object-cover rounded-lg border border-onFooter/20 cursor-pointer"
+          @click="openPreview(img.img || img.image)"
+        />
       </div>
     </div>
     <NuxtImg 
@@ -41,8 +56,8 @@
 <script setup>
 const props = defineProps({
   message: { type: Object, required: true },
-  name: { type: String, default: 'CyberGamer_X' },
-  supportName: { type: String, default: 'Alex Support' }
+  name: { type: String, default: 'Customer' },
+  supportName: { type: String, default: 'Support' }
 })
 
 const isUser = computed(() => props.message.sender === 'user')
@@ -71,6 +86,10 @@ const bubbleStyle = computed(() => {
     }
   }
 })
+
+function openPreview(src) {
+  window.open(src, '_blank')
+}
 </script>
 
 <style scoped>

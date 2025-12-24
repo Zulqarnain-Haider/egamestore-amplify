@@ -13,7 +13,8 @@
             </div>
             <div>
               <div class="text-lg font-semibold">Support Chat</div>
-              <div class="text-sm text-onFooter">Game Order #{{ ticket?.order_id || '—' }}</div>
+              <div v-if="ticket?.reason?.show_orders === true && ticket?.order_id" class="text-sm text-onFooter">Game Order #{{ ticket?.order_id || '—' }}</div>
+              <div v-else class="text-sm text-onFooter">{{ ticket?.reason?.name }}</div>
             </div>
           </div>
 
@@ -23,13 +24,34 @@
               v-for="msg in messages"
               :key="msg.id"
               :message="msg"
-              :support-name="'Alex Support'"
+              :support-name="'Support'"
             />
             <div v-if="!messages?.length" class="h-full flex items-center justify-center text-onFooter/70 text-sm">
               No messages yet. Start a conversation below 👇
             </div>
           </div>
-
+          <!-- Selected Images Chips -->
+          <div
+            v-if="selectedImages.length"
+            class="flex flex-wrap gap-2 mb-3"
+          >
+            <div
+              v-for="(file, index) in selectedImages"
+              :key="index"
+              class="flex items-center gap-2 bg-[#2E364A] text-xs px-3 py-2 rounded-full"
+            >
+              <span class="truncate max-w-[120px]">
+                {{ file.name }}
+              </span>
+          
+              <button
+                @click="removeImage(index)"
+                class="text-onFooter hover:text-error transition"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
           <!-- Input box -->
           <div class="mt-4 flex-shrink-0">
             <div class="relative">
@@ -41,10 +63,28 @@
               />
               <button
                 @click="send"
-                class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-chat-gradient flex items-center 
-              justify-center text-white shadow-md hover:opacity-90 transition"
+                :disabled="!canSend || sending"
+                class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full 
+                       flex items-center justify-center shadow-md transition
+                       disabled:opacity-40 disabled:cursor-not-allowed
+                       bg-chat-gradient text-white hover:opacity-90"
               >
                 <Icon name="ph:paper-plane-tilt-bold" size="18" />
+              </button>
+              <input
+                ref="fileInput"
+                type="file"
+                multiple
+                accept="image/png,image/jpeg,image/jpg"
+                class="hidden"
+                @change="onImageSelect"
+              />
+              
+              <button
+                @click="fileInput?.click()"
+                class="absolute right-14 top-1/2 -translate-y-1/2 text-onFooter"
+              >
+                <Icon name="mdi:paperclip" size="20" />
               </button>
             </div>
           </div>
@@ -84,7 +124,7 @@
                     :class="ticket?.status === 'active'
                       ? 'bg-green-300 text-green-600 px-3 py-1 rounded-full text-xs'
                       : 'bg-onFooter text-mainText/80 px-3 py-1 rounded-full text-xs'">
-                    {{ ticket?.status === 'active' ? 'Active' : 'Closed' }}
+                    {{ ticket?.status }}
                   </span>
                 </div>
                 <div class="flex justify-between">
@@ -133,7 +173,7 @@
           </div>
 
           <!-- Order Details -->
-          <div class="bg-[#2E364A] rounded-lg">
+          <div v-show="ticket?.reason?.show_orders === true && ticket?.order_id" class="bg-[#2E364A] rounded-lg" >
             <div
               class="flex justify-between items-center p-4 cursor-pointer select-none"
               @click="toggleSection('orderDetails')"
@@ -173,7 +213,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, nextTick, watch } from 'vue'
+import { ref, computed, onMounted, nextTick, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useTicketStore } from '~/stores/ticketStore.js'
 import { useToast } from '#imports'
@@ -185,12 +225,32 @@ const router = useRouter()
 
 const chatWrap = ref(null)
 const newMsg = ref('')
-const ticketId = ref(null)
+const sending = ref(false)
+const fileInput = ref(null)
+const selectedImages = ref([]) 
+const ticketUuid = ref(null)
 const openSection = ref('ticketInfo')
 const isLoaded = ref(false)
 const timeNow = ref(Date.now())
 
-let timer = null
+
+function onImageSelect(e) {
+  const files = Array.from(e.target.files)
+
+  files.forEach(file => {
+    if (!file.type.startsWith('image/')) return
+    if (file.size > 5 * 1024 * 1024) return // 5MB guard
+
+    selectedImages.value.push(file)
+  })
+
+  e.target.value = ''
+}
+
+function removeImage(index) {
+  selectedImages.value.splice(index, 1)
+}
+
 
 function toggleSection(section) {
   openSection.value = openSection.value === section ? null : section
@@ -198,21 +258,33 @@ function toggleSection(section) {
 
 // Load ticket details
 onMounted(async () => {
-  ticketId.value = Number(route.query.id)
-  if (!ticketId.value) return router.replace('/contact-us')
+  ticketUuid.value = route.query.uuid
 
-  await ticketStore.fetchTicketDetails(ticketId.value)
+  if (!ticketUuid.value || typeof ticketUuid.value !== 'string') {
+    return router.replace('/contact-us')
+  }
+
+  await ticketStore.fetchTicketDetails(ticketUuid.value)
   isLoaded.value = true
   scrollToBottom()
-
-  // Auto-refresh every 60 sec
-  timer = setInterval(() => timeNow.value = Date.now(), 60000)
 })
 
-onUnmounted(() => { if (timer) clearInterval(timer) })
 
 const ticket = computed(() => ticketStore.ticketDetails || {})
-const messages = computed(() => ticketStore.replies || [])
+const canSend = computed(() => {
+  return newMsg.value.trim().length > 0 || selectedImages.value.length > 0
+})
+const messages = computed(() => {
+  if (!ticketStore.replies) return []
+
+  return ticketStore.replies.map(reply => ({
+    id: reply.id,
+    text: reply.message && reply.message !== 'null' ? reply.message : '',
+    time: reply.created_at,
+    sender: reply.replier === 'Customer' ? 'user' : 'support',
+    images: reply.images || [],
+  }))
+})
 
 function scrollToBottom() {
   nextTick(() => {
@@ -223,21 +295,52 @@ function scrollToBottom() {
 watch(messages, scrollToBottom, { deep: true })
 
 async function send() {
-  if (!newMsg.value.trim()) return
+  if (sending.value) return
+  if (!newMsg.value.trim() && !selectedImages.value.length) return
+
+  sending.value = true
+
   try {
-    const response = await ticketStore.sendReply(ticketId.value, newMsg.value)
-    if (response.status) {
-      newMsg.value = ''
-      scrollToBottom()
+    const res = await ticketStore.sendReply(
+      ticketUuid.value,
+      newMsg.value,
+      selectedImages.value
+    )
+
+    // backend-level failure (reply limit etc.)
+    if (!res.status) {
+      toast.error({
+        title: 'Message not sent',
+        message: res.errors?.[0] || res.message || 'Something went wrong',
+        position: 'topCenter',
+        duration: 3000,
+      })
+      return
     }
-  } catch (err) {
-    toast.error({ title: 'Error', message: 'Failed to send message', position: 'topCenter', duration: 3000 })
+
+    // success
+    newMsg.value = ''
+    selectedImages.value = []
+    scrollToBottom()
+
+  } catch (error) {
+    toast.error({
+      title: 'Error',
+      message: `Failed to send message: ${error.message || error}`,
+      position: 'topCenter',
+      duration: 3000,
+    })
+  } finally {
+    sending.value = false
   }
 }
 
+// Message Guard
+
+
 async function makeResolved() {
   try {
-    const res = await ticketStore.closeTicket(ticketId.value)
+    const res = await ticketStore.closeTicket(ticketUuid.value)
     if (res.status) {
       toast.success({ title: 'Success', message: 'Ticket closed', position: 'topCenter', duration: 2500 })
       ticketStore.ticketDetails.status = 'closed'

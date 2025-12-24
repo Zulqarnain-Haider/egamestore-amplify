@@ -19,7 +19,7 @@
               @click="toggleDropdown"
             >
               <span class="truncate" :class="form.reason ? 'text-mainText' : 'text-onFooter/50'">
-                {{ form.reason || 'Select' }}
+                {{ form.reason?.name || 'Select' }}
               </span>
               <Icon
                 name="heroicons:chevron-down"
@@ -44,7 +44,7 @@
                   v-else
                   v-for="(r, index) in reasons"
                   :key="r.id"
-                  @click="selectReason(r.name, r.id)"
+                  @click="selectReason(r)"
                   class="px-4 py-2 text-sm cursor-pointer transition-colors duration-200"
                   :class="[index === highlightedIndex ? 'bg-primary/20 text-mainText' : 'text-mainText hover:bg-primary/20']"
                 >
@@ -54,7 +54,67 @@
             </transition>
           </div>
           <p v-if="errors.reason" class="text-error text-xs mt-1">{{ errors.reason }}</p>
+          <!-- Order Dropdown (Logged-in) -->
+          <div v-if="requiresOrder && isLoggedIn" class="mt-4">
+            <label class="label">Select Order</label>
+          
+            <div class="relative">
+              <div
+                class="input flex justify-between items-center cursor-pointer select-none pr-10"
+                @click="toggleOrderDropdown"
+              >
+                <span
+                  class="truncate"
+                  :class="selectedOrder ? 'text-mainText' : 'text-onFooter/50'"
+                >
+                  {{ selectedOrder?.name || 'Select order' }}
+                </span>
+          
+                <Icon
+                  name="heroicons:chevron-down"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-onFooter text-lg transition-transform duration-300"
+                  :class="{ 'rotate-180': orderDropdownOpen }"
+                />
+              </div>
+          
+              <transition name="fade">
+                <ul
+                  v-if="orderDropdownOpen"
+                  class="absolute w-full bg-bgDark py-2 rounded-xl mt-1 z-20 shadow-lg overflow-hidden"
+                >
+                  <li
+                    v-if="loadingOrders"
+                    class="px-4 py-2 text-sm text-onFooter text-center"
+                  >
+                    Loading orders...
+                  </li>
+          
+                  <li
+                    v-else
+                    v-for="order in orders"
+                    :key="order.id"
+                    @click="selectOrder(order)"
+                    class="px-4 py-2 text-sm cursor-pointer transition-colors duration-200 text-mainText hover:bg-primary/20"
+                  >
+                    {{ order.name }}
+                  </li>
+                </ul>
+              </transition>
+            </div>
+          </div>
 
+          <!-- Order Input (Guest) -->
+          <div v-if="requiresOrder && !isLoggedIn" class="mt-4">
+            <label class="label">Order Number</label>
+            <input
+              v-model="form.orderId"
+              class="input"
+              placeholder="Enter order number"
+            />
+          </div>
+          <p v-if="errors.orderId" class="text-error text-xs mt-1">
+            {{ errors.orderId }}
+          </p>
           <!-- Subject -->
           <label class="label mt-4">Subject</label>
           <input v-model="form.subject" class="input" placeholder="" />
@@ -137,17 +197,18 @@
                 v-for="(t, i) in ticketStore.tickets"
                 :key="t.id"
                 :class="['hover:bg-bgLight/30 transition', i === 0 ? '' : 'border-t border-onMainText']"
+                @click="openConversation(t.uuid)"
               >
                 <td class="py-4 px-4">
-                  <button class="text-mainText hover:text-primary" @click="openConversation(t.id)">
+                  <button class="text-mainText hover:text-primary" >
                     {{ t.id }}
                   </button>
                 </td>
-                <td class="px-4">{{ t.orderId || '—' }}</td>
+                <td class="px-4">{{ t.order_id || '—' }}</td>
                 <td class="text-onFooter px-4">{{ formatDate(t.created_at) }}</td>
                 <td class="px-4">
                   <span :class="t.status === 'active' ? 'text-green-600 py-1 rounded-full text-sm' : 'text-onFooter py-1 rounded-full text-sm'">
-                    {{ t.status === 'active' ? 'Active' : 'Closed' }}
+                    {{ t.status }}
                   </span>
                 </td>
               </tr>
@@ -169,6 +230,7 @@ import { useToast } from '#imports'
 const ticketStore = useTicketStore()
 const userStore = useUserStore()
 const router = useRouter()
+const route = useRoute()
 const toast = useToast()
 
 const highlightedIndex = ref(0)
@@ -181,18 +243,36 @@ const reasons = ref([])
 const loadingReasons = ref(false)
 const reasonsError = ref(false)
 
+const orders = ref([])
+const loadingOrders = ref(false)
+const ordersFetched = ref(false)
+const orderDropdownOpen = ref(false)
+const selectedOrder = ref(null)
+
+
 const form = ref({
   name: userStore.currentUser?.name || '',
   email: userStore.currentUser?.email || '',
-  reason: '',
-  reasonId: null,
+  reason: null,
   subject: '',
   message: '',
   orderId: '',
   attachments: [],
 })
 
+const orderFromQuery = route.query.order
+
+if (orderFromQuery) {
+  const found = orders.value.find(o => o.id == orderFromQuery)
+  if (found) {
+    form.value.orderId = found.id
+  }
+}
+
 const isLoggedIn = computed(() => !!userStore.currentUser)
+const requiresOrder = computed(() => {
+  return form.value.reason?.show_orders === true
+})
 
 async function fetchReasons() {
   loadingReasons.value = true
@@ -215,16 +295,88 @@ async function fetchReasons() {
   }
 }
 
+async function fetchOrders() {
+  if (!isLoggedIn.value || ordersFetched.value) return
+
+  loadingOrders.value = true
+  try {
+    const res = await $fetch(
+      'https://api.egamestore.com/api/users/orders/pagination?status=all&per_page=20000&page=1',
+      {
+        headers: {
+          Authorization: `Bearer ${userStore.token}`,
+          'Accept-language': 'en',
+        },
+      }
+    )
+
+    if (res.status && res.data?.orders) {
+      orders.value = res.data.orders
+      ordersFetched.value = true
+    } else {
+      toast.error({
+        title: 'Error',
+        message: 'Failed to load orders',
+        position: 'topCenter',
+        duration: 3000,
+      })
+    }
+  } catch (err) {
+    toast.error({
+      title: 'Connection Error',
+      message: 'Unable to load orders',
+      position: 'topCenter',
+      duration: 3000,
+    })
+  } finally {
+    loadingOrders.value = false
+  }
+}
+
+watch(
+  () => form.value.reason,
+  (reason) => {
+    if (reason?.show_orders && isLoggedIn.value) {
+      fetchOrders()
+    } else {
+      form.value.orderId = ''
+    }
+  }
+)
+
+watch(
+  () => requiresOrder.value,
+  (val) => {
+    if (!val) {
+      selectedOrder.value = null
+      form.value.orderId = ''
+      orderDropdownOpen.value = false
+    }
+  }
+)
+
+
 function toggleDropdown() {
   dropdownOpen.value = !dropdownOpen.value
   if (dropdownOpen.value) highlightedIndex.value = 0
 }
 
-function selectReason(name, id) {
-  form.value.reason = name
-  form.value.reasonId = id
+function selectReason(reason) {
+  form.value.reason = reason
+  form.value.orderId = ''
   dropdownOpen.value = false
 }
+
+function toggleOrderDropdown() {
+  orderDropdownOpen.value = !orderDropdownOpen.value
+}
+
+function selectOrder(order) {
+  selectedOrder.value = order
+  form.value.orderId = order.id
+  orderDropdownOpen.value = false
+}
+
 
 function triggerFile() { fileInput.value?.click() }
 
@@ -248,6 +400,9 @@ function validateForm() {
   if (!form.value.reason) errors.value.reason = 'Please select a reason.'
   if (!form.value.subject) errors.value.subject = 'Subject is required.'
   if (!form.value.message) errors.value.message = 'Message cannot be empty.'
+  if (requiresOrder.value && !form.value.orderId) {
+     errors.value.orderId = 'Order is required for this reason.'
+   }
   return Object.keys(errors.value).length === 0
 }
 
@@ -259,27 +414,27 @@ async function submitTicket() {
       email: form.value.email,
       subject: form.value.subject,
       message: form.value.message,
-      reasonId: form.value.reasonId,
-      orderId: form.value.orderId,
+      reasonId: form.value.reason.id,
+      orderId: requiresOrder.value ? form.value.orderId : '',
       attachments: form.value.attachments.map(f => f.file || f)
     }
     const response = await ticketStore.createTicket(payload)
     if (response.status) {
       toast.success({ title: 'Success', message: 'Ticket created successfully', position: 'topCenter', duration: 2500 })
-      router.push({ path: '/contact/conversation', query: { id: response.data.uuid } })
+      router.push({ path: '/contact-us/chat', query: { uuid: response.data.uuid } })
     } else throw new Error(response.message || 'Failed to create ticket')
   } catch (err) {
     toast.error({ title: 'Error', message: err.message, position: 'topCenter', duration: 3000 })
   }
 }
 
-function openConversation(id) {
-  const ticket = ticketStore.getTicketById(id)
+function openConversation(uuid) {
+  const ticket = ticketStore.getTicketById(uuid)
   if (!ticket || ticket.status === 'closed') {
     toast.error({ title: 'Ticket Closed', message: 'This ticket is closed and cannot be reopened', position: 'topCenter', duration: 3000 })
     return
   }
-  router.push({ path: '/contact-us/chat', query: { id } })
+  router.push({ path: '/contact-us/chat', query: { uuid: uuid } })
 }
 
 let reasonsFetched = false

@@ -163,8 +163,8 @@ export const useTicketStore = defineStore('ticket', {
     },
 
     // Get ticket by id
-    getTicketById(id) {
-      return this.tickets.find(t => t.id === id)
+    getTicketById(uuid) {
+      return this.tickets.find(t => t.uuid === uuid)
     },
   },
 })

@@ -2,7 +2,7 @@
   <NuxtLink
     :to="to"
     :class="[
-      'flex items-center justify-center transition-all duration-300 shadow-md',
+      'flex items-center justify-center transition-all duration-300 shadow-md cursor-pointer',
       variant === 'primary'
         ? 'bg-primary text-onPrimary hover:opacity-90'
         : 'bg-surface border-2 border-outline text-mainText hover:bg-outline hover:text-white',
