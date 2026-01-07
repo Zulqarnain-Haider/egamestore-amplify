@@ -2,11 +2,11 @@
   <section class="relative w-full text-white overflow-hidden">
     <!--Title -->
     <div class="flex items-center justify-between px-4 mb-2 sm:mb-4  sm:px-6 lg:px-7">
-      <h2 class="text-2xl font-semibold font-vazirmatn">Customer Reviews</h2>
+      <h2 class="text-2xl font-semibold font-vazirmatn">{{ t('customerReviews') }}</h2>
       <div
         class="text-onGoNext text-lg font-vazirmatn flex items-center cursor-pointer hover:text-primary transition"
       >
-        View All
+        {{ t('viewAll') }}
         <Icon name="mdi:chevron-right" class="w-10 h-10" />
       </div>
     </div>
@@ -59,8 +59,9 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
-
 import reviewsData from '~/../data/reviews.json'
+
+const { t } = useI18n()
 
 interface Review {
   name: string

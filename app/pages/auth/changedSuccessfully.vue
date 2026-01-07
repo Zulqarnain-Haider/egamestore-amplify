@@ -27,21 +27,23 @@
 
       <!-- Heading -->
       <h2 class="text-2xl md:text-3xl font-semibold mb-3">
-        Your Password Successfully Changed!
+        {{ t('passwordChangedTitle') }}
       </h2>
 
       <p class="text-inputsIn text-md mb-8 md:mb-10">
-        Sign in to your account with your new password
+        {{ t('passwordChangedSubtitle') }}
       </p>
 
       <!--Sign In Button -->
         <AppButton to="/auth/login" full class="h-9 text-lg font-poppins">
-          Sign In
+          {{ t('passwordChangedSignIn') }}
         </AppButton>
     </div>
   </section>
 </template>
 <script setup>
+const { t } = useI18n()
+
 definePageMeta({
   layout: 'auth'
 })

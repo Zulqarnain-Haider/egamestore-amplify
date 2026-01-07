@@ -4,10 +4,10 @@
 
       <!-- Heading -->
       <h1 class="text-2xl font-semibold text-center mb-4">
-        Welcome back
+        {{ t('loginTitle') }}
       </h1>
       <p class="text-center text-sm text-mainText mb-10">
-        Enter your credentials to access your account
+        {{ t('loginSubtitle') }}
       </p>
 
       <!-- Global Error -->
@@ -23,11 +23,11 @@
 
         <!-- Email / Phone -->
         <div>
-          <label class="block mb-1 text-sm">Email or Phone</label>
+          <label class="block mb-1 text-sm">{{ t('emailOrPhone') }}</label>
           <input
             v-model="identifier"
             type="text"
-            placeholder="Enter your email or phone"
+            :placeholder="t('emailOrPhonePlaceholder')"
             :class="inputClass('identifier')"
           />
           <p
@@ -40,14 +40,14 @@
 
         <!-- Password -->
         <div>
-          <label class="block mb-1 text-sm">Password</label>
+          <label class="block mb-1 text-sm">{{ t('password') }}</label>
         
           <!-- Input wrapper -->
           <div class="relative">
             <input
               v-model="password"
               :type="showPassword ? 'text' : 'password'"
-              placeholder="Enter your password"
+              :placeholder="t('passwordPlaceholder')"
               :class="inputClass('password') + ' pr-10'"
             />
         
@@ -79,14 +79,14 @@
               v-model="rememberMe"
               class="accent-primary w-4 h-4"
             />
-            <span>Remember for 30 days</span>
+            <span>{{ t('rememberMe') }}</span>
           </label>
 
           <NuxtLink
             to="/auth/forgot-password"
             class="text-xs underline text-primary hover:text-primary/80"
           >
-            Forgot password?
+            {{ t('forgotPassword') }}
           </NuxtLink>
         </div>
 
@@ -97,15 +97,15 @@
           class="h-10 font-semibold"
           :disabled="loading"
         >
-          {{ loading ? 'Logging in...' : 'Login' }}
+          {{ loading ? t('loggingIn') : t('login') }}
         </AppLink>
       </form>
 
       <!-- Signup -->
       <p class="text-center text-sm mt-6">
-        Don’t have an account?
+        {{ t('noAccount') }}
         <NuxtLink to="/auth/signup" class="text-primary hover:underline">
-          Sign Up
+          {{ t('signUp') }}
         </NuxtLink>
       </p>
     </div>
@@ -115,8 +115,10 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { navigateTo, useCookie } from '#app'
-import { useUserStore } from '~/stores/userStore'
+import { useAuth } from '~/composables/useAuth'
 import { useToast } from '#imports'
+
+const { t, locale } = useI18n()
 
 /* -----------------------------------
  * Meta (Auth pages should not be indexed)
@@ -143,7 +145,7 @@ useHead({
 /* -----------------------------------
  * State
  * ----------------------------------- */
-const userStore = useUserStore()
+const auth = useAuth()
 const toast = useToast()
 
 const identifier = ref('')
@@ -180,11 +182,11 @@ const validateForm = () => {
   errors.value = {}
 
   if (!identifier.value) {
-    errors.value.identifier = 'Email or phone is required.'
+    errors.value.identifier = t('errorEmailRequired')
   }
 
   if (!password.value) {
-    errors.value.password = 'Password is required.'
+    errors.value.password = t('errorPasswordRequired')
   }
 
   return Object.keys(errors.value).length === 0
@@ -198,15 +200,17 @@ const handleLogin = async () => {
 
   loading.value = true
 
+  const currentLocale = locale.value
+
   try {
-    const res = await userStore.login(identifier.value, password.value)
+    const res = await auth.login(identifier.value, password.value, currentLocale)
 
     loading.value = false
 
     if (!res.success) {
-      globalError.value = res.message || 'Login failed.'
+      globalError.value = res.message || t('loginFailed')
       toast.error({
-        title: 'Login failed',
+        title: t('loginFailedTitle'),
         message: globalError.value,
         position: 'topCenter',
       })
@@ -216,8 +220,8 @@ const handleLogin = async () => {
     // Activation required → OTP page
     if (res.otpRequired) {
       toast.info({
-        title: 'Account activation',
-        message: 'Please verify the OTP sent to you.',
+        title: t('accountActivation'),
+        message: t('pleaseVerifyOTP'),
         position: 'topCenter',
       })
       return navigateTo('/auth/otp-verification?type=activation')
@@ -225,8 +229,8 @@ const handleLogin = async () => {
 
     // Success → Home
     toast.success({
-      title: 'Welcome back',
-      message: 'Login successful',
+      title: t('welcomeBack'),
+      message: t('loginSuccessful'),
       position: 'topCenter',
     })
 
@@ -237,9 +241,9 @@ const handleLogin = async () => {
     navigateTo('/')
   } catch (err) {
     loading.value = false
-    globalError.value = 'Something went wrong. Please try again.'
+    globalError.value = t('somethingWentWrong')
     toast.error({
-      title: 'Error',
+      title: t('error'),
       message: globalError.value,
       position: 'topCenter',
     })

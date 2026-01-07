@@ -7,8 +7,10 @@
         <div v-for="item in cartItems" :key="item.id"
           class="flex flex-col md:flex-row gap-5 border border-onFooter/80 rounded-xl bg-[#22262B] p-5 relative">
           <!--Remove Button -->
-          <button @click="removeItem(item.id)"
-            class="absolute top-3 right-3 text-onMainText/70 hover:text-red-500 transition" title="Remove item">
+          <button
+            class="absolute top-3 right-3 text-onMainText/70 hover:text-red-500 transition" :title="t('cartRemoveItem')"
+            @click="removeItem(item.id)"
+            >
             <i class="fa-solid fa-xmark text-lg"></i>
           </button>
 
@@ -26,14 +28,14 @@
 
             <!-- Qty Controls -->
             <div class="flex border items-center border-onMainText/30 rounded-xl overflow-hidden w-fit">
-              <button @click="decreaseQty(item)" class="px-3 py-1 hover:bg-primary transition">-</button>
+              <button class="px-3 py-1 hover:bg-primary transition" @click="decreaseQty(item)">-</button>
               <span class="px-5 py-1 text-primary">{{ item.qty }}</span>
-              <button @click="increaseQty(item)" class="px-3 py-1 hover:bg-primary transition">+</button>
+              <button class="px-3 py-1 hover:bg-primary transition" @click="increaseQty(item)">+</button>
             </div>
 
             <!-- Extra Info -->
             <div class="flex flex-col flex-wrap gap-4 text-sm text-onMainText">
-              <span class="text-orange-400 font-medium uppercase">{{ item.shipping || 'Free Shipping' }}</span>
+              <span class="text-orange-400 font-medium uppercase">{{ item.shipping || t('cartFreeShipping') }}</span>
               <span class="text-lg text-yellow-400 flex items-center gap-1">
                 <NuxtImg src="/games/fi.jpg" alt="rating" quality="80" width="20" height="20" densities="x1"
                   loading="lazy" class="w-4 h-4 sm:w-5 sm:h-5" />{{ item.rating }}<span
@@ -45,17 +47,17 @@
         </div>
 
         <p v-if="!cartItems.length" class="text-center text-onMainText/60 mt-16 text-lg">
-          Your cart is empty
+          {{ t('cartEmpty') }}
         </p>
       </div>
 
       <!-- Right: Order Summary -->
       <div class="w-full lg:w-[350px] bg-[#282C32]/70 border border-outline rounded-xl p-6 h-fit self-start">
-        <h3 class="text-lg font-semibold text-mainText mb-8">Order Summary</h3>
+        <h3 class="text-lg font-semibold text-mainText mb-8">{{ t('cartOrderSummary') }}</h3>
 
         <div class="space-y-3 text-sm">
           <div class="flex justify-between">
-            <p>Sub Total:</p>
+            <p>{{ t('cartSubtotal') }}:</p>
             <p class="font-semibold">USD {{ cartTotal.toFixed(2) }}</p>
           </div>
           <hr class="text-mainText mb-2">
@@ -74,14 +76,14 @@
         </div>
 
         <div class="flex justify-between text-sm font-semibold mt-2">
-          <p>ORDER TOTAL:</p>
+          <p>{{ t('cartOrderTotal') }}:</p>
           <p>USD {{ cartTotal.toFixed(2) }}</p>
         </div>
 
         <div class="flex justify-center">
           <AppButton to="/checkout" variant="primary" extraClass="w-full mt-6 py-3 px-12 
           text-md rounded-full text-mainText font-medium hover:opacity-90 transition-all duration-300">
-            Checkout
+            {{ t('cartCheckout') }}
           </AppButton>
         </div>
       </div>
@@ -95,6 +97,7 @@ import { useCartStore } from '~/stores/cartStore'
 import { useCart } from '~/composables/useCart'
 
 const cartStore = useCartStore()
+const { t } = useI18n()
 const { updateQty, removeCard } = useCart()
 
 onMounted(() => {
@@ -133,8 +136,8 @@ const cartItems = computed(() =>
       // Stock logic (ported from old Vue mixin)
       stockStatus:
         item.type === 2 || (item.type === 1 && item.stock === 0)
-          ? 'Out of stock'
-          : 'In stock'
+          ? t('cartOutOfStock')
+          : t('cartInStock')
     }
   })
 )

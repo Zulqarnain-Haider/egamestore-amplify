@@ -2,7 +2,7 @@
   <div class="min-h-screen max-w-7xl px-4 sm:px-6 lg:px-8 mb-10 lg:mb-12 mx-auto">
     <!-- Breadcrumb -->
     <div class="mb-6 text-lg flex items-center gap-1">
-      <NuxtLink to="/" class="hover:text-primary text-mainText">Home</NuxtLink>
+      <NuxtLink to="/" class="hover:text-primary text-mainText">{{ t('home') }}</NuxtLink>
       <Icon name="heroicons-chevron-right-20-solid" class="text-mainText w-7 h-7" />
       <span class="text-mainText">{{ categoryName }}</span>
     </div>
@@ -15,17 +15,17 @@
     <!-- Error State -->
     <div v-else-if="error" class="text-center py-12">
       <p class="text-error text-lg mb-4">{{ error }}</p>
-      <button
-        @click="fetchData"
-        class="bg-primary text-white px-6 py-2 rounded-lg hover:opacity-90"
-      >
-        Retry
-      </button>
+      <NuxtLink
+      to="/"
+        class="bg-primary text-white px-6 py-2 mt-4 rounded-lg hover:opacity-90"
+        >
+        Go To Home
+      </NuxtLink>
     </div>
 
     <!-- Empty State -->
     <div v-else-if="!categories.length" class="text-center py-12">
-      <p class="text-onFooter text-lg">No subcategories found</p>
+      <p class="text-onFooter text-lg">{{ t('noSubcategoriesFound') }}</p>
     </div>
 
     <!-- Categories Grid -->
@@ -48,6 +48,7 @@ import { useCategoryContext } from '~/composables/useCategoryContext'
 import { useHead } from '#app'
 
 const router = useRouter()
+const { t } = useI18n()
 const categoriesStore = useCategoriesStore()
 
 // Route context

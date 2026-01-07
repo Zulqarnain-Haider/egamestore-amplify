@@ -42,7 +42,7 @@
                 ? 'bg-primary text-onPrimary'
                 : 'border border-primary text-onPrimary hover:bg-primary/10'"
             >
-              Terms of Service
+              {{ t('termsOfService') }}
             </button>
 
             <button
@@ -53,7 +53,7 @@
                 ? 'bg-primary text-onPrimary'
                 : 'border border-primary text-onPrimary hover:bg-primary/10'"
             >
-              Privacy & Policy
+              {{ t('privacyAndPolicy') }}
             </button>
           </div>
 
@@ -68,7 +68,7 @@
               v-if="pending"
               class="text-center text-xs sm:text-sm text-inputsIn mt-10"
             >
-              Loading...
+              {{ t('loading') }}
             </div>
 
             <div
@@ -92,7 +92,7 @@
                      text-sm font-semibold
                      hover:bg-orange-600 transition"
             >
-              Close
+              {{ t('close') }}
             </button>
           </div>
         </div>
@@ -103,6 +103,7 @@
 
 
 <script setup>
+const { t, locale } = useI18n()
 const props = defineProps({
   modelValue: Boolean,
 })
@@ -115,11 +116,11 @@ const config = useRuntimeConfig()
 /* SSR-friendly + lazy */
 const [{ data: termsData }, { data: privacyData }, pending] = await Promise.all([
   useFetch(`${config.public.apiBase}/terms`, {
-    headers: { lang: 'en' },
+    headers: { lang: locale.value },
     lazy: true,
   }),
   useFetch(`${config.public.apiBase}/privacy-policy`, {
-    headers: { lang: 'en' },
+    headers: { lang: locale.value },
     lazy: true,
   }),
 ])

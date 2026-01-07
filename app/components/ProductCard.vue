@@ -85,7 +85,7 @@
         extraClass="text-xs py-2 px-2 rounded-xl whitespace-nowrap"
         @click.stop="handleAddToCart"
       >
-        Add to Cart
+        {{ t('addToCart') }}
       </AppButton>
 
       <AppButton
@@ -96,7 +96,7 @@
         extraClass="text-xs py-2 px-2 rounded-xl whitespace-nowrap"
         @click.stop="handleBuyNow"
       >
-        Buy Now
+        {{ t('buyNow') }}
       </AppButton>
     </div>
   </div>
@@ -104,6 +104,9 @@
 
 <script setup>
 import { useCart } from '~/composables/useCart'
+
+// I18N
+const { t } = useI18n()
 
 /* -----------------------------------
  * Props

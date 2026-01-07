@@ -22,13 +22,13 @@
         <!-- Breadcrumb + Sorting (UNCHANGED) -->
         <div class="flex flex-wrap items-center justify-between mb-6 gap-4">
           <div class="flex items-center gap-3 text-sm sm:text-base">
-            <NuxtLink class="text-mainText text-lg hover:text-primary" to="/">Home</NuxtLink>
+            <NuxtLink class="text-mainText text-lg hover:text-primary" to="/">{{ t('home') }}</NuxtLink>
             <i class="fa-solid fa-chevron-right text-sm text-mainText"></i>
-            <h2 class="font-medium">Search Results: {{ searchQuery }}</h2>
+            <h2 class="font-medium">{{ t('searchResults') }} {{ searchQuery }}</h2>
           </div>
 
           <div class="flex items-center gap-2 text-sm sm:text-base relative">
-            <span class="text-onMainText/80 text-xl">Sort by:</span>
+            <span class="text-onMainText/80 text-xl">{{ t('sortBy') }}</span>
 
             <div class="relative">
               <select
@@ -100,6 +100,7 @@ import { useAsyncData } from '#app'
 
 const route = useRoute()
 const config = useRuntimeConfig()
+const { t } = useI18n()
 
 /* -------------------------
    STATIC FILTERS (UNCHANGED)

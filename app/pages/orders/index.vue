@@ -5,9 +5,9 @@
       <!-- Header -->
       <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
         <div>
-          <h1 class="text-2xl md:text-3xl font-semibold">My Orders</h1>
+          <h1 class="text-2xl md:text-3xl font-semibold">{{ t('myOrdersTitle') }}</h1>
           <p class="text-onMainText text-sm mt-1">
-            View and manage your digital game purchases
+            {{ t('myOrdersSubtitle') }}
           </p>
         </div>
 
@@ -18,7 +18,7 @@
             <i class="fa-solid fa-magnifying-glass text-onMainText mr-2"></i>
             <input
               v-model="searchQuery"
-              placeholder="Search orders..."
+              :placeholder="t('ordersSearchPlaceholder')"
               class="bg-transparent outline-none text-sm w-full text-mainText placeholder-onMainText"
             />
           </div>
@@ -134,7 +134,7 @@
                   extraClass="px-5 py-1 text-sm rounded-lg"
                   @click="openKeyModal(order)"
                 >
-                  <Icon name="fa-solid:key" class="mr-1" /> View Key
+                  <Icon name="fa-solid:key" class="mr-1" /> {{ t('orderViewKey') }}
                 </AppButton>
 
                 <button
@@ -142,7 +142,7 @@
                   class="flex items-center gap-2 text-sm rounded-md px-3 py-[6px] bg-onMainText/40"
                 >
                   <Icon name="mdi-hourglass" class="w-5 h-5" />
-                  Processing
+                  {{ t('orderProcessing') }}
                 </button>
               </div>
             </div>
@@ -152,16 +152,16 @@
 
           <div class="flex justify-between items-center text-sm">
             <div class="text-onMainText space-x-3">
-              <span>Platform: <span class="text-mainText">{{ order.platform }}</span></span>
-              <span>Region: <span class="text-mainText">{{ order.region }}</span></span>
-              <span>Delivery: <span class="text-green-400">{{ order.delivery }}</span></span>
+              <span>{{ t('orderPlatform') }}: <span class="text-mainText">{{ order.platform }}</span></span>
+              <span>{{ t('orderRegion')}}: <span class="text-mainText">{{ order.region }}</span></span>
+              <span>{{ t('orderDelivery') }}: <span class="text-green-400">{{ order.delivery }}</span></span>
             </div>
 
             <p
               class="text-primary cursor-pointer hover:underline flex items-center"
               @click="goToDetails(order)"
             >
-              View Details
+              {{ t('orderViewDetails') }}
               <Icon name="heroicons-chevron-right-20-solid" class="ml-1" />
             </p>
           </div>
@@ -202,6 +202,7 @@ useHead({
 
 const router = useRouter()
 const route = useRoute()
+const { t } = useI18n()
 const ordersStore = useOrdersStore()
 
 const searchQuery = ref('')
@@ -216,36 +217,56 @@ const orders = computed(() => ordersStore.orders)
 const paginatedOrders = computed(() => orders.value)
 
 /* Status options */
-const statusOptions = [
-  { label: 'All Orders', value: 'all' },
-  { label: 'Completed', value: 'completed' },
-  { label: 'Processing', value: 'processing' },
-  { label: 'On Hold', value: 'on-hold' },
-  { label: 'Shipped', value: 'shipped' },
-  { label: 'Cancelled', value: 'cancelled' },
-  { label: 'Refunded', value: 'refunded' }
-]
+const statusOptions = computed(() => [
+  { label: t('ordersFilterAll'), value: 'all' },
+  { label: t('ordersFilterCompleted'), value: 'completed' },
+  { label: t('ordersFilterProcessing'), value: 'processing' },
+  { label: t('ordersFilterOnHold'), value: 'on-hold' },
+  { label: t('ordersFilterShipped'), value: 'shipped' },
+  { label: t('ordersFilterCancelled'), value: 'cancelled' },
+  { label: t('ordersFilterRefunded'), value: 'refunded' }
+])
+
 
 const selectedStatusLabel = computed(() => {
-  return statusOptions.find(o => o.value === statusFilter.value)?.label || 'All Orders'
+  return (
+    statusOptions.value.find(o => o.value === statusFilter.value)?.label ||
+    t('ordersFilterAll')
+  )
 })
 
 const paginationText = computed(() => {
   const { current_page, per_page, total } = ordersStore.pagination
-  if (!total) return 'Showing 0 orders'
+  if (!total) return t('ordersShowingNone')
   const start = (current_page - 1) * per_page + 1
   const end = Math.min(current_page * per_page, total)
-  return `Showing ${start}–${end} of ${total} orders`
+  return t('ordersShowingRange', {
+    start,
+    end,
+    total
+  })
 })
 
 const statsCards = computed(() => [
-  { icon: '/games/OrdersIcon1.png', value: ordersStore.pagination.total, label: 'Total Orders' },
-  { icon: '/games/OrdersIcon2.png', value: orders.value.filter(o => o.status === 'Completed').length, label: 'Completed' },
-  { icon: '/games/OrdersIcon3.png', value: orders.value.filter(o => o.status === 'Processing').length, label: 'Processing' },
+  {
+    icon: '/games/OrdersIcon1.png',
+    value: ordersStore.pagination.total,
+    label: t('ordersStatsTotal')
+  },
+  {
+    icon: '/games/OrdersIcon2.png',
+    value: orders.value.filter(o => o.status === 'Completed').length,
+    label: t('ordersStatsCompleted')
+  },
+  {
+    icon: '/games/OrdersIcon3.png',
+    value: orders.value.filter(o => o.status === 'Processing').length,
+    label: t('ordersStatsProcessing')
+  },
   {
     icon: '/games/OrdersIcon4.png',
     value: orders.value.reduce((s, o) => s + (Number(o.price) || 0), 0).toFixed(2),
-    label: 'Total Spent'
+    label: t('ordersStatsTotalSpent')
   }
 ])
 

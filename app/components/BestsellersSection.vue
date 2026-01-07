@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="flex items-center justify-between px-4 sm:px-6 lg:px-7">
       <h2 class="text-2xl font-semibold font-vazirmatn">
-        Bestsellers
+        {{ t('bestSellers') }}
       </h2>
 
       <NuxtLink
@@ -11,7 +11,7 @@
         class="text-onGoNext text-lg font-vazirmatn flex items-center
                cursor-pointer hover:text-primary transition"
       >
-        View All
+        {{ t('viewAll') }}
         <Icon name="mdi:chevron-right" class="w-10 h-10" />
       </NuxtLink>
     </div>
@@ -101,6 +101,7 @@
 import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
 
 const config = useRuntimeConfig()
+const { t } = useI18n()
 
 /* ---------------------------
    SSR FETCH (BESTSELLERS)

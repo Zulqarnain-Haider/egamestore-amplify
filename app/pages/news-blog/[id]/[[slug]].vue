@@ -1,11 +1,11 @@
 <template>
   <div class="min-h-screen text-mainText font-poppins bg-bgDark">
     <section v-if="pending" class="text-center py-16 text-onMainText">
-      Loading post...
+      {{ t('loading') }}
     </section>
 
     <section v-else-if="error" class="text-center py-16 text-error">
-      Failed to load post.
+      {{ t('failedToLoad') }}
     </section>
 
     <section v-else class="max-w-5xl mx-auto py-10 px-4">
@@ -70,6 +70,7 @@ import { computed } from 'vue'
 
 const config = useRuntimeConfig()
 const route = useRoute()
+const { t } = useI18n()
 
 /* =========================
    ROUTE PARAMS

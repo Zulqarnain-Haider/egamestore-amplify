@@ -30,13 +30,13 @@
           <h2
             class="text-mainText font-semibold tracking-wide max-w-[60%] mx-auto text-xl sm:text-2xl leading-snug"
           >
-            Profile Updated Successfully
+            {{ t('profileUpdateSuccessTitle') }}
           </h2>
           <button
             @click="closeModal"
             class="bg-primary w-full text-white px-8 py-2 rounded-md hover:bg-orange-600 transition"
           >
-            OK
+           {{ t('commonOk') }}
           </button>
         </div>
       </div>
@@ -45,6 +45,8 @@
 </template>
 
 <script setup>
+const { t } = useI18n()
+
 const props = defineProps({
   visible: Boolean
 })

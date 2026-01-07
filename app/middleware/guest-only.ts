@@ -1,13 +1,11 @@
 export default defineNuxtRouteMiddleware(async () => {
-  const userStore = useUserStore()
-
-  // Ensure auth is initialized (important for SSR + refresh)
-  if (!userStore.isReady) {
-    await userStore.initAuth()
+  const auth = useAuth()
+  
+  if (!auth.isReady.value) {
+    await auth.initAuth()
   }
-
-  // If user is logged in AND activated → block guest pages
-  if (userStore.token && userStore.isActivated) {
+  
+  if (auth.isAuthenticated.value && auth.isActivated.value) {
     return navigateTo('/')
   }
 })

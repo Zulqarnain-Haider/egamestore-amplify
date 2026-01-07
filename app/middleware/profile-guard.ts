@@ -1,20 +1,15 @@
 export default defineNuxtRouteMiddleware(async () => {
-  const userStore = useUserStore()
-
-  // Bootstrap auth ONLY once
-  if (!userStore.isReady) {
-    await userStore.initAuth()
+  const auth = useAuth()
+  
+  if (!auth.isReady.value) {
+    await auth.initAuth()
   }
-
-  // Still not logged in
-  if (!userStore.token) {
+  
+  if (!auth.isAuthenticated.value) {
     return navigateTo('/auth/login')
   }
-
-  // User logged in but not activated
-  if (!userStore.isActivated) {
+  
+  if (!auth.isActivated.value) {
     return navigateTo('/auth/otp-verification?type=activation')
   }
-
-  // Otherwise allow access
 })

@@ -21,7 +21,7 @@
               @input="debouncedSearch"
               @keyup.enter="handleEnter"
               type="text"
-              placeholder="Search games..."
+              :placeholder="t('searchGames')"
               class="w-full bg-transparent text-mainText placeholder:text-onMainText outline-none font-poppins text-sm"
               autofocus
               ref="searchInput"
@@ -42,7 +42,7 @@
             class="bg-bgNav mt-3 border border-outline rounded-lg p-4 text-center"
           >
             <Icon name="mdi:loading" class="w-6 h-6 text-primary animate-spin mx-auto" />
-            <p class="text-onMainText text-sm mt-2">Searching...</p>
+            <p class="text-onMainText text-sm mt-2">{{ t('searching') }}</p>
           </div>
 
           <!-- Suggestions List -->
@@ -90,6 +90,8 @@
 <script setup>
 import { ref, watch, nextTick, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
+
+const { t } = useI18n()
 
 const props = defineProps({
   show: Boolean,

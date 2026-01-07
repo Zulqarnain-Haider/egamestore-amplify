@@ -18,7 +18,7 @@
         <!-- Breadcrumb + Sorting -->
         <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
           <span class="flex gap-1 items-center text-sm sm:text-base">
-            <NuxtLink class="text-mainText text-lg hover:text-primary" to="/">Home</NuxtLink>
+            <NuxtLink class="text-mainText text-lg hover:text-primary" to="/">{{ t('home') }}</NuxtLink>
             <Icon name="heroicons-chevron-right-20-solid" class="text-mainText w-7 h-7"/>
             <NuxtLink :to="`/category/${categoryId}`" class="hover:text-primary">
               {{ categoryName }}
@@ -87,6 +87,7 @@ import { useCategoryContext } from '~/composables/useCategoryContext'
 
 const route = useRoute()
 const router = useRouter()
+const { t } = useI18n()
 const productsStore = useProductsStore()
 const categoriesStore = useCategoriesStore()
 const { categoryId, subcategoryId, countryId } = useCategoryContext()

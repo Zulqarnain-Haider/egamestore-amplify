@@ -36,9 +36,9 @@
 
 
         <div class="font-grotesk">
-          <h2 class="text-2xl font-semibold mb-5">My Points Wallet</h2>
+          <h2 class="text-2xl font-semibold mb-5">{{ t('walletTitle') }}</h2>
           <!-- show wallet.balance from api here -->
-         <h3 class="text-onFooter">{{ balance }} balance in your wallet</h3>
+         <h3 class="text-onFooter">{{ balance }} {{ t('walletBalanceText') }}</h3>
         </div>
       </section>
 
@@ -46,7 +46,7 @@
       <div class="grid md:grid-cols-2 gap-8">
         <!-- LEFT: How to Earn Points -->
         <div class="bg-bgDark rounded-2xl p-5 border font-grotesk border-onFooter">
-          <h3 class="text-xl mb-4 text-mainText">How to Earn Points</h3>
+          <h3 class="text-xl mb-4 text-mainText">{{ t('walletEarnTitle') }}</h3>
 
             <div class="flex flex-col gap-4">
           <div v-for="(item, index) in earnOptions" :key="index"
@@ -62,8 +62,8 @@
             densities="x1" quality="80" loading="lazy" :src="item.icon" alt="icon" class="object-contain" />
           </div>
             <div>
-              <h4 class="">{{ item.title }}</h4>
-              <p class="text-sm text-onFooter">{{ item.description }}</p>
+              <h4 class="">{{ t(item.title) }}</h4>
+              <p class="text-sm text-onFooter">{{ t(item.description) }}</p>
             </div>
         </div>
         </div>
@@ -72,7 +72,7 @@
 
         <!-- RIGHT: How to Use Points -->
         <div class="bg-bgDark rounded-2xl p-5 border font-poppins border-onFooter">
-          <h3 class="text-xl mb-4 text-mainText">How to Use Points</h3>
+          <h3 class="text-xl mb-4 text-mainText">{{ t('walletUseTitle') }}</h3>
 
             <div class="flex flex-col gap-4">
           <div v-for="(item, index) in useOptions" :key="index"
@@ -89,11 +89,11 @@
                 densities="x1" quality="80" loading="lazy" :src="item.icon" alt="icon" class="object-contain" />
                 </div>  
                 <div>
-                  <h4 class="text-mainText">{{ item.title }}</h4>
-                  <p class="text-sm text-mainText">{{ item.description }}</p>
+                  <h4 class="text-mainText">{{ t(item.title) }}</h4>
+                  <p class="text-sm text-mainText">{{ t(item.description) }}</p>
                 </div>
                 </div>
-                <h2 class="text-primary text-lg">{{ item.action }}</h2>
+                <h2 class="text-primary text-lg">{{ t(item.action) }}</h2>
 
           </div>
         </div>
@@ -106,14 +106,14 @@
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
           <!-- LEFT -->
           <h3 class="text-lg text-mainText">
-            Transaction History
+            {{ t('walletTransactionHistory') }}
           </h3>
         
           <!-- RIGHT -->
           <div class="flex items-center gap-4 md:justify-end self-end md:self-auto">
             <!-- Filter -->
             <div class="flex items-center gap-2 text-sm sm:text-base relative">
-              <span class="text-mainText/80 whitespace-nowrap">Filter:</span>
+              <span class="text-mainText/80 whitespace-nowrap">{{ t('walletFilter') }}:</span>
         
               <div class="relative">
                 <select
@@ -121,9 +121,9 @@
                   class="bg-bgDark border appearance-none border-outline rounded-lg
                          px-4 py-2 pr-10 cursor-pointer text-mainText focus:outline-none"
                 >
-                  <option value="">All</option>
-                  <option value="credit">Credit</option>
-                  <option value="debit">Debit</option>
+                  <option value="">{{ t('walletFilterAll') }}</option>
+                  <option value="credit">{{ t('walletFilterCredit') }}</option>
+                  <option value="debit">{{ t('walletFilterDebit') }}</option>
                 </select>
         
                 <Icon
@@ -136,7 +136,7 @@
         
             <!-- Per Page -->
             <div class="flex items-center gap-2 text-sm sm:text-base relative">
-              <span class="text-mainText/80 whitespace-nowrap">Show:</span>
+              <span class="text-mainText/80 whitespace-nowrap">{{ t('walletShow') }}:</span>
         
               <div class="relative">
                 <select
@@ -161,14 +161,14 @@
 
         <div class="hidden md:block overflow-x-auto">
         <div class="grid grid-cols-8 font-semibold border-b border-onFooter pb-2 text-sm">
-          <span>ID</span>
-          <span>Date</span>
-          <span>Action</span>
-          <span>Amount</span>
-          <span>Reference</span>
-          <span>Before</span>
-          <span>After</span>
-          <span>Notes</span>
+          <span>{{ t('walletTableId') }}</span>
+          <span>{{ t('walletTableDate') }}</span>
+          <span>{{ t('walletTableAction') }}</span>
+          <span>{{ t('walletTableAmount') }}</span>
+          <span>{{ t('walletTableReference') }}</span>
+          <span>{{ t('walletTableBefore') }}</span>
+          <span>{{ t('walletTableAfter') }}</span>
+          <span>{{ t('walletTableNotes') }}</span>
         </div>
         <div
           v-for="txn in transactions"
@@ -200,7 +200,7 @@
           </span>
         </div>
         <p v-if="!transactions.length" class="text-center text-onFooter py-10">
-          No transactions yet.
+          {{ t('walletNoTransactions') }}
         </p>
         </div>
         <!-- MOBILE TRANSACTIONS -->
@@ -220,30 +220,30 @@
       
           <!-- Action -->
           <div class="flex justify-between mb-1">
-            <span class="text-onFooter">Action</span>
+            <span class="text-onFooter">{{ t('walletMobileAction') }}</span>
             <span>{{ txn.action }}</span>
           </div>
       
           <!-- Amount -->
           <div class="flex justify-between mb-1">
-            <span class="text-onFooter">Amount</span>
+            <span class="text-onFooter">{{ t('walletMobileAmount') }}</span>
             <span>{{ txn.amount }}</span>
           </div>
       
           <!-- Balance -->
           <div class="flex justify-between mb-1">
-            <span class="text-onFooter">Before</span>
+            <span class="text-onFooter">{{ t('walletMobileBefore') }}</span>
             <span class="text-green-500">{{ txn.before }}</span>
           </div>
       
           <div class="flex justify-between mb-1">
-            <span class="text-onFooter">After</span>
+            <span class="text-onFooter">{{ t('walletMobileAfter') }}</span>
             <span class="text-red-500">{{ txn.after }}</span>
           </div>
       
           <!-- Reference -->
           <div class="flex justify-between mb-1">
-            <span class="text-onFooter">Ref</span>
+            <span class="text-onFooter">{{ t('walletMobileRef') }}</span>
             <span class="truncate max-w-[180px] text-right">
               {{ txn.reference }}
             </span>
@@ -274,6 +274,7 @@ import { useUserStore } from '~/stores/userStore'
 
 const config = useRuntimeConfig()
 const userStore = useUserStore()
+const { t, locale } = useI18n()
 const { token, isReady } = storeToRefs(userStore)
 const balance = ref(0)
 const transactions = ref([])
@@ -286,20 +287,20 @@ const lastPage = ref(1)
 const earnOptions = [
   { 
         id: 1,
-        title: 'Complete Games',
-        description: 'Earn 50–200 points per game',
+        title: 'walletEarnGameTitle',
+        description: 'walletEarnGameDesc',
         icon: '/wallet/EranPoint1.png'
       },
       { 
         id: 2,
-        title: 'Daily Login',
-        description: 'Get 25 points daily',
+        title: 'walletEarnDailyTitle',
+        description: 'walletEarnDailyDesc',
         icon: '/wallet/EranPoint2.svg'
       },
       { 
         id: 3,
-        title: 'Refer Friends',
-        description: 'Earn 500 points per referral',
+        title: 'walletEarnReferTitle',
+        description: 'walletEarnReferDesc',
         icon: '/wallet/EranPoint3.svg'
       },
 ]
@@ -307,25 +308,25 @@ const earnOptions = [
 const useOptions = [
   {
         id: 1,
-        title: 'Discount Coupons',
-        description: 'Starting from 500 points',
-        action: 'Redeem',
+        title: 'walletUseCouponTitle',
+        description: 'walletUseCouponDesc',
+        action: 'walletActionRedeem',
         color: 'text-primary',
         icon: '/wallet/UsePoint1.svg'
       },
       {
         id: 2,
-        title: 'Free Shipping',
-        description: '200 points per order',
-        action: 'Redeem',
+        title: 'walletUseShippingTitle',
+        description: 'walletUseShippingDesc',
+        action: 'walletActionRedeem',
         color: 'text-primary',
         icon: '/wallet/UsePoint2.svg'
       },
       {
         id: 3,
-        title: 'Exclusive Products',
-        description: 'Premium items available',
-        action: 'Browse',
+        title: 'walletUseExclusiveTitle',
+        description: 'walletUseExclusiveDesc',
+        action: 'walletActionBrowse',
         color: 'text-orange-400',
         icon: '/wallet/UsePoint3.svg'
       },
@@ -346,7 +347,7 @@ watch(
         },
         headers: {
           Authorization: `Bearer ${token.value}`,
-          lang: 'en',
+          lang: locale.value,
         },
       }
     )

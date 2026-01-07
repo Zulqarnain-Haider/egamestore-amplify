@@ -4,61 +4,61 @@
 
       <!-- LEFT: Personal + Address + Payment -->
       <div class="flex-1 rounded-2xl space-y-6 px-4 lg:px-0">
-        <h2 class="text-md sm:text-lg font-semibold">Personal details</h2>
+        <h2 class="text-md sm:text-lg font-semibold">{{ t('checkoutPersonalDetails') }}</h2>
 
         <!-- Full Name (spans 2 columns) -->
         <div>
-          <label class="label">Full Name <span class="text-error">*</span></label>
+          <label class="label">{{ t('checkoutFullName') }} <span class="text-error">*</span></label>
           <input 
             v-model="form.fullName" 
             type="text" 
             :class="inputClass('fullName')" 
-            placeholder="Enter your full name *" 
+            :placeholder="t('checkoutFullNamePlaceholder')" 
           />
           <p v-if="errors.fullName" class="text-error text-xs mt-1">{{ errors.fullName }}</p>
         </div>
 
         <!-- Address -->
         <div class="grid grid-cols-1 gap-5">
-          <h3 class="text-md sm:text-lg font-semibold mt-4">Delivery Address</h3>
+          <h3 class="text-md sm:text-lg font-semibold mt-4">{{ t('checkoutDeliveryAddress') }}</h3>
 
           <div class="grid md:grid-cols-2 gap-5">
             <div>
-              <label class="label">Country <span class="text-error">*</span></label>
+              <label class="label">{{ t('checkoutCountry') }} <span class="text-error">*</span></label>
               <input 
                 v-model="form.country" 
                 :class="inputClass('country')" 
-                placeholder="Country *" 
+                :placeholder="t('checkoutCountryPlaceholder')"
               />
               <p v-if="errors.country" class="text-error text-xs mt-1">{{ errors.country }}</p>
             </div>
             <div>
-              <label class="label">City <span class="text-error">*</span></label>
+              <label class="label">{{ t('checkoutCity') }} <span class="text-error">*</span></label>
               <input 
                 v-model="form.city" 
                 :class="inputClass('city')" 
-                placeholder="City *" 
+                :placeholder="t('checkoutCityPlaceholder')"
               />
               <p v-if="errors.city" class="text-error text-xs mt-1">{{ errors.city }}</p>
             </div>
           </div>
 
           <div>
-            <label class="label">Street Address <span class="text-error">*</span></label>
+            <label class="label">{{ t('checkoutStreetAddress') }} <span class="text-error">*</span></label>
             <input 
               v-model="form.address" 
               :class="inputClass('address')" 
-              placeholder="Street address *" 
+              :placeholder="t('checkoutStreetAddressPlaceholder')" 
             />
             <p v-if="errors.address" class="text-error text-xs mt-1">{{ errors.address }}</p>
           </div>
 
           <div>
-            <label class="label">Phone Number <span class="text-error">*</span></label>
+            <label class="label">{{ t('checkoutPhone') }} <span class="text-error">*</span></label>
             <input 
               v-model="form.phone" 
               :class="inputClass('phone')" 
-              placeholder="Phone number *" 
+              :placeholder="t('checkoutPhonePlaceholder')"
               type="tel"
             />
             <p v-if="errors.phone" class="text-error text-xs mt-1">{{ errors.phone }}</p>
@@ -67,12 +67,12 @@
 
         <!-- Payment Methods -->
         <div class="mt-6">
-          <h3 class="text-md sm:text-lg font-semibold mb-3">Payment methods</h3>
+          <h3 class="text-md sm:text-lg font-semibold mb-3">{{ t('checkoutPaymentMethods') }}</h3>
 
           <!-- Loading State -->
           <div v-if="checkoutStore.loadingPayments" class="flex items-center justify-center py-8">
             <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-            <span class="ml-3 text-sm text-onFooter">Loading payment methods...</span>
+            <span class="ml-3 text-sm text-onFooter">{{ t('checkoutLoadingPayments') }}</span>
           </div>
 
           <!-- Payment Options -->
@@ -114,7 +114,7 @@
 
             <p v-if="!checkoutStore.paymentMethods.length && !checkoutStore.loadingPayments" 
                class="text-center text-onFooter text-sm py-4">
-              No payment methods available
+              {{ t('checkoutNoPaymentMethods') }}
             </p>
           </div>
         </div>
@@ -122,17 +122,17 @@
 
       <!-- RIGHT: Order summary -->
       <div class="w-full lg:w-[400px] mt-8">
-        <h3 class="text-lg sm:text-xl font-semibold mb-4">Order Summary</h3>
+        <h3 class="text-lg sm:text-xl font-semibold mb-4">{{ t('checkoutOrderSummary') }}</h3>
         <div class="bg-bgLight/10 border border-outline rounded-xl p-6">
           
           <!-- Cart Items -->
           <div class="border-b border-mainText pb-2 mb-3 flex justify-between text-sm uppercase">
-            <span>Product</span>
-            <span>Price</span>
+            <span>{{ t('checkoutProduct') }}</span>
+            <span>{{ t('checkoutPrice') }}</span>
           </div>
 
           <div v-if="displayItems.length === 0" class="text-center text-onFooter text-sm py-4">
-            Loading items...
+            {{ t('checkoutLoadingItems') }}
           </div>
 
           <div v-for="item in displayItems" :key="item.id" 
@@ -157,34 +157,34 @@
           <!-- Price Breakdown -->
           <div v-if="checkoutStore.cartPrice" class="mt-4 space-y-2 text-sm">
             <div class="flex justify-between">
-              <p>Subtotal:</p>
+              <p>{{ t('checkoutSubtotal') }}:</p>
               <p class="font-semibold">{{ checkoutStore.cartPrice.cart_price?.toFixed(2) || '0.00' }} USD</p>
             </div>
 
             <div v-if="checkoutStore.cartPrice.shipping_fees > 0" class="flex justify-between">
-              <p>Shipping:</p>
+              <p>{{ t('checkoutShipping') }}:</p>
               <p class="font-semibold">{{ checkoutStore.cartPrice.shipping_fees.toFixed(2) }} USD</p>
             </div>
 
             <div v-if="checkoutStore.cartPrice.payment_fee > 0" class="flex justify-between">
-              <p>Payment Fee:</p>
+              <p>{{ t('checkoutPaymentFee') }}:</p>
               <p class="font-semibold">{{ checkoutStore.cartPrice.payment_fee.toFixed(2) }} USD</p>
             </div>
 
             <div v-if="checkoutStore.cartPrice.discount > 0" class="flex justify-between text-green-600">
-              <p>Discount ({{ checkoutStore.cartPrice.discount_type }}):</p>
+              <p>{{ t('checkoutDiscount') }} ({{ checkoutStore.cartPrice.discount_type }}):</p>
               <p class="font-semibold">-{{ checkoutStore.cartPrice.discount.toFixed(2) }} USD</p>
             </div>
 
             <div v-if="checkoutStore.cartPrice.wallet_discount > 0" class="flex justify-between text-green-600">
-              <p>Wallet Discount:</p>
+              <p>{{ t('checkoutWalletDiscount') }}:</p>
               <p class="font-semibold">-{{ checkoutStore.cartPrice.wallet_discount.toFixed(2) }} USD</p>
             </div>
           </div>
 
           <!-- Total -->
           <div class="flex justify-between font-semibold text-lg mt-4 pt-3 border-t border-onOutline">
-            <p>Total:</p>
+            <p>{{ t('checkoutTotal') }}:</p>
             <p class="text-green-600">
               {{ checkoutStore.cartPrice?.total_price?.toFixed(2) || '0.00' }} USD
             </p>
@@ -193,8 +193,8 @@
           <!-- Coupon Section -->
           <div class="mt-4">
             <p class="text-xs text-mainText cursor-pointer" @click="showCouponInput = !showCouponInput">
-              Have a coupon?
-              <span class="text-primary underline">Click here to enter your code</span>
+              {{ t('checkoutHaveCoupon') }}
+              <span class="text-primary underline">{{ t('checkoutEnterCoupon') }}</span>
             </p>
 
             <!-- Coupon Input -->
@@ -202,7 +202,7 @@
               <input
                 v-model="couponCode"
                 type="text"
-                placeholder="Enter coupon code"
+                :placeholder="t('checkoutCouponPlaceholder')"
                 :disabled="checkoutStore.loadingCoupon || !!checkoutStore.appliedCoupon"
                 class="w-full px-3 py-2 rounded-lg bg-bgDark text-sm outline-none border border-outline focus:border-primary disabled:opacity-50 disabled:cursor-not-allowed"
               />
@@ -213,7 +213,7 @@
                 :disabled="checkoutStore.loadingCoupon || !couponCode.trim()"
                 class="px-4 py-2 bg-primary text-white rounded-lg text-sm hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               >
-                {{ checkoutStore.loadingCoupon ? 'Checking...' : 'Apply' }}
+                {{ checkoutStore.loadingCoupon ? t('checkoutChecking') : t('checkoutApply') }}
               </button>
 
               <button
@@ -221,7 +221,7 @@
                 @click="handleRemoveCoupon"
                 class="px-4 py-2 bg-error text-white rounded-lg text-sm hover:opacity-90 transition cursor-pointer"
               >
-                Remove
+                {{ t('checkoutRemove') }}
               </button>
             </div>
 
@@ -238,7 +238,7 @@
               :disabled="placing || checkoutStore.loadingPrice || !checkoutStore.selectedPaymentId"
               class="w-full px-8 py-3 rounded-full text-md bg-primary text-onPrimary hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium cursor-pointer"
             >
-              {{ placing ? 'Placing Order...' : 'Place Order' }}
+              {{ placing ? t('checkoutPlacingOrder') : t('checkoutPlaceOrder') }}
             </button>
           </div>
         </div>
@@ -257,6 +257,7 @@ import { useRoute } from '#app'
 const checkoutStore = useCheckoutStore()
 const cartStore = useCartStore()
 const route = useRoute()
+const { t } = useI18n()
 const { initCheckout, applyCoupon, removeCoupon, selectPayment, placeOrder } = useCheckout()
 
 // Buy Now Parameters
@@ -352,23 +353,23 @@ const validateForm = () => {
   errors.value = {}
   
   if (!form.value.fullName?.trim()) {
-    errors.value.fullName = 'Full name is required'
+    errors.value.fullName = t('checkoutErrorFullName')
   }
   
   if (!form.value.country?.trim()) {
-    errors.value.country = 'Country is required'
+    errors.value.country = t('checkoutErrorCountry')
   }
   
   if (!form.value.city?.trim()) {
-    errors.value.city = 'City is required'
+    errors.value.city = t('checkoutErrorCity')
   }
   
   if (!form.value.address?.trim()) {
-    errors.value.address = 'Street address is required'
+    errors.value.address = t('checkoutErrorAddress')
   }
   
   if (!form.value.phone?.trim()) {
-    errors.value.phone = 'Phone number is required'
+    errors.value.phone = t('checkoutErrorPhone')
   }
   
   return Object.keys(errors.value).length === 0

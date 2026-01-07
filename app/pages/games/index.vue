@@ -27,7 +27,7 @@
         <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
           <span class="flex gap-2 items-center text-sm sm:text-base">
             <NuxtLink to="/" class="text-mainText text-lg hover:text-primary">
-              Home
+              {{ t('home') }}
             </NuxtLink>
             <Icon name="heroicons-chevron-right-20-solid" class="w-6 h-6" />
             <h1 class="font-medium capitalize whitespace-nowrap">
@@ -41,7 +41,7 @@
             class="flex items-center gap-2 text-sm sm:text-base relative"
           >
             <span class="text-mainText/80 text-xl whitespace-nowrap">
-              Sort by:
+              {{ t('sortBy') }}
             </span>
 
             <div class="relative">
@@ -81,7 +81,7 @@
           v-else-if="products.length === 0"
           class="text-center py-20 text-onMainText text-lg"
         >
-          No games found.
+          {{ t('noGamesFound') }}
         </div>
 
         <!-- GRID -->
@@ -113,6 +113,8 @@
 </template>
 
 <script setup>
+// Use I18n
+const { t } = useI18n()
 /* ----------------------------------
    ROUTING
 ---------------------------------- */

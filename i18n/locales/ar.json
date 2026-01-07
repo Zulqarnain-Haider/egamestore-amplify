@@ -1,0 +1,508 @@
+{
+  "home": "الرئيسية",
+  "pc-games": "ألعاب الكمبيوتر",
+  "xbox": "إكس بوكس",
+  "playstation": "بلايستيشن",
+  "nintendo": "نينتندو",
+  "gift-cards": "بطاقات الهدايا",
+  "deals": "العروض",
+  "pre-orders": "الطلبات المسبقة",
+  "news-blog": "الأخبار والمدونة",
+  "sign-up": "تسجيل الدخول",
+  "profile": "الملف الشخصي",
+  "orders": "الطلبات",
+  "wallet": "المحفظة",
+  "logout": "تسجيل الخروج",
+  "heroTitleOne": "لعبتك القادمة",
+  "heroTitleTwo": "على بُعد نقرة واحدة",
+  "heroSubtitle": "احصل على مفاتيح الألعاب الرقمية فورًا وبسعر أقل — وابدأ اللعب خلال ثوانٍ.",
+  "browseDeals": "تصفح العروض",
+  "viewGames": "عرض الألعاب",
+  "theMost": "الأكثر",
+  "popular": " شعبية ",
+  "games": "الألعاب",
+  "category_sports_racing": "الرياضة والسباقات",
+  "category_strategy": "الاستراتيجية",
+  "category_survival": "البقاء",
+  "category_rpg": "تقمص الأدوار",
+  "category_adventure": "المغامرة",
+  "category_action": "الأكشن",
+  "viewAll": "عرض الكل",
+  "trendingGames": "الألعاب الرائجة",
+  "bestSellers": "الأكثر مبيعًا",
+  "upComingGames": "الألعاب القادمة",
+  "addToCart": "إضافة إلى السلة",
+  "buyNow": "اشترِ الآن",
+  "customerReviews": "تقييمات العملاء",
+  "blogPosts": "مقالات المدونة",
+  "join": "انضم إلى",
+  "theBigTournament": " البطولة الكبرى",
+  "readyFor": " مستعد لـ ",
+  "battles": "المعارك ",
+  "tournamentDescLine1": "انغمس في بطولات الرياضات الإلكترونية المثيرة، العالمية",
+  "tournamentDescLine2": "فعاليات الألعاب العالمية، وتحديات المجتمع",
+  "tournamentDescLine3": "الملحمية. النصر بانتظارك.",
+  "joinNow": "انضم الآن",
+  "heroDealsTitleLine1": "العب أفضل ألعابك",
+  "heroDealsTitleLine2": "واجمع عروضًا ملحمية",
+  "heroDealsDescriptionLine1": "اكتشف خصومات لفترة محدودة على الألعاب الأكثر مبيعًا،",
+  "heroDealsDescriptionLine2": "وبطاقات الهدايا، والباقات.",
+  "heroDealsDescriptionLine3": "تُضاف عروض جديدة يوميًا — لا تفوّت الفرصة!",
+  "footerAboutText": "ادخل إلى مستقبل الألعاب مع متجر eGame. استكشف مراجعات متميزة، وأخبارًا، وتحليلات متعمقة لأحدث وأفضل الألعاب. انضم إلى مجتمع اللاعبين الآن للحصول على محتوى وميزات حصرية.",
+  "footerQuickLinks": "روابط سريعة",
+  "footerResources": "الموارد",
+  "footerExplore": "استكشف",
+  "footerContactUs": "تواصل معنا",
+  "footerHome": "الرئيسية",
+  "footerGiftCards": "بطاقات الهدايا",
+  "footerDeals": "العروض",
+  "footerBlog": "المدونة",
+  "footerTrendingGames": "الألعاب الرائجة",
+  "footerUpcomingGames": "الألعاب القادمة",
+  "footerContact": "تواصل معنا",
+  "footerFaq": "الأسئلة الشائعة",
+  "footerPcGames": "ألعاب الكمبيوتر",
+  "footerPlaystation": "بلايستيشن",
+  "footerNintendo": "نينتندو",
+  "footerXbox": "إكس بوكس",
+  "footerCopyright": " EGameStore.com — جميع الحقوق محفوظة.",
+
+  "loginTitle": "مرحبًا بعودتك",
+  "loginSubtitle": "أدخل بياناتك للوصول إلى حسابك",
+  "emailOrPhone": "البريد الإلكتروني أو رقم الهاتف",
+  "emailOrPhonePlaceholder": "أدخل البريد الإلكتروني أو رقم الهاتف",
+  "password": "كلمة المرور",
+  "passwordPlaceholder": "أدخل كلمة المرور",
+  "rememberMe": "تذكرني لمدة 30 يومًا",
+  "forgotPassword": "هل نسيت كلمة المرور؟",
+  "login": "تسجيل الدخول",
+  "loggingIn": "جاري تسجيل الدخول...",
+  "noAccount": "ليس لديك حساب؟",
+  "signUp": "إنشاء حساب",
+  "errorEmailOrPhoneRequired": "البريد الإلكتروني أو رقم الهاتف مطلوب.",
+  "errorPasswordRequired": "كلمة المرور مطلوبة.",
+  "loginFailed": "فشل تسجيل الدخول.",
+  "loginFailedTitle": "فشل تسجيل الدخول",
+  "activationTitle": "تفعيل الحساب",
+  "activationMessage": "يرجى التحقق من رمز OTP المرسل إليك.",
+  "loginSuccessTitle": "مرحبًا بعودتك",
+  "loginSuccessMessage": "تم تسجيل الدخول بنجاح",
+  "genericError": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+
+  "signupTitle": "ابدأ الآن",
+  "email": "البريد الإلكتروني",
+  "emailPlaceholder": "أدخل بريدك الإلكتروني",
+  "phoneNumber": "رقم الهاتف",
+  "phonePlaceholder": "أدخل رقم هاتفك",
+  "confirmPassword": "تأكيد كلمة المرور",
+  "confirmPasswordPlaceholder": "أكد كلمة المرور",
+  "dateOfBirth": "تاريخ الميلاد:",
+  "dobMonth": "شهر",
+  "dobDay": "يوم",
+  "dobYear": "سنة",
+  "agreeTermsPrefix": "أوافق على",
+  "termsAndPolicy": "الشروط والسياسة",
+  "agreeSms": "أوافق على استلام رسائل SMS من",
+  "brandName": "EGAMETSTORE",
+  "signup": "إنشاء حساب",
+  "or": "أو",
+  "haveAccount": "لديك حساب بالفعل؟",
+  "signIn": "تسجيل الدخول",
+  "errorEmailRequired": "البريد الإلكتروني مطلوب.",
+  "errorPhoneInvalid": "يرجى إدخال رقم هاتف صحيح.",
+  "errorConfirmPassword": "يرجى تأكيد كلمة المرور.",
+  "errorPasswordMismatch": "كلمتا المرور غير متطابقتين.",
+  "errorDobRequired": "تاريخ الميلاد مطلوب.",
+  "errorAgreeTerms": "يجب الموافقة على الشروط.",
+  "errorAgreeSms": "يجب الموافقة على استلام الرسائل.",
+  "fixErrors": "يرجى تصحيح الحقول المحددة.",
+  "signupSuccessTitle": "تم بنجاح!",
+  "validationErrorTitle": "خطأ في التحقق",
+  "googleOnlyError": "تسجيل الدخول عبر Google فقط مدعوم حاليًا",
+  "googleTokenError": "لم يتم استلام رمز Google",
+  "googleLoginFailed": "فشل تسجيل الدخول عبر Google",
+  "loggedInSuccess": "تم تسجيل الدخول بنجاح",
+
+  "searchGames": "ابحث عن الألعاب...",
+  "searching": "جارٍ البحث...",
+  "searchResults": "نتائج البحث:",
+  "sortBy": "ترتيب حسب:",
+  "filters": "الفلاتر",
+  "genre": "النوع",
+  "price": "السعر",
+  "clearAll": "مسح الكل",
+  "allGenres": "جميع الأنواع",
+
+  "otpTitle": "التحقق من رمز OTP",
+  "otpSubtitle": "تحقق من بريدك الإلكتروني أو هاتفك للحصول على رمز التحقق",
+  "otpVerify": "تحقق",
+  "otpResendIn": "إعادة الإرسال خلال",
+  "otpResendCode": "إعادة إرسال الرمز",
+  "otpInvalidLength": "يرجى إدخال رمز مكوّن من 6 أرقام",
+
+  "resetPasswordTitle": "تعيين كلمة مرور جديدة",
+  "resetPasswordSubtitle": "أدخل كلمة المرور الجديدة لإكمال عملية إعادة التعيين",
+  "newPasswordLabel": "كلمة المرور الجديدة",
+  "newPasswordPlaceholder": "كلمة المرور الجديدة",
+  "confirmNewPasswordLabel": "تأكيد كلمة المرور الجديدة",
+  "confirmNewPasswordPlaceholder": "تأكيد كلمة المرور الجديدة",
+  "saveNewPassword": "حفظ كلمة المرور الجديدة",
+  "saving": "جارٍ الحفظ...",
+  "rememberOldPassword": "هل تتذكر كلمة المرور القديمة؟",
+  "signInLink": "تسجيل الدخول",
+  "errorFieldsRequired": "يرجى ملء كلا الحقلين.",
+  "errorSessionExpired": "انتهت الجلسة. يرجى إعادة عملية الاستعادة.",
+  "errorSomethingWrong": "حدث خطأ ما.",
+
+  "forgotPasswordTitle": "هل نسيت كلمة المرور؟",
+  "forgotPasswordSubtitle": "أدخل بريدك الإلكتروني لإعادة تعيين كلمة المرور",
+  "forgotPasswordEmailPlaceholder": "أدخل بريدك الإلكتروني",
+  "forgotPasswordSubmit": "إرسال",
+  "forgotPasswordSending": "جارٍ الإرسال...",
+  "errorEmailRequiredForgot": "يرجى إدخال بريدك الإلكتروني.",
+  "errorForgotRequestFailed": "تعذر معالجة الطلب.",
+
+  "passwordChangedTitle": "تم تغيير كلمة المرور بنجاح!",
+  "passwordChangedSubtitle": "سجّل الدخول إلى حسابك باستخدام كلمة المرور الجديدة",
+  "passwordChangedSignIn": "تسجيل الدخول",
+
+  "retry": "إعادة المحاولة",
+  "noSubcategoriesFound": "لم يتم العثور على فئات فرعية",
+  "noCountriesAvailable": "لا توجد دول متاحة",
+  "noGamesFound": "لم يتم العثور على ألعاب.",
+
+  "Blogs": "المدونات",
+  "News": "الأخبار",
+  "loadMoreArticles": "تحميل المزيد من المقالات",
+  "loadingBlogs": "جارٍ تحميل المدونات...",
+  "noPostsFound": "لم يتم العثور على منشورات.",
+  "loading": "جارٍ التحميل...",
+  "failedToLoad": "فشل في التحميل.",
+
+  "myOrdersTitle": "طلباتي",
+  "myOrdersSubtitle": "عرض وإدارة مشترياتك من الألعاب الرقمية",
+  "ordersSearchPlaceholder": "ابحث في الطلبات...",
+  "ordersFilterAll": "جميع الطلبات",
+  "ordersFilterCompleted": "مكتملة",
+  "ordersFilterProcessing": "قيد المعالجة",
+  "ordersFilterOnHold": "قيد الانتظار",
+  "ordersFilterShipped": "تم الشحن",
+  "ordersFilterCancelled": "ملغاة",
+  "ordersFilterRefunded": "مستردة",
+  "ordersStatsTotal": "إجمالي الطلبات",
+  "ordersStatsCompleted": "مكتملة",
+  "ordersStatsProcessing": "قيد المعالجة",
+  "ordersStatsTotalSpent": "إجمالي المبلغ",
+  "orderLabel": "طلب",
+  "orderPlatform": "المنصة",
+  "orderRegion": "المنطقة",
+  "orderDelivery": "التسليم",
+  "orderViewKey": "عرض المفتاح",
+  "orderProcessing": "قيد المعالجة",
+  "orderViewDetails": "عرض التفاصيل",
+  "ordersShowingNone": "عرض 0 طلب",
+  "ordersShowingRange": "عرض {start}–{end} من {total} طلب",
+
+  "orderDetailsBack": "العودة إلى طلباتي",
+  "orderSummaryTitle": "ملخص الطلب",
+  "orderStatusDelivered": "تم التسليم",
+  "orderIdLabel": "رقم الطلب",
+  "orderDeliveryLocation": "موقع التسليم",
+  "orderNotSpecified": "غير محدد",
+  "orderPaymentMethod": "طريقة الدفع",
+  "orderAgain": "اطلب مرة أخرى",
+  "orderDownloadInvoice": "تحميل الفاتورة",
+  "orderItemsTitle": "عناصر الطلب",
+  "orderQuantity": "الكمية",
+
+  "invalidProductID": "معرف المنتج غير صالح",
+
+  "profileGuestUser": "مستخدم زائر",
+  "profileGuestUsername": "زائر",
+  "profileLevel": "المستوى {level} لاعب",
+  "profileMemberSince": "عضو منذ {year}",
+  "profileSaveChanges": "حفظ التغييرات",
+  "profilePersonalInfo": "المعلومات الشخصية",
+  "profileFullName": "الاسم الكامل",
+  "profileFullNamePlaceholder": "أدخل اسمك الكامل",
+  "profileEmail": "البريد الإلكتروني",
+  "profileBio": "نبذة",
+  "profileBioPlaceholder": "أخبرنا عن نفسك...",
+  "profileUsername": "اسم المستخدم",
+  "profileUsernamePlaceholder": "أدخل اسم المستخدم",
+  "profilePhone": "رقم الهاتف",
+  "profilePassword": "كلمة المرور",
+  "profileChange": "تغيير",
+  "profileBirthday": "تاريخ الميلاد",
+  "profileNotLoggedInTitle": "أنت غير مسجل الدخول",
+  "profileNotLoggedInDesc": "يرجى تسجيل الدخول للوصول إلى ملفك الشخصي وإدارة إعدادات حسابك.",
+  "profileGoToLogin": "الانتقال إلى تسجيل الدخول",
+  "profileUpdateSuccess": "تم تحديث الملف الشخصي بنجاح",
+  "profileUpdateFailed": "فشل تحديث الملف الشخصي",
+
+  "cartRemoveItem": "إزالة العنصر",
+  "cartFreeShipping": "شحن مجاني",
+  "cartOutOfStock": "غير متوفر",
+  "cartInStock": "متوفر",
+  "cartEmpty": "سلة التسوق فارغة",
+  "cartOrderSummary": "ملخص الطلب",
+  "cartSubtotal": "المجموع الفرعي",
+  "cartOrderTotal": "إجمالي الطلب",
+  "cartCheckout": "إتمام الشراء",
+
+  "checkoutPersonalDetails": "البيانات الشخصية",
+  "checkoutFullName": "الاسم الكامل",
+  "checkoutFullNamePlaceholder": "أدخل اسمك الكامل *",
+  "checkoutDeliveryAddress": "عنوان التسليم",
+  "checkoutCountry": "الدولة",
+  "checkoutCountryPlaceholder": "الدولة *",
+  "checkoutCity": "المدينة",
+  "checkoutCityPlaceholder": "المدينة *",
+  "checkoutStreetAddress": "عنوان الشارع",
+  "checkoutStreetAddressPlaceholder": "عنوان الشارع *",
+  "checkoutPhone": "رقم الهاتف",
+  "checkoutPhonePlaceholder": "رقم الهاتف *",
+  "checkoutPaymentMethods": "طرق الدفع",
+  "checkoutLoadingPayments": "جارٍ تحميل طرق الدفع...",
+  "checkoutNoPaymentMethods": "لا توجد طرق دفع متاحة",
+  "checkoutOrderSummary": "ملخص الطلب",
+  "checkoutProduct": "المنتج",
+  "checkoutPrice": "السعر",
+  "checkoutLoadingItems": "جارٍ تحميل العناصر...",
+  "checkoutSubtotal": "المجموع الفرعي",
+  "checkoutShipping": "الشحن",
+  "checkoutPaymentFee": "رسوم الدفع",
+  "checkoutDiscount": "الخصم",
+  "checkoutWalletDiscount": "خصم المحفظة",
+  "checkoutTotal": "الإجمالي",
+  "checkoutHaveCoupon": "هل لديك كوبون؟",
+  "checkoutEnterCoupon": "اضغط هنا لإدخال الرمز",
+  "checkoutCouponPlaceholder": "أدخل رمز الكوبون",
+  "checkoutChecking": "جارٍ التحقق...",
+  "checkoutApply": "تطبيق",
+  "checkoutRemove": "إزالة",
+  "checkoutPlacingOrder": "جارٍ تنفيذ الطلب...",
+  "checkoutPlaceOrder": "تنفيذ الطلب",
+  "checkoutErrorFullName": "الاسم الكامل مطلوب",
+  "checkoutErrorCountry": "الدولة مطلوبة",
+  "checkoutErrorCity": "المدينة مطلوبة",
+  "checkoutErrorAddress": "عنوان الشارع مطلوب",
+  "checkoutErrorPhone": "رقم الهاتف مطلوب",
+
+  "faqTitle":"الأسئلة الشائعة",
+  "faqSubtitle":"توفر هذه الصفحة إجابات سريعة على أكثر الأسئلة شيوعًا حول منصة الألعاب الخاصة بنا. اعثر على معلومات حول حسابك وطرق الدفع والمكافآت والمزيد في مكان واحد.",
+  "faqPopularTitle":"الأسئلة الشائعة",
+  "faqLoading":"جارٍ تحميل الأسئلة الشائعة...",
+  "faqFailed":"فشل تحميل الأسئلة الشائعة",
+  "faqStillNeedHelp":"هل ما زلت بحاجة إلى مساعدة؟",
+  "faqStillNeedHelpDesc":"لم تجد ما تبحث عنه؟ فريق الدعم لدينا هنا لمساعدتك.",
+  "supportLiveChat":"الدردشة المباشرة",
+  "supportLiveChatDesc":"متاحة على مدار الساعة",
+  "supportLiveChatBtn":"بدء الدردشة",
+  "supportEmail":"الدعم عبر البريد الإلكتروني",
+  "supportEmailDesc":"الرد خلال 24 ساعة",
+  "supportEmailBtn":"إرسال بريد",
+  "supportPhone":"الدعم الهاتفي",
+  "supportPhoneDesc":"من الإثنين إلى الجمعة 9 صباحًا – 9 مساءً",
+  "supportPhoneBtn":"اتصال الآن",
+
+  "walletTitle":"محفظة النقاط الخاصة بي",
+  "walletBalanceText":"رصيد في محفظتك",
+  "walletEarnTitle":"كيفية كسب النقاط",
+  "walletUseTitle":"كيفية استخدام النقاط",
+  "walletTransactionHistory":"سجل المعاملات",
+  "walletFilter":"تصفية",
+  "walletShow":"عرض",
+  "walletFilterAll":"الكل",
+  "walletFilterCredit":"إيداع",
+  "walletFilterDebit":"خصم",
+  "walletNoTransactions":"لا توجد معاملات حتى الآن.",
+  "walletTableId":"المعرف",
+  "walletTableDate":"التاريخ",
+  "walletTableAction":"الإجراء",
+  "walletTableAmount":"المبلغ",
+  "walletTableReference":"المرجع",
+  "walletTableBefore":"قبل",
+  "walletTableAfter":"بعد",
+  "walletTableNotes":"ملاحظات",
+  "walletMobileAction":"الإجراء",
+  "walletMobileAmount":"المبلغ",
+  "walletMobileBefore":"قبل",
+  "walletMobileAfter":"بعد",
+  "walletMobileRef":"مرجع",
+  "walletEarnGameTitle":"إكمال الألعاب",
+  "walletEarnGameDesc":"اكسب من 50 إلى 200 نقطة لكل لعبة",
+  "walletEarnDailyTitle":"تسجيل الدخول اليومي",
+  "walletEarnDailyDesc":"احصل على 25 نقطة يوميًا",
+  "walletEarnReferTitle":"دعوة الأصدقاء",
+  "walletEarnReferDesc":"اكسب 500 نقطة لكل إحالة",
+  "walletUseCouponTitle":"قسائم الخصم",
+  "walletUseCouponDesc":"تبدأ من 500 نقطة",
+  "walletUseShippingTitle":"شحن مجاني",
+  "walletUseShippingDesc":"200 نقطة لكل طلب",
+  "walletUseExclusiveTitle":"منتجات حصرية",
+  "walletUseExclusiveDesc":"عناصر مميزة متاحة",
+  "walletActionRedeem":"استبدال",
+  "walletActionBrowse":"تصفح",
+
+  "ticketNewTitle":"تذكرة جديدة",
+  "ticketName":"الاسم",
+  "ticketSelectReason":"اختر السبب",
+  "ticketSelect":"اختر",
+  "ticketLoadingReasons":"جارٍ تحميل الأسباب...",
+  "ticketReasonsFailed":"فشل تحميل الأسباب",
+  "ticketSelectOrder":"اختر الطلب",
+  "ticketSelectOrderPlaceholder":"اختر الطلب",
+  "ticketOrderNumber":"رقم الطلب",
+  "ticketOrderNumberPlaceholder":"أدخل رقم الطلب",
+  "ticketSubject":"الموضوع",
+  "ticketAttachment":"مرفق",
+  "ticketUploadClick":"اضغط هنا",
+  "ticketUploadText":"للتحميل أو إسقاط الملفات هنا",
+  "ticketEmail":"البريد الإلكتروني",
+  "ticketEmailPlaceholder":"أدخل بريدك الإلكتروني",
+  "ticketMessage":"الرسالة",
+  "ticketMessagePlaceholder":"اشرح مشكلتك...",
+  "ticketSendMessage":"إرسال الرسالة",
+  "ticketNoAccount":"ليس لديك حساب؟",
+  "ticketSignup":"إنشاء حساب",
+  "ticketPrevious":"التذاكر السابقة",
+  "ticketTableTicket":"التذكرة",
+  "ticketTableOrder":"الطلب",
+  "ticketTableCreated":"تاريخ الإنشاء",
+  "ticketTableStatus":"الحالة",
+  "ticketStatusActive":"نشطة",
+  "ticketStatusClosed":"مغلقة",
+  "ticketErrorName":"الاسم مطلوب.",
+  "ticketErrorEmail":"البريد الإلكتروني مطلوب.",
+  "ticketErrorReason":"يرجى اختيار سبب.",
+  "ticketErrorSubject":"الموضوع مطلوب.",
+  "ticketErrorMessage":"لا يمكن أن تكون الرسالة فارغة.",
+  "ticketErrorOrder":"الطلب مطلوب لهذا السبب.",
+  "ticketToastError":"خطأ",
+  "ticketToastConnectionError":"خطأ في الاتصال",
+  "ticketToastLoadReasonsFail":"فشل تحميل أسباب التذكرة",
+  "ticketToastLoadReasonsRetry":"تعذر تحميل الأسباب. يرجى التحديث.",
+  "ticketToastLoadOrdersFail":"فشل تحميل الطلبات",
+  "ticketToastLoadOrdersRetry":"تعذر تحميل الطلبات",
+  "ticketToastFileAttached":"تم إرفاق الملف",
+  "ticketToastSuccess":"تم بنجاح",
+  "ticketToastCreated":"تم إنشاء التذكرة بنجاح",
+  "ticketToastClosedTitle":"التذكرة مغلقة",
+  "ticketToastClosedMsg":"هذه التذكرة مغلقة ولا يمكن إعادة فتحها",
+
+  "ticketChatTitle":"محادثة التذكرة",
+  "ticketChatSupport":"دعم العملاء",
+  "ticketChatOrder":"طلب اللعبة",
+  "ticketChatNoMessages":"لا توجد رسائل بعد. ابدأ المحادثة أدناه 👇",
+  "ticketChatPlaceholder":"اكتب رسالتك...",
+  "ticketDetailsTitle":"تفاصيل التذكرة",
+  "ticketInfoTitle":"معلومات التذكرة",
+  "ticketUserDetails":"بيانات المستخدم",
+  "ticketOrderDetails":"تفاصيل الطلب",
+  "ticketId":"رقم التذكرة",
+  "ticketStatus":"الحالة",
+  "ticketPriority":"الأولوية",
+  "ticketCreated":"تاريخ الإنشاء",
+  "ticketUpdated":"آخر تحديث",
+  "ticketUserName":"الاسم",
+  "ticketUserEmail":"البريد الإلكتروني",
+  "ticketOrderId":"رقم الطلب",
+  "ticketPlatform":"المنصة",
+  "ticketResolve":"تحديد كمحلولة",
+  "ticketPriorityMedium":"متوسطة",
+  "ticketTimeJustNow":"الآن",
+  "ticketTimeMinute":"منذ دقيقة",
+  "ticketTimeMinutes":"منذ دقائق",
+  "ticketTimeHour":"منذ ساعة",
+  "ticketTimeHours":"منذ ساعات",
+  "ticketTimeDay":"منذ يوم",
+  "ticketTimeDays":"منذ أيام",
+  "ticketTimeMonth":"منذ شهر",
+  "ticketTimeMonths":"منذ أشهر",
+  "ticketTimeYear":"منذ سنة",
+  "ticketTimeYears":"منذ سنوات",
+  "ticketToastSendFailTitle":"لم يتم إرسال الرسالة",
+  "ticketToastSendFail":"حدث خطأ ما",
+  "ticketToastSendError":"فشل إرسال الرسالة",
+  "ticketToastClosed":"تم إغلاق التذكرة",
+  "ticketToastCloseFail":"فشل إغلاق التذكرة",
+
+  "close": "إغلاق",
+  "privacyAndPolicy": "سياسة الخصوصية",
+  "termsOfService": "شروط الخدمة",
+
+  "relatedItemsTitle":"عناصر ذات صلة",
+  "relatedItemsEmpty":"لم يتم العثور على منتجات ذات صلة.",
+  "profileUpdateSuccessTitle":"تم تحديث الملف الشخصي بنجاح",
+  "commonOk":"حسناً",
+
+  "productTabSystemRequirements":"متطلبات النظام",
+  "productTabDescription":"الوصف",
+  "productTabReviews":"التقييمات",
+  "productTabSupport":"الدعم",
+  "productNoSystemRequirements":"لا توجد متطلبات نظام متوفرة.",
+  "productNoDescription":"لا يوجد وصف متاح.",
+  "productNoSupport":"معلومات الدعم غير متوفرة.",
+
+  "customerReviewsTitle":"آراء العملاء",
+  "writeReviewPlaceholder":"اكتب رأيك هنا...",
+  "postReview":"نشر التقييم",
+  "postingReview":"جاري النشر...",
+  "noReviewsYet":"لا توجد تقييمات بعد.",
+  "reviewAnonymousUser":"مستخدم",
+  "errorTitle":"خطأ",
+  "invalidProductId":"معرّف المنتج غير صالح",
+  "invalidRatingTitle":"تقييم غير صالح",
+  "invalidRatingMessage":"يجب أن يكون التقييم بين 1 و 5",
+  "invalidCommentTitle":"تعليق غير صالح",
+  "invalidCommentMessage":"يجب أن يحتوي التعليق على حرفين على الأقل",
+  "reviewFailed":"فشل إرسال التقييم",
+  "reviewSubmittedTitle":"تم إرسال التقييم",
+  "reviewSubmittedMessage":"شكرًا لمشاركتك رأيك",
+  "reviewErrorTitle":"خطأ في التقييم",
+  "reviewErrorMessage":"تعذر إرسال التقييم",
+
+  "productReviewsLabel":"التقييمات",
+  "productQuantity":"الكمية:",
+  "productOutOfStock":"غير متوفر",
+  "productInStock":"متوفر",
+  "productPlatform":"المنصة",
+  "productRegion":"المنطقة",
+  "productDelivery":"التسليم",
+  "productGlobal":"عالمي",
+  "productOnline":"فوري عبر الإنترنت",
+
+  "highlightSupportTitle":"دعم على مدار 24 ساعة",
+  "highlightSupportDesc":"متواجدون دائمًا عندما تحتاج إلينا",
+  "highlightDeliveryTitle":"توصيل سريع",
+  "highlightDeliveryDesc":"تسليم فوري للمنتجات الرقمية",
+  "highlightSecureTitle":"تسوق آمن",
+  "highlightSecureDesc":"معلوماتك آمنة بالكامل",
+
+  "productFaqTitle":"الأسئلة الشائعة عن المنتج",
+  "productFaqQ1":"كيف يمكنني تفعيل اللعبة بعد الشراء؟",
+  "productFaqA1":"ستتلقى رمزًا رقميًا عبر بريدك الإلكتروني يمكن استخدامه على المنصة المناسبة.",
+  "productFaqQ2":"هل يمكنني استرداد المبلغ بعد الشراء؟",
+  "productFaqA2":"تتوفر إمكانية الاسترداد فقط إذا لم يتم استخدام المفتاح خلال 24 ساعة.",
+  "productFaqQ3":"هل تدعم هذه اللعبة اللعب الجماعي؟",
+  "productFaqA3":"نعم، تدعم اللعبة اللعب الجماعي عبر الإنترنت بشكل كامل.",
+
+  "preOrder":"طلب مسبق",
+  "comingSoonTitle":"قريبًا",
+  "comingSoonMessage":"هذا المنتج غير مدعوم حاليًا عبر واجهة البرمجة",
+
+  "passwordChangeSuccessTitle":"تم تغيير كلمة المرور بنجاح",
+  "passwordChangeHome":"الرئيسية",
+  "setNewPasswordTitle":"تعيين كلمة مرور جديدة",
+  "setNewPasswordDesc":"أنشئ كلمة مرور جديدة لا تقل عن 8 أحرف.",
+  "currentPasswordLabel":"أدخل كلمة المرور الحالية",
+  "currentPasswordPlaceholder":"أدخل كلمة المرور الحالية",
+  "forgotPasswordLink":"نسيت كلمة المرور؟",
+  "errorEnterCurrentPassword":"يرجى إدخال كلمة المرور الحالية",
+  "errorEnterNewPassword":"يرجى إدخال كلمة المرور الجديدة",
+  "errorConfirmNewPassword":"يرجى تأكيد كلمة المرور",
+  "errorFixFields":"يرجى تصحيح الأخطاء",
+  "errorUpdatePasswordFailed":"فشل تحديث كلمة المرور"
+
+}

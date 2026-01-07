@@ -2,11 +2,11 @@
   <section class="w-full">
     <!-- Header -->
     <div class="flex items-center justify-between px-5 sm:px-7 lg:px-8 mb-6">
-      <h2 class="text-2xl font-semibold text-white font-vazirmatn">Blog Posts</h2>
+      <h2 class="text-2xl font-semibold text-white font-vazirmatn">{{ t('blogPosts') }}</h2>
       <NuxtLink to="/news-blog"
         class="text-primary text-lg font-vazirmatn flex items-center cursor-pointer hover:text-primary transition"
       >
-        View All
+        {{ t('viewAll') }}
       <Icon name="mdi:chevron-right" class="w-10 h-10" />
          </NuxtLink>
     </div>
@@ -109,6 +109,9 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+
+// I18N
+const { t } = useI18n()
 
 // --------------------------------------
 // RuntimeConfig (From .env)

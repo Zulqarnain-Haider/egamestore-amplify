@@ -23,7 +23,7 @@
             :class="isActive(link.path) ? 'text-primary' : 'hover:text-primary'"
             class="transition-colors"
           >
-            {{ link.label }}
+            {{ t(link.key) }}
           </NuxtLink>
           <span
             class="absolute left-1/3 -translate-x-1/2 bottom-[-3px] h-[2px] bg-primary rounded transition-all duration-300"
@@ -52,13 +52,12 @@
         <!-- Language -->
         <div class="relative" ref="langRef">
           <button @click="toggleDropdown('lang')" class="flex items-center text-[12px] font-roboto">
-            EN
+            {{ locale.toUpperCase() }}
             <Icon :class="{'rotate-180': showLangDropdown}" name="mdi:menu-down" class="w-6 h-6 text-current transition-transform" />
           </button>
           <ul v-if="showLangDropdown" class="absolute right-0 mt-2 bg-bgNav border border-outline rounded shadow-lg text-sm z-50">
-            <li @click="selectLang('EN')" class="px-3 py-2 hover:bg-outline hover:text-white cursor-pointer">EN</li>
-            <li @click="selectLang('FR')" class="px-3 py-2 hover:bg-outline hover:text-white cursor-pointer">FR</li>
-            <li @click="selectLang('DE')" class="px-3 py-2 hover:bg-outline hover:text-white cursor-pointer">DE</li>
+            <li @click="selectLang('en')" class="px-3 py-2 hover:bg-outline hover:text-white cursor-pointer">EN</li>
+            <li @click="selectLang('ar')" class="px-3 py-2 hover:bg-outline hover:text-white cursor-pointer">AR</li>
           </ul>
         </div>
 
@@ -93,29 +92,29 @@
       <!-- Login / Profile -->
       <NuxtLink v-if="!isLoggedIn" to="/auth/login" class="bg-primary text-mainText px-4 py-1.5 rounded-md 
           text-[15px] font-medium hover:opacity-90 transition font-roboto">
-        Sign In
+        {{ t('sign-up') }}
       </NuxtLink>
 
       <div v-else class="relative" ref="profileRef">
         <NuxtImg 
-          :src="userStore.currentUser?.avatar && !userStore.currentUser?.avatar.includes('&')
-             ? userStore.currentUser.avatar 
+          :src="auth.user?.avatar && !auth.user?.avatar.includes('&')
+             ? auth.user.avatar 
           :'/games/ProfileAvatar.png'"
           class="w-9 h-9 rounded-full object-cover cursor-pointer"
           @click="toggleDropdown('profile')"
         />
         <ul v-if="showProfileDropdown" class="absolute right-0 mt-2 bg-bgNav border border-outline rounded-md shadow-lg z-50">
           <li @click="selectProfileOption('/profile')" class="px-2 py-2 text-sm text-mainText flex items-center font-semibold gap-1 hover:text-primary cursor-pointer w-full text-left">
-            <Icon name="mdi:account-circle" /> Profile
+            <Icon name="mdi:account-circle" /> {{ t('profile') }}
           </li>
           <li @click="selectProfileOption('/orders')" class="px-2 py-2 text-sm text-mainText flex items-center font-semibold gap-1 hover:text-primary cursor-pointer w-full text-left">
-            <Icon name="mdi:clipboard-list-outline" /> Orders
+            <Icon name="mdi:clipboard-list-outline" /> {{ t('orders') }}
           </li>
           <li @click="selectProfileOption('/wallet')" class="px-2 py-2 text-sm text-mainText flex items-center font-semibold gap-1 hover:text-primary cursor-pointer w-full text-left">
-            <Icon name="mdi:wallet-outline" /> Wallet
+            <Icon name="mdi:wallet-outline" /> {{ t('wallet') }}
           </li>
           <li @click="logoutUser" class="px-2 py-2 text-sm text-mainText flex items-center font-semibold gap-1 hover:text-primary cursor-pointer w-full text-left">
-            <Icon name="mdi:logout" /> Logout
+            <Icon name="mdi:logout" /> {{ t('logout') }}
           </li>
         </ul>
       </div>
@@ -143,7 +142,7 @@
                 :class="isActive(link.path) ? 'text-primary' : 'hover:text-primary'" 
                 class="block py-2 transition-colors"
               >
-                {{ link.label }}
+                {{ t(link.key) }}
               </NuxtLink>
             </li>
           </ul>
@@ -157,9 +156,8 @@
                 <Icon :class="{'rotate-180': showMobileLangDropdown}" name="mdi:menu-down" class="w-6 h-6 text-current transition-transform" />
               </button>
               <ul v-if="showMobileLangDropdown" class="absolute left-0 mt-2 bg-bgNav border border-outline rounded shadow-lg text-sm max-h-[50vh] overflow-y-auto z-50">
-                <li @click="selectLang('EN')" class="px-3 py-2 hover:bg-outline hover:text-white cursor-pointer">EN</li>
-                <li @click="selectLang('FR')" class="px-3 py-2 hover:bg-outline hover:text-white cursor-pointer">FR</li>
-                <li @click="selectLang('DE')" class="px-3 py-2 hover:bg-outline hover:text-white cursor-pointer">DE</li>
+                <li @click="selectLang('en')" class="px-3 py-2 hover:bg-outline hover:text-white cursor-pointer">EN</li>
+                <li @click="selectLang('ar')" class="px-3 py-2 hover:bg-outline hover:text-white cursor-pointer">AR</li>
               </ul>
             </div>
 
@@ -191,14 +189,18 @@
 </template>
 
 <script setup>
+import { useLang } from '~/composables/useLang'
 import { ref, watch, onMounted, onBeforeUnmount, computed } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useCartStore } from '~/stores/cartStore'
-import { useUserStore } from '~/stores/userStore.js'
+import { useAuth } from '~/composables/useAuth'
+
+const { locale, setLocale, t } = useI18n()
+const langCookie = useLang()
 
 const router = useRouter()
 const route = useRoute()
-const userStore = useUserStore()
+const auth = useAuth()
 const cartStore = useCartStore()
 
 
@@ -228,18 +230,18 @@ const categoryMap = {
 
 // Links with proper category IDs
 const links = [
-  { label: "Home", path: "/" },
-  { label: "PC Games", path: `/category/${categoryMap.pc}` },
-  { label: "Xbox", path: `/category/${categoryMap.xbox}` },
-  { label: "PlayStation", path: `/category/${categoryMap.playstation}` },
-  { label: "Nintendo", path: `/category/${categoryMap.nintendo}` },
-  { label: "Gift Cards", path: "/games?type=giftcards" },
-  { label: "Deals", path: "/games?type=deals" },
-  { label: "Pre-orders", path: "/games?type=preorders" },
-  { label: "Blog", path: "/news-blog" },
+  { key: 'home', path: '/' },
+  { key: 'pc-games', path: `/category/${categoryMap.pc}` },
+  { key: 'xbox', path: `/category/${categoryMap.xbox}` },
+  { key: 'playstation', path: `/category/${categoryMap.playstation}` },
+  { key: 'nintendo', path: `/category/${categoryMap.nintendo}` },
+  { key: 'gift-cards', path: '/games?type=giftcards' },
+  { key: 'deals', path: '/games?type=deals' },
+  { key: 'pre-orders', path: '/games?type=preorders' },
+  { key: 'news-blog', path: '/news-blog' }
 ]
 
-const isLoggedIn = computed(() => !!userStore.currentUser)
+const isLoggedIn = computed(() => auth.isAuthenticated.value)
 
 // Check if current route is active
 const isActive = (path) => {
@@ -247,8 +249,8 @@ const isActive = (path) => {
   return route.path === path
 }
 
-const logoutUser = () => {
-  userStore.logout()
+const logoutUser = async () => {
+  await auth.logout()
   router.push('/')
 }
 
@@ -298,8 +300,23 @@ onMounted(() => document.addEventListener('click', handleClickOutside))
 onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
 
 
-const selectLang = (lang) => { 
-  console.log('Language:', lang)
+const selectLang = async (code) => {
+  const normalized = code.toLowerCase()
+  
+  if (!['en', 'ar'].includes(normalized)) return
+  
+  // Set the locale using Nuxt's i18n
+  await setLocale(normalized)
+  
+  // Update cookie
+  langCookie.value = normalized
+  
+  // Update HTML direction for RTL/LTR
+  if (process.client) {
+    document.documentElement.dir = normalized === 'ar' ? 'rtl' : 'ltr'
+    document.documentElement.lang = normalized
+  }
+  
   showLangDropdown.value = false
   showMobileLangDropdown.value = false
 }

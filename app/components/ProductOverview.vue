@@ -34,7 +34,7 @@
 
           <span class="text-mainText flex text-lg ml-1 items-baseline">
             {{ product.reviews_count || 0 }}
-            <p class="text-mainText text-md ml-1">reviews</p>
+            <p class="text-mainText text-md ml-1">{{ t('productReviewsLabel') }}</p>
           </span>
         </div>
       </div>
@@ -55,7 +55,7 @@
 
       <!-- Quantity -->
       <div class="flex items-center gap-4">
-        <span class="text-md font-medium">Quantity:</span>
+        <span class="text-md font-medium">{{ t('productQuantity') }}</span>
 
         <div class="flex items-center border border-onMainText rounded-lg overflow-hidden">
           <button
@@ -146,7 +146,7 @@
           :disabled="!isInStock(product)"
           @click="buyNow(product, quantity)"
         >
-          Buy Now
+         {{ t('buyNow') }}
         </AppButton>
 
         <AppButton
@@ -157,7 +157,7 @@
           :disabled="!isInStock(product)"
           @click.stop.prevent="addToCart(product, quantity)"
         >
-          {{ isInStock(product) ? 'Add to Cart' : 'Out of Stock' }}
+          {{ isInStock(product) ? t('addToCart') : t('productOutOfStock') }}
         </AppButton>
       </div>
 
@@ -184,7 +184,7 @@
 
           <span class="flex flex-col items-center sm:items-start text-sm">
             <p class="text-lg font-medium text-mainText">
-              {{ info.label }}
+              {{ t(info.label) }}
             </p>
             <p class="text-sm font-medium text-onMainText">
               {{ info.value }}
@@ -203,6 +203,7 @@ import { useStock } from '~/composables/useStock'
 
 const { addToCart, buyNow } = useCart()
 const { isInStock, stockLabel } = useStock()
+const { t } = useI18n()
 
 const props = defineProps({
   product: {
@@ -239,17 +240,17 @@ const starCount = computed(() =>
 
 const infoBadges = computed(() => [
   {
-    label: 'Platform',
+    label: 'productPlatform',
     value: props.product.platform?.name || 'N/A',
     icon: '/games/OverviewPlatform.png'
   },
   {
-    label: 'Region',
+    label: 'productRegion',
     value: selected.value.region || 'Global',
     icon: '/games/OverviewGlobal.png'
   },
   {
-    label: 'Delivery',
+    label: 'productDelivery',
     value: props.product.delivery_time || 'Online',
     icon: '/games/OverviewOnline.png'
   }

@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center justify-center min-h-screen font-poppins px-4 bg-page-gradient">
     <div class="w-full max-w-md text-mainText py-12">
-      <h2 class="text-2xl font-semibold text-center mb-8 font-poppins">Get Started Now</h2>
+      <h2 class="text-2xl font-semibold text-center mb-8 font-poppins">{{ t('signupTitle') }}</h2>
 
       <!-- Global Error Message -->
       <p v-if="globalError" class="text-error text-sm mb-3 text-center font-poppins">{{ globalError }}</p>
@@ -9,11 +9,11 @@
       <form class="space-y-4" @submit.prevent="handleSignup">
         <!-- Email -->
         <div>
-          <label class="block mb-1 text-sm font-poppins">Email</label>
+          <label class="block mb-1 text-sm font-poppins">{{ t('email') }}</label>
           <input
             v-model="form.email"
             type="email"
-            placeholder="Enter your email"
+            :placeholder="t('emailPlaceholder')"
             :class="inputClass('email')"
           />
           <p v-if="errors.email" class="text-error text-xs mt-1">{{ errors.email }}</p>
@@ -21,18 +21,18 @@
 
         <!-- Phone -->
         <div>
-          <label class="block mb-1 text-sm font-poppins">Phone Number</label>
+          <label class="block mb-1 text-sm font-poppins">{{ t('phoneNumber') }}</label>
             <VueTelInput
             v-model="form.phone"
             mode="international"
             :preferredCountries="['US','PK','AE']"
             :disabledFetchingCountry="true"
-            placeholder="Enter your phone number"
+            :placeholder="t('phonePlaceholder')"
             @validate="onPhoneValidate"
             :inputOptions="{
             showDialCode: true,
             showDialCodeInList: true,
-            placeholder: 'Enter your phone number',
+            placeholder: t('phonePlaceholder'),
             }"
             :class="[{ error: errors.phone }]"
          />
@@ -41,11 +41,11 @@
 
         <!-- Password -->
         <div class="relative">
-          <label class="block mb-1 text-sm font-poppins">Password</label>
+          <label class="block mb-1 text-sm font-poppins">{{ t('password') }}</label>
           <input
             v-model="form.password"
             :type="showPassword ? 'text' : 'password'"
-            placeholder="Enter your password"
+            :placeholder="t('passwordPlaceholder')"
             :class="inputClass('password')"
           />
           <button
@@ -63,11 +63,11 @@
 
         <!-- Confirm Password -->
         <div class="relative"> 
-          <label class="block mb-1 text-sm font-poppins">Confirm Password</label>
+          <label class="block mb-1 text-sm font-poppins">{{ t('confirmPassword') }}</label>
           <input
             v-model="form.confirmPassword"
             :type="showConfirmPassword ? 'text' : 'password'"
-            placeholder="Confirm your password"
+            :placeholder="t('confirmPasswordPlaceholder')"
             :class="inputClass('confirmPassword')"
           />
           <button
@@ -86,7 +86,7 @@
         <!-- Date of Birth -->
         <div class="w-full mt-4">
           <div class="flex items-center gap-4">
-            <label class="text-sm whitespace-nowrap font-poppins">Date of birth:</label>
+            <label class="text-sm whitespace-nowrap font-poppins">{{ t('dateOfBirth') }}</label>
 
             <div class="flex gap-2 w-full">
               <!-- Month -->
@@ -195,13 +195,13 @@
         <div class="flex items-center mt-3 space-x-2">
           <input v-model="form.agree" type="checkbox" class="accent-primary cursor-pointer" />
           <label class="text-sm">
-          I agree to the
+          {{ t('agreeTermsPrefix') }}
           <button
             type="button"
             class="underline text-primary"
             @click="showTerms = true"
           >
-            terms & policy
+            {{ t('termsAndPolicy') }}
           </button>
         </label>
         </div>
@@ -210,7 +210,7 @@
         <!-- SMS Consent (optional) -->
         <div class="flex items-center mt-2 space-x-2">
           <input v-model="form.agree_sms" type="checkbox" class="accent-primary cursor-pointer" />
-          <label class="text-sm">I agree to receive SMS from <span class="font-semibold">EGAMETSTORE</span></label>
+          <label class="text-sm">{{ t('agreeSms') }} <span class="font-semibold">{{ t('brandName') }}</span></label>
         </div>
         <p v-if="errors.agree_sms" class="text-error text-xs mt-1">{{ errors.agree_sms }}</p>
         
@@ -220,7 +220,7 @@
           full
           class="h-10 mt-5 font-poppins font-semibold"
         >
-          Signup
+          {{ t('signup') }}
         </AppLink>
       </form>
 
@@ -253,8 +253,8 @@
 
       <!-- Login Link -->
       <p class="text-center text-md text-mainText">
-        Have an account?
-        <NuxtLink to="/auth/login" class="text-primary hover:underline">Sign In</NuxtLink>
+        {{ t('haveAccount') }}
+        <NuxtLink to="/auth/login" class="text-primary hover:underline">{{ t('signIn') }}</NuxtLink>
       </p>
     </div>
     <!-- Terms Modal -->
@@ -264,7 +264,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useUserStore } from '~/stores/userStore.js'
+import { useAuth } from '~/composables/useAuth'
 import { googleTokenLogin } from 'vue3-google-login'
 
 import { navigateTo } from '#app'
@@ -275,7 +275,8 @@ import { VueTelInput } from 'vue-tel-input'
 import 'vue-tel-input/dist/vue-tel-input.css'
 
 const toast = useToast()
-const userStore = useUserStore()
+const auth = useAuth()
+const { t, locale } = useI18n()
 
 
 // Password toggle
@@ -327,29 +328,31 @@ const validateForm = () => {
   errors.value = {}
   globalError.value = ''
 
-  if (!form.value.email) errors.value.email = 'Email is required.'
-  if (!form.value.phone || !phoneIsValid.value) errors.value.phone = 'Please enter a valid Phone number.'
-  if (!form.value.password) errors.value.password = 'Password is required.'
-  if (!form.value.confirmPassword) errors.value.confirmPassword = 'Confirm your password.'
+  if (!form.value.email) errors.value.email = t('errorEmailRequired')
+  if (!form.value.phone || !phoneIsValid.value) errors.value.phone = t('errorPhoneInvalid')
+  if (!form.value.password) errors.value.password = t('errorPasswordRequired')
+  if (!form.value.confirmPassword) errors.value.confirmPassword = t('errorConfirmPassword')
   else if (form.value.password !== form.value.confirmPassword)
-    errors.value.confirmPassword = 'Passwords do not match.'
+    errors.value.confirmPassword = t('errorPasswordMismatch')
 
   if (!dob.value.day || !dob.value.month || !dob.value.year)
-    errors.value.dob = 'Date of birth is required.'
+    errors.value.dob = t('errorDobRequired')
 
-  if (!form.value.agree) errors.value.agree = 'You must accept the terms.'
-  if (!form.value.agree_sms) errors.value.agree_sms = 'You must receive SMS.'
+  if (!form.value.agree) errors.value.agree = t('errorAgreeTerms')
+  if (!form.value.agree_sms) errors.value.agree_sms = t('errorAgreeSms')
 
   return Object.keys(errors.value).length === 0
 }
 
 
-// Handle Signup Through store
+// Handle Signup Through auth composable
 const handleSignup = async () => {
   if (!validateForm()) {
-    globalError.value = 'Please fix the highlighted fields.'
+    globalError.value = t('fixErrors')
     return
   }
+
+  const cleanPhone = form.value.phone.replace(/\s+/g, '').replace(/[()-]/g, '')
 
   // Create DOB format YYYY-MM-DD
   const pad = (val) => val.toString().padStart(2, '0')
@@ -357,21 +360,23 @@ const handleSignup = async () => {
 
   const payload = {
     email: form.value.email,
-    phone: form.value.phone,
+    phone: cleanPhone,
     password: form.value.password,
     // password_confirmation: form.value.confirmPassword,
     dob: finalDob,
     agree_sms: form.value.agree_sms ? 1 : 0,
   }
-  console.log("from singup",form.value.phone)
-  const res = await userStore.signup(payload) 
+
+  const currentLocale = locale.value
+  
+  const res = await auth.signup(payload, currentLocale) 
 
   if (!res.success) {
     globalError.value = res.message
   
     // Show main message
     toast.error({
-      title: 'Error!',
+      title: t('errorTitle'),
       message: res.message,
       position: 'topCenter',
     })
@@ -380,7 +385,7 @@ const handleSignup = async () => {
     if (res.errors && res.errors.length > 0) {
       res.errors.forEach(err => {
         toast.error({
-          title: "Validation Error",
+          title: t('validationErrorTitle'),
           message: err,
           position: "topCenter",
           duration: 3500
@@ -392,7 +397,7 @@ const handleSignup = async () => {
   }
 
   toast.success({
-    title: 'Success!',
+    title: t('signupSuccessTitle'),
     message: res.message,
     position: 'topCenter',
     duration: 2500,
@@ -407,8 +412,8 @@ const handleSocialLogin = async (provider) => {
   try {
     if (provider !== 'google') {
       toast.error({
-        title: 'Error',
-        message: 'Only Google login is supported right now',
+        title: t('errorTitle'),
+        message: t('googleOnlyError'),
       })
       return
     }
@@ -419,18 +424,20 @@ const handleSocialLogin = async (provider) => {
     const oauthToken = response?.access_token
     if (!oauthToken) {
       toast.error({
-        title: 'Error',
-        message: 'Google access token not received',
+        title: t('errorTitle'),
+        message: t('googleTokenError'),
       })
       return
     }
 
+    const currentLocale = locale.value
+
     // Send token to backend (same as old Vue)
-    const res = await userStore.socialLogin('google', oauthToken)
+    const res = await auth.socialLogin('google', oauthToken, currentLocale)
 
     if (!res.success) {
       toast.error({
-        title: 'Error!',
+        title: t('errorTitle'),
         message: res.message,
         position: 'topCenter',
       })
@@ -438,8 +445,8 @@ const handleSocialLogin = async (provider) => {
     }
 
     toast.success({
-      title: 'Success!',
-      message: 'Logged in successfully',
+      title: t('successTitle'),
+      message: t('loggedInSuccessfully'),
       position: 'topCenter',
       duration: 2500,
     })
@@ -449,8 +456,8 @@ const handleSocialLogin = async (provider) => {
 
   } catch (err) {
     toast.error({
-      title: 'Error!',
-      message: err?.message || 'Google login failed',
+      title: t('errorTitle'),
+      message: err?.message || t('googleLoginFailed'),
     })
   }
 }

@@ -43,8 +43,8 @@ useSeoMeta({
   ogTitle: 'E-GAMESTORE - Your Ultimate Gaming Destination',
   ogDescription: 'Discover the latest and greatest in gaming at E-GAMESTORE. From trending titles to upcoming releases, we have it all. Join tournaments, read reviews, and stay updated with our blog. Your next adventure awaits!',
   ogType: 'website',
-  ogImage: 'https://e-gamestore.vercel.app/og-image.png',
-  ogUrl: 'https://e-gamestore.vercel.app/',
+  ogImage: '/favicon.png',
+  ogUrl: 'https://egamestore.com/',
   twitterCard: 'summary_large_image',
 });
 

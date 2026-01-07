@@ -4,22 +4,22 @@
     <div class="flex flex-wrap gap-4 md:gap-6 border-b px-3 border-onMainText mb-6">
       <button
         v-for="tab in tabs"
-        :key="tab"
-        @click="activeTab = tab"
+        :key="tab.key"
+        @click="activeTab = tab.key"
         class="pb-2 text-sm md:text-base font-medium transition-all duration-300"
         :class="[
-          activeTab === tab
+          activeTab === tab.key
             ? 'text-primary font-semibold'
             : 'text-mainText hover:text-primary'
         ]"
       >
-        {{ tab }}
+        {{ t(tab.label) }}
       </button>
     </div>
 
     <!-- System Requirements (API ONLY) -->
     <div
-      v-if="activeTab === 'System Requirements'"
+      v-if="activeTab === 'system'"
       class="text-mainText text-md md:text-base border rounded-lg
              border-onFooter bg-[#282C32] p-4 mx-2 leading-relaxed"
     >
@@ -28,13 +28,13 @@
         v-html="product.system_requirement"
       />
       <p v-else class="text-onMainText italic">
-        No system requirements provided.
+        {{ t('productNoSystemRequirements') }}
       </p>
     </div>
 
     <!-- Description (API ONLY) -->
     <div
-      v-else-if="activeTab === 'Description'"
+      v-else-if="activeTab === 'description'"
       class="text-mainText text-md md:text-base border rounded-lg
              border-onFooter bg-[#282C32] p-4 mx-2 leading-relaxed"
     >
@@ -43,12 +43,12 @@
         v-html="product.desc"
       />
       <p v-else class="text-onMainText italic">
-        No description available.
+        {{ t('productNoDescription') }}
       </p>
     </div>
 
     <!-- Reviews -->
-    <div v-else-if="activeTab === 'Reviews'" class="mx-2">
+    <div v-else-if="activeTab === 'reviews'" class="mx-2">
       <ProductReviews
         :product="product"
         :reviews="product?.reviews || []"
@@ -57,7 +57,7 @@
 
     <!-- Support (API ONLY – future ready) -->
     <div
-      v-else-if="activeTab === 'Support'"
+      v-else-if="activeTab === 'support'"
       class="text-mainText text-sm md:text-base border rounded-lg
              border-onFooter bg-[#282C32] p-4 mx-2 leading-relaxed"
     >
@@ -66,7 +66,7 @@
         v-html="product.support"
       />
       <p v-else class="text-onMainText italic">
-        Support information not available.
+        {{ t('productNoSupport') }}
       </p>
     </div>
   </section>
@@ -74,7 +74,10 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import ProductReviews from '~/components/ProductReviews.vue'
+
+const { t } = useI18n()
 
 defineProps({
   product: {
@@ -84,6 +87,12 @@ defineProps({
   currentUser: Object
 })
 
-const tabs = ['System Requirements', 'Description', 'Reviews', 'Support']
-const activeTab = ref('Description')
+const tabs = [
+  { key: 'system', label: 'productTabSystemRequirements' },
+  { key: 'description', label: 'productTabDescription' },
+  { key: 'reviews', label: 'productTabReviews' },
+  { key: 'support', label: 'productTabSupport' }
+]
+
+const activeTab = ref('description')
 </script>

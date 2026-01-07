@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2025-07-15',
+  compatibilityDate: "2025-07-15",
   ssr: true,
 
   devtools: { enabled: true },
@@ -8,36 +8,39 @@ export default defineNuxtConfig({
   css: [
     "~/assets/css/tailwind.css",
     "~/assets/css/toast.css",
-    "~/assets/css/global.css"
+    "~/assets/css/global.css",
   ],
 
   modules: [
-    '@nuxt/scripts',
-    '@nuxt/icon',
-    '@nuxt/image',
-    '@nuxt/fonts',
-    '@nuxt/eslint',
-    '@nuxt/content',
-    '@pinia/nuxt',
-    '@nuxtjs/google-fonts',
-    '@nuxtjs/tailwindcss',
-    'nuxt-toast'
+    "@nuxt/scripts",
+    "@nuxt/icon",
+    "@nuxt/image",
+    "@nuxt/fonts",
+    "@nuxt/eslint",
+    "@nuxt/content",
+    "@pinia/nuxt",
+    "@nuxtjs/google-fonts",
+    "@nuxtjs/tailwindcss",
+    "nuxt-toast",
+    "@nuxtjs/i18n",
   ],
 
   toast: {
-    position: 'top-right',
+    position: "top-right",
     duration: 3000,
     keepOnHover: true,
-    theme: 'dark',
+    theme: "dark",
   },
 
-  plugins: ["~/plugins/aos.client.ts"],
+  plugins: [
+    "~/plugins/aos.client.ts",
+  ],
 
   runtimeConfig: {
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE,
       googleClientId: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_ID,
-    }
+    },
   },
 
   googleFonts: {
@@ -45,9 +48,9 @@ export default defineNuxtConfig({
       Poppins: [400, 600],
       Vazirmatn: [400, 700],
       Roboto: [400, 500, 700],
-      Inter: [400]
+      Inter: [400],
     },
-    display: 'swap',
+    display: "swap",
     download: true,
     preload: true,
   },
@@ -55,23 +58,48 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: "E-GAMESTORE",
-      htmlAttrs: { lang: 'en' },
-      link: [
-        { rel: "icon", type: "image/x-icon", href: "/favicon.png" }
-      ]
-    }
+      htmlAttrs: { lang: "en" },
+      link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.png" }],
+    },
   },
 
   image: {
     quality: 80,
-    format: ['webp', 'avif'],
+    format: ["webp", "avif"],
   },
 
   experimental: {
-    payloadExtraction: false
+    payloadExtraction: false,
   },
 
   nitro: {
-    compressPublicAssets: true
-  }
-})
+    compressPublicAssets: true,
+  },
+
+  i18n: {
+    locales: [
+      {
+        code: "en",
+        iso: "en-US",
+        dir: "ltr",
+        file: "en.json"
+      },
+      {
+        code: "ar",
+        iso: "ar-SA",
+        dir: "rtl",
+        file: "ar.json"
+      },
+    ],
+    defaultLocale: "en",
+    strategy: "no_prefix",
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'lang',
+      redirectOn: 'root'
+    },
+    vueI18n: "./i18n.config.ts",
+    lazy: true,
+    langDir: "locales",
+  },
+});

@@ -30,10 +30,10 @@
         <!--Text -->
         <div class="relative z-10 flex flex-col justify-center">
           <h3 class="text-md font-semibold text-white">
-            {{ item.title }}
+            {{ t(item.title) }}
           </h3>
           <p class="text-sm text-onMainText">
-            {{ item.description }}
+            {{ t(item.description) }}
           </p>
         </div>
       </div>
@@ -42,23 +42,25 @@
 </template>
 
 <script setup>
+const { t } = useI18n();
+
 defineProps({
   highlights: {
     type: Array,
     default: () => [     
       {
-        title: '24H Support',
-        description: 'Always available when you need us',
+        title: 'highlightSupportTitle',
+        description: 'highlightSupportDesc',
         icon: '/games/24Hours.png',
       },
        {
-        title: 'Fast Delivery',
-        description: 'Instant delivery for digital products',
+        title: 'highlightDeliveryTitle',
+        description: 'highlightDeliveryDesc',
         icon: '/games/FastDelivery.png',
       }, 
      {
-        title: 'Secure Shopping',
-        description: 'Your information is completely secure',
+        title: 'highlightSecureTitle',
+        description: 'highlightSecureDesc',
         icon: '/games/SecureShopping.png',
       },
     ],

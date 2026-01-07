@@ -16,16 +16,16 @@
         <h1
           class="text-3xl sm:text-4xl lg:text-5xl font-bold font-poppins leading-tight mb-4 whitespace-nowrap text-primary"
         >
-          Play Your Best Game  <br />
-          <span class="text-mainText" >& Collect Epic Deals</span>
+          {{ t('heroDealsTitleLine1') }} <br/>
+          <span class="text-mainText" >& {{ t('heroDealsTitleLine2') }}</span>
         </h1>
 
         <p
           class="text-mainText font-poppins text-base sm:text-lg max-w-lg mx-auto lg:mx-0 mb-6"
         >
-       Discover limited-time discounts on top-selling games,
-       gift cards, and bundles.
-       New deals added every day — don't miss out! 
+       {{ t('heroDealsDescriptionLine1') }}
+       {{ t('heroDealsDescriptionLine2') }}
+       {{ t('heroDealsDescriptionLine3') }}
        </p>
 
         <div class="flex flex-wrap justify-center lg:justify-start gap-3">
@@ -37,7 +37,7 @@
             extraClass="px-6 md:px-7 py-3 text-xs font-poppins
             shadow-lg shadow-primary/40 hover:shadow-primary/60 rounded-2xl transition-all duration-300"
           >
-            Browse Deals
+            {{ t('browseDeals') }}
           </AppButton>
           <AppButton
             to="/games?type=latest" 
@@ -47,7 +47,7 @@
             extraClass="px-6 md:px-7 py-3 text-xs font-poppins border-[2.5px] sm:border-[3px] 
             rounded-2xl "
           >
-            View Games
+            {{ t('viewGames') }}
           </AppButton>
         </div>
       </div>
@@ -66,6 +66,10 @@
     </div>
   </section>
 </template>
+
+<script setup>
+const { t } = useI18n()
+</script>
 
 <style scoped>
 /* Mobile: hide right section completely */

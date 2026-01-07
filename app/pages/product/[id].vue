@@ -71,6 +71,7 @@ import ProductOverviewSkeleton from '~/components/ProductOverviewSkeleton.vue'
 
 const route = useRoute()
 const productStore = useProductStore()
+const { t } = useI18n()
 
 /**
  * Parse ID safely
@@ -87,7 +88,7 @@ const id = Number(route.params.id)
 if (!Number.isNaN(id)) {
   await productStore.fetchProduct(id)
 } else {
-  productStore.error = 'Invalid product'
+  productStore.error = t('invalidProductID')
 }
 
 /**

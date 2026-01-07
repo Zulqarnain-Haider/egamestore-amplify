@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="flex items-center justify-between px-4 sm:px-6 lg:px-7">
       <h2 class="text-2xl font-semibold font-vazirmatn">
-        Up Coming Games
+        {{ t('upComingGames') }}
       </h2>
 
       <NuxtLink
@@ -11,7 +11,7 @@
         class="text-onGoNext text-lg font-vazirmatn flex items-center
                cursor-pointer hover:text-primary transition"
       >
-        View All
+        {{ t('viewAll') }}
         <Icon name="mdi:chevron-right" class="w-10 h-10" />
       </NuxtLink>
     </div>
@@ -100,6 +100,9 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import preorders from '../../data/preorders.json'
+
+// I18N
+const { t } = useI18n()
 
 /* ---------------------------
    DATA (STATIC)

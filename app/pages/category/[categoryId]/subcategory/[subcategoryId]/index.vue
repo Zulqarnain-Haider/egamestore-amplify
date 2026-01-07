@@ -2,7 +2,7 @@
   <div class="w-full min-h-screen px-4 sm:px-6 lg:px-8 mb-10 lg:mb-12 max-w-7xl mx-auto">
     <!-- Breadcrumb -->
     <div class="mb-6 text-lg flex items-center gap-1">
-      <NuxtLink to="/" class="hover:text-primary text-mainText">Home</NuxtLink>
+      <NuxtLink to="/" class="hover:text-primary text-mainText">{{ t('home') }}</NuxtLink>
       <Icon name="heroicons-chevron-right-20-solid" class="text-mainText w-7 h-7" />
 
       <NuxtLink
@@ -28,13 +28,13 @@
         @click="fetchData"
         class="bg-primary text-white px-6 py-2 rounded-lg hover:opacity-90"
       >
-        Retry
+        {{ t('retry') }}
       </button>
     </div>
 
     <!-- Empty State -->
     <div v-else-if="!countries.length" class="text-center py-12">
-      <p class="text-onFooter text-lg">No countries available</p>
+      <p class="text-onFooter text-lg">{{ t('noCountriesAvailable') }}</p>
     </div>
 
     <!-- Countries Grid -->
@@ -58,6 +58,7 @@ import { useCategoryContext } from '~/composables/useCategoryContext'
 import { useHead } from '#app'
 
 const router = useRouter()
+const { t } = useI18n()
 const countriesStore = useCountriesStore()
 const categoriesStore = useCategoriesStore()
 

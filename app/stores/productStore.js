@@ -15,9 +15,6 @@ export const useProductStore = defineStore('product', () => {
 
   /**
    * FETCH PRODUCT
-   * ----------------------------------
-   * JS version (no TS types)
-   * Safe for SSR + CSR
    */
   const fetchProduct = async (cardId) => {
     loading.value = true

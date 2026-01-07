@@ -36,10 +36,10 @@
 
       <!-- Heading -->
       <h2 class="text-2xl md:text-3xl font-semibold text-left mb-2">
-        Forgot Password?
+        {{ t('forgotPasswordTitle') }}
       </h2>
       <p class="text-inputsIn text-xs text-left mb-6 md:mb-12">
-        Enter your email to reset your password
+        {{ t('forgotPasswordSubtitle') }}
       </p>
 
       <!-- Email Input -->
@@ -51,7 +51,7 @@
         <input
           v-model="email"
           type="email"
-          placeholder="Enter your email"
+          :placeholder="t('forgotPasswordEmailPlaceholder')"
           class="w-full bg-bgDark rounded-md py-2 pl-10 pr-3
                  focus:outline-none focus:ring-1 focus:ring-primary"
         />
@@ -67,7 +67,7 @@
         :disabled="loading"
         @click="handleSubmit"
       >
-        {{ loading ? 'Sending...' : 'Submit' }}
+        {{ loading ? t('forgotPasswordSending') : t('forgotPasswordSubmit') }}
       </AppLink>
     </div>
   </section>
@@ -75,7 +75,8 @@
 
 <script setup>
 import { ref } from 'vue'
-import { navigateTo, useRuntimeConfig, useHead } from '#imports'
+import { navigateTo, useHead } from '#imports'
+import { useAuth } from '~/composables/useAuth'
 
 definePageMeta({ layout: 'auth' })
 
@@ -84,7 +85,8 @@ useHead({
   meta: [{ name: 'robots', content: 'noindex, nofollow' }],
 })
 
-const config = useRuntimeConfig()
+const auth = useAuth()
+const { t, locale } = useI18n()
 const email = ref('')
 const error = ref('')
 const loading = ref(false)
@@ -92,29 +94,23 @@ const loading = ref(false)
 const handleSubmit = async () => {
   error.value = ''
   if (!email.value) {
-    error.value = 'Please enter your email.'
+    error.value = t('errorEmailRequiredForgot')
     return
   }
 
   loading.value = true
 
   try {
-    const fd = new FormData()
-    fd.append('email', email.value)
+    const res = await auth.requestPasswordReset(email.value, locale.value)
 
-    const res = await $fetch(
-      `${config.public.apiBase}/users/requestPasswordReset`,
-      { method: 'POST', body: fd }
-    )
-
-    if (res?.status) {
+    if (res?.data?.status) {
       localStorage.setItem('resetIdentifier', email.value)
       navigateTo('/auth/otp-verification?type=reset')
     } else {
-      error.value = res.message
+      error.value = res?.data?.message || t('errorForgotRequestFailed')
     }
   } catch {
-    error.value = 'Unable to process request.'
+    error.value = t('errorForgotRequestFailed')
   }
 
   loading.value = false

@@ -44,7 +44,7 @@
         class="flex items-center gap-1 hover:scale-105 transition"
         @click.stop.prevent="handleClick"
       >
-        <span>{{ product.buttonText || 'Pre-Order' }}</span>
+        <span>{{ t('preOrder') }}</span>
         <Icon name="heroicons:arrow-long-right" class="w-4 h-4 text-orange-500" />
       </button>
     </div>
@@ -53,6 +53,7 @@
 
 <script setup>
 const toast = useToast()
+const { t } = useI18n()
 
 const props = defineProps({
   product: {
@@ -63,8 +64,8 @@ const props = defineProps({
 
 const handleClick = () => {
   toast.info({
-    title: 'Coming Soon',
-    message: 'This product has no API support yet',
+    title: t('comingSoonTitle'),
+    message: t('comingSoonMessage'),
     position: 'topCenter',
     duration: 2500
   })

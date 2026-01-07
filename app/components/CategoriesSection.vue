@@ -13,7 +13,7 @@
           <div class="absolute inset-0 bg-black/40 z-0"></div>
 
           <div class="absolute inset-x-0 bottom-2 bg-gradient-to-t from-black/60 to-transparent p-3">
-            <span class="text-lg font-semibold font-poppins">{{ cats[0].title }}</span>
+            <span class="text-lg font-semibold font-poppins">{{ t(cats[0].title) }}</span>
           </div>
         </div>
 
@@ -26,7 +26,7 @@
             <div class="absolute inset-0 bg-black/40 z-0"></div>
 
             <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-3">
-              <span class="text-base font-semibold font-poppins">{{ c.title }}</span>
+              <span class="text-base font-semibold font-poppins">{{ t(c.title) }}</span>
             </div>
           </div>
         </div>
@@ -43,7 +43,7 @@
             <div class="absolute inset-0 bg-black/40 z-0"></div>
 
             <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-3">
-              <span class="text-base font-semibold font-poppins">{{ c.title }}</span>
+              <span class="text-base font-semibold font-poppins">{{ t(c.title) }}</span>
             </div>
           </div>
         </div>
@@ -55,7 +55,7 @@
             format="webp" densities="x1 x2" quality="75" loading="lazy" />
           <div class="absolute inset-0 bg-black/40 z-0"></div>
           <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-3">
-            <span class="text-lg font-semibold font-poppins">{{ cats[5].title }}</span>
+            <span class="text-lg font-semibold font-poppins">{{ t(cats[5].title) }}</span>
           </div>
         </div>
       </div>
@@ -72,7 +72,7 @@
         <div class="absolute inset-0 bg-black/40 z-0"></div>
 
         <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-3">
-          <span class="text-base font-poppins">{{ c.title }}</span>
+          <span class="text-base font-poppins">{{ t(c.title) }}</span>
         </div>
       </div>
     </div>
@@ -80,14 +80,14 @@
 </template>
 
 <script setup>
+const { t } = useI18n()
 const cats = [
-  { title: 'Sports & Racing', image: '/games/Categories6.png' },
-  { title: 'Strategy', image: '/games/Categories3.jpg' },
-  { title: 'Survival', image: '/games/Categories2.jpg' },
-  { title: 'RPG', image: '/games/Categories5.png' },
-  { title: 'Adventure', image: '/games/Categories4.png' },
-  { title: 'Action', image: '/games/Categories1.jpg' },
-
+  { title: 'category_sports_racing', image: '/games/Categories6.png' },
+  { title: 'category_strategy', image: '/games/Categories3.jpg' },
+  { title: 'category_survival', image: '/games/Categories2.jpg' },
+  { title: 'category_rpg', image: '/games/Categories5.png' },
+  { title: 'category_adventure', image: '/games/Categories4.png' },
+  { title: 'category_action', image: '/games/Categories1.jpg' },
 
 ]
 </script>

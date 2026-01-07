@@ -29,13 +29,13 @@
               class="w-16 h-16 sm:w-20 sm:h-20"
             />
             <h2 class="text-mainText font-semibold tracking-wide max-w-[50%] mx-auto text-xl sm:text-2xl leading-snug">
-              Your Password Successfully Changed
+              {{ t('passwordChangeSuccessTitle') }}
             </h2>
             <button
               @click="closeModal"
               class="bg-primary w-full text-mainText px-8 py-2 rounded-md hover:bg-orange-600 transition"
             >
-              Home
+             {{ t('home') }}
             </button>
           </div>
         </template>
@@ -52,10 +52,10 @@
 
             <div class="text-left">
               <h2 class="text-mainText font-semibold text-2xl mb-1">
-                Set New Password
+                {{ t('setNewPasswordTitle') }}
               </h2>
               <p class="text-inputsIn text-xs sm:text-sm mb-4 pr-4 sm:pr-8">
-                Create a new password that is at least 8 characters long.
+                {{ t('setNewPasswordDesc') }}
               </p>
             </div>
 
@@ -66,7 +66,7 @@
               <!-- Current Password -->
               <div class="text-left text-xs sm:text-sm">
                 <label class="block text-inputsIn mb-1">
-                  Enter Current Password
+                  {{ t('currentPasswordLabel') }}
                 </label>
                 <div class="relative">
                     <Icon name="mdi-lock"
@@ -75,7 +75,7 @@
                   <input
                     :type="showCurrent ? 'text' : 'password'"
                     v-model="currentPassword"
-                    placeholder="Enter current password"
+                    :placeholder="t('currentPasswordPlaceholder')"
                     class="w-full bg-transparent border border-outline rounded-md 
                     px-10 py-2 focus:outline-none focus:border-primary placeholder-onFooter/70"
                     :class="errors.current ? 'border-error' : 'border-outline focus:border-primary'"
@@ -154,12 +154,12 @@
                 type="submit"
                 class="w-full bg-primary text-white py-2 rounded-md hover:bg-orange-600 transition"
               >
-                Save New Password
+                {{ t('saveNewPassword') }}
               </button>
 
               <NuxtLink to="/auth/forgot-password">
                 <p class="text-xs mt-3 underline cursor-pointer text-primary">
-                  forgot password?
+                  {{ t('forgotPasswordTitle') }}
                 </p>
               </NuxtLink>
             </form>
@@ -174,6 +174,7 @@
 import { ref } from 'vue'
 import { useUserStore } from '~/stores/userStore'
 
+const { t } = useI18n()
 const props = defineProps({ visible: Boolean })
 const emit = defineEmits(['close'])
 
@@ -195,15 +196,15 @@ const handleSave = async () => {
   errors.value = {}
   globalError.value = ''
 
-  if (!currentPassword.value) errors.value.current = 'Enter current password'
-  if (!newPassword.value) errors.value.new = 'Enter new password'
-  if (!confirmPassword.value) errors.value.confirm = 'Confirm new password'
+  if (!currentPassword.value) errors.value.current = t('errorEnterCurrentPassword')
+  if (!newPassword.value) errors.value.new = t('errorEnterNewPassword')
+  if (!confirmPassword.value) errors.value.confirm = t('errorConfirmNewPassword')
   if (newPassword.value !== confirmPassword.value) {
-    errors.value.confirm = 'Passwords do not match'
+    errors.value.confirm = t('errorPasswordMismatch')
   }
 
   if (Object.keys(errors.value).length) {
-    globalError.value = 'Please fix the errors'
+    globalError.value = t('errorFixFields')
     return
   }
 
@@ -213,7 +214,7 @@ const handleSave = async () => {
   )
 
   if (!res.success) {
-    globalError.value = res.message || 'Failed to update password'
+    globalError.value = res.message || t('errorUpdatePasswordFailed')
     return
   }
 

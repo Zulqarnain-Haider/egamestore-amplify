@@ -8,14 +8,14 @@
         @click="goBack"
       >
         <Icon name="heroicons-arrow-left" class="w-5 h-5 font-semibold" />
-        Back to my orders
+        {{ t('orderDetailsBack') }}
       </div>
 
       <!-- Selected Order Summary -->
       <div v-if="order" class="bg-[#282C32] rounded-xl p-6 space-y-5">
         <!-- Header -->
         <div class="flex justify-between items-center flex-wrap gap-3">
-          <h2 class="text-lg text-primary">Order Summary</h2>
+          <h2 class="text-lg text-primary">{{ t('orderSummaryTitle') }}</h2>
 
           <!-- ✅ Beautiful status badge for ALL states -->
           <button
@@ -27,14 +27,17 @@
               'bg-yellow-500 text-mainText': order.status === 'Shipped'
             }"
           >
-            {{ order.status === 'Completed' ? 'Delivered' : order.status }}
+            {{ order.status === 'Completed'
+              ? t('orderStatusDelivered')
+              : order.status
+            }}
           </button>
         </div>
 
         <!-- Info Row -->
         <div class="flex flex-col sm:flex-row md:space-x-10 lg:space-x-32 gap-4 mt-3 text-sm sm:text-base">
           <div>
-            <p class="text-onMainText text-sm">Order ID</p>
+            <p class="text-onMainText text-sm">{{ t('orderIdLabel') }}</p>
             <p class="text-md text-primary whitespace-nowrap">
               #{{ order.code || 'N/A' }}
             </p>
@@ -45,8 +48,8 @@
               <Icon name="heroicons-map-pin-20-solid" class="text-neutral-700 w-6 h-6" />
             </div>
             <div>
-              <p class="text-onMainText text-sm">Delivery Location</p>
-              <p>{{ order.location || 'Not specified' }}</p>
+              <p class="text-onMainText text-sm">{{ t('orderDeliveryLocation') }}</p>
+              <p>{{ order.location || t('orderNotSpecified') }}</p>
             </div>
           </div>
 
@@ -55,7 +58,7 @@
               <Icon name="heroicons-wallet-20-solid" class="text-neutral-700 w-6 h-6" />
             </div>
             <div>
-              <p class="text-onMainText text-sm whitespace-nowrap">Payment Method</p>
+              <p class="text-onMainText text-sm whitespace-nowrap">{{ t('orderPaymentMethod') }}</p>
               <!-- ✅ API driven -->
               <p class="whitespace-nowrap">
                 {{ order.payment_method || 'N/A' }}
@@ -76,7 +79,7 @@
               extraClass="text-mainText flex items-center gap-2 text-sm rounded-lg px-4 py-2"
             >
               <Icon name="heroicons-arrow-path" class="w-4 h-4 text-white" />
-              Order Again
+              {{ t('orderAgain') }}
             </AppButton>
 
             <AppButton
@@ -85,7 +88,7 @@
               extraClass="bg-mainText flex items-center gap-2 text-sm text-primary rounded-lg px-4 py-2"
               @click="openKeyModal"
             >
-              <Icon name="fa-solid:key" /> View Key
+              <Icon name="fa-solid:key" /> {{ t('orderViewKey') }}
             </AppButton>
 
             <button
@@ -100,7 +103,7 @@
               variant="outline"
               extraClass="bg-mainText text-mainText flex items-center gap-2 text-sm text-primary rounded-lg px-4 py-2"
             >
-              <Icon name="fa-solid:download" /> Download Invoice
+              <Icon name="fa-solid:download" /> {{ t('orderDownloadInvoice') }}
             </AppButton>
           </div>
         </div>
@@ -111,7 +114,7 @@
 
         <!-- ✅ ORDER ITEMS (correct source) -->
         <div v-if="order.items?.length" class="space-y-5">
-          <h3 class="text-lg text-primary">Order items</h3>
+          <h3 class="text-lg text-primary">{{ t('orderItemsTitle') }}</h3>
 
           <div
             v-for="item in order.items"
@@ -131,7 +134,7 @@
               <div>
                 <h4 class="font-medium text-lg">{{ item.name }}</h4>
                 <p class="text-onMainText text-sm">
-                  Qty: {{ item.qty }}
+                  {{ t('orderQuantity') }}: {{ item.qty }}
                 </p>
               </div>
             </div>
@@ -171,6 +174,7 @@ import { useOrdersStore } from '~/stores/ordersStore'
 
 const route = useRoute()
 const router = useRouter()
+const { t } = useI18n()
 const config = useRuntimeConfig()
 const userStore = useUserStore()
 const ordersStore = useOrdersStore()

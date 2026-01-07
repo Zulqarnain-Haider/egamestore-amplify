@@ -1,6 +1,5 @@
 <template>
-  <section class="min-h-screen flex flex-col md:flex-row md:-mt-[2.3rem]
-           items-center justify-center text-white px-4 md:px-10">
+  <section class="min-h-screen flex flex-col md:flex-row md:-mt-[2.3rem] items-center justify-center text-white px-4 md:px-10">
     <div class="w-full md:w-1/2 flex justify-center mb-8 md:mb-0">
       <NuxtImg
         src="/games/ForgotPasswordLeft.png"
@@ -13,14 +12,13 @@
       />
     </div>
 
-    <div class="w-full md:w-1/2 flex flex-col font-inter justify-center
-                max-w-md mx-auto rounded-3xl p-10 md:p-16">
+    <div class="w-full md:w-1/2 flex flex-col font-inter justify-center max-w-md mx-auto rounded-3xl p-10 md:p-16">
       <h2 class="text-2xl md:text-3xl font-semibold mb-2">
-        OTP Verification
+        {{ t('otpTitle') }}
       </h2>
 
       <p class="text-inputsIn text-xs mb-7 md:mb-12">
-        Check your email or phone for the verification code
+        {{ t('otpSubtitle') }}
       </p>
 
       <div
@@ -46,16 +44,16 @@
       </p>
 
       <AppLink full class="h-9 mt-3" @click="verifyOtp">
-        Verify
+        {{ t('otpVerify') }}
       </AppLink>
 
       <p class="text-mainText text-center text-sm mt-6">
         <template v-if="isTimerRunning">
-          Resend in {{ formatTime(timer) }}
+          {{ t('otpResendIn') }} {{ formatTime(timer) }}
         </template>
         <template v-else>
           <span class="text-primary cursor-pointer" @click="resendOtp">
-            Resend code
+            {{ t('otpResendCode') }}
           </span>
         </template>
       </p>
@@ -66,7 +64,8 @@
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import { useRoute, navigateTo } from '#imports'
-import { useUserStore } from '~/stores/userStore'
+import { useAuth } from '~/composables/useAuth'
+import { useUser } from '~/composables/useUser'
 
 definePageMeta({
   layout: 'auth',
@@ -74,7 +73,9 @@ definePageMeta({
 })
 
 const route = useRoute()
-const userStore = useUserStore()
+const auth = useAuth()
+const user = useUser()
+const { t, locale } = useI18n()
 
 const otpFlow = route.query.type || 'activation'
 
@@ -115,16 +116,16 @@ const handleBackspace = (i) => {
 const resendOtp = async () => {
   startTimer()
   if (otpFlow === 'reset') {
-    await userStore.requestPasswordReset(resetEmail)
+    await auth.requestPasswordReset(resetEmail, locale.value)
   } else {
-    await userStore.resendCode()
+    await auth.resendCode(locale.value)
   }
 }
 
 const verifyOtp = async () => {
   const code = otp.value.join('')
   if (code.length !== 6) {
-    errorMessage.value = 'Enter 6-digit OTP'
+    errorMessage.value = t('enter6DigitOTP')
     showError.value = true
     return
   }
@@ -134,7 +135,7 @@ const verifyOtp = async () => {
     return navigateTo('/auth/reset-password')
   }
 
-  const res = await userStore.activateAccount(code)
+  const res = await user.activateAccount(code, locale.value)
   if (!res.success) {
     errorMessage.value = res.message
     return
@@ -146,7 +147,7 @@ const verifyOtp = async () => {
 onMounted(async () => {
   startTimer()
   if (otpFlow === 'activation') {
-    await userStore.resendCode()
+    await auth.resendCode()
   }
   nextTick(() => otpInputs.value[0]?.focus())
 })

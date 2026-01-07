@@ -1,7 +1,7 @@
 <template>
   <section class="font-poppins py-4 shadow-md">
     <h2 class="text-xl md:text-2xl font-semibold mb-6">
-      Customer Reviews
+      {{ t('customerReviewsTitle') }}
     </h2>
 
     <!-- ADD REVIEW (logged in + purchased only) -->
@@ -21,7 +21,7 @@
       <div class="flex flex-col flex-1">
         <textarea
           v-model="newReview.comment"
-          placeholder="Write your review..."
+          :placeholder="t('writeReviewPlaceholder')"
           class="bg-transparent border border-outline rounded-lg
                  px-3 py-2 w-full resize-none text-sm text-mainText
                  focus:ring-2 focus:ring-outline"
@@ -49,7 +49,7 @@
             :disabled="submitting"
             @click="submitReview"
           >
-            {{ submitting ? 'Posting...' : 'Post Review' }}
+            {{ submitting ? t('postingReview') : t('postReview') }}
           </AppButton>
         </div>
       </div>
@@ -115,7 +115,7 @@
             loading="lazy"
           />
           <h4 class="text-md">
-            {{ r.user?.email || 'User' }}
+            {{ r.user?.email || t('reviewAnonymousUser') }}
           </h4>
         </div>
       </div>
@@ -125,16 +125,18 @@
       v-else
       class="text-onMainText text-sm italic"
     >
-      No reviews yet.
+      {{ t('noReviewsYet') }}
     </p>
   </section>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useUserStore } from '~/stores/userStore'
 import { useToast, useRuntimeConfig } from '#imports'
 
+const { t, locale } = useI18n()
 const toast = useToast()
 const config = useRuntimeConfig()
 const userStore = useUserStore()
@@ -182,22 +184,22 @@ const reviewAvatar = '/games/Reviews.png'
 const submitReview = async () => {
   if (!cardId.value) {
     return toast.error({
-      title: 'Error',
-      message: 'Invalid product ID'
+      title: t('errorTitle'),
+      message: t('invalidProductId')
     })
   }
 
   if (newReview.value.rating < 1 || newReview.value.rating > 5) {
     return toast.error({
-      title: 'Invalid rating',
-      message: 'Rating must be between 1 and 5'
+      title: t('invalidRatingTitle'),
+      message: t('invalidRatingMessage')
     })
   }
 
   if (newReview.value.comment.length < 2) {
     return toast.error({
-      title: 'Invalid comment',
-      message: 'Comment must be at least 2 characters'
+      title: t('invalidCommentTitle'),
+      message: t('invalidCommentMessage')
     })
   }
 
@@ -215,26 +217,26 @@ const submitReview = async () => {
         body: form,
         headers: {
           Authorization: `Bearer ${userStore.token}`,
-          lang: 'en'
+          lang: locale.value
         }
       }
     )
 
     if (!res?.status) {
-      throw new Error(res?.message || 'Review failed')
+      throw new Error(res?.message || t('reviewFailed'))
     }
 
     toast.success({
-      title: 'Review submitted',
-      message: 'Thank you for your feedback'
+      title: t('reviewSubmittedTitle'),
+      message: t('reviewSubmittedMessage')
     })
 
     newReview.value.rating = 0
     newReview.value.comment = ''
   } catch (err) {
     toast.error({
-      title: 'Review error',
-      message: err.message || 'Could not submit review'
+      title: t('reviewErrorTitle'),
+      message: err.message || t('reviewErrorMessage')
     })
   } finally {
     submitting.value = false

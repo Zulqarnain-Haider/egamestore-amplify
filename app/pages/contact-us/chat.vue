@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen text-mainText py-10 px-6 md:px-12">
     <div class="max-w-7xl mx-auto">
-      <h1 class="text-2xl font-semibold mb-6 font-inter">Ticket Conversation</h1>
+      <h1 class="text-2xl font-semibold mb-6 font-inter">{{ t('ticketChatTitle') }}</h1>
 
       <div class="flex flex-col lg:flex-row bg-[#1E2126] shadow-sm font-inter rounded-2xl overflow-hidden">
         <!-- Left Section: Chat -->
@@ -12,8 +12,8 @@
               <NuxtImg densities="x1" quality="80" loading="lazy" src="/games/ChatHeadPhone.svg" />
             </div>
             <div>
-              <div class="text-lg font-semibold">Support Chat</div>
-              <div v-if="ticket?.reason?.show_orders === true && ticket?.order_id" class="text-sm text-onFooter">Game Order #{{ ticket?.order_id || '—' }}</div>
+              <div class="text-lg font-semibold">{{ t('ticketChatSupport') }}</div>
+              <div v-if="ticket?.reason?.show_orders === true && ticket?.order_id" class="text-sm text-onFooter">{{ t('ticketChatOrder') }} #{{ ticket?.order_id || '—' }}</div>
               <div v-else class="text-sm text-onFooter">{{ ticket?.reason?.name }}</div>
             </div>
           </div>
@@ -27,7 +27,7 @@
               :support-name="'Support'"
             />
             <div v-if="!messages?.length" class="h-full flex items-center justify-center text-onFooter/70 text-sm">
-              No messages yet. Start a conversation below 👇
+              {{ t('ticketChatNoMessages') }}
             </div>
           </div>
           <!-- Selected Images Chips -->
@@ -57,7 +57,7 @@
             <div class="relative">
               <input
                 v-model="newMsg"
-                placeholder="Type your message..."
+                :placeholder="t('ticketChatPlaceholder')"
                 class="input pr-14"
                 @keyup.enter="send"
               />
@@ -92,7 +92,7 @@
 
         <!-- Right Section: Ticket Details -->
         <div class="w-full bg-gradient-to-b from-[#1E2126] bg-[#201f1f] lg:w-[380px] p-6 flex flex-col gap-4">
-          <h2 class="text-mainText font-semibold text-2xl">Ticket Details</h2>
+          <h2 class="text-mainText font-semibold text-2xl">{{ t('ticketDetailsTitle') }}</h2>
 
           <!-- Ticket Info -->
           <div class="bg-[#2E364A] rounded-lg">
@@ -102,7 +102,7 @@
             >
               <div class="flex items-center gap-2 text-primary">
                 <Icon name="mdi:ticket-confirmation-outline" size="20" />
-                <h3 class="text-base font-semibold text-mainText">Ticket Information</h3>
+                <h3 class="text-base font-semibold text-mainText">{{ t('ticketInfoTitle') }}</h3>
               </div>
               <Icon
                 name="mdi:chevron-down"
@@ -115,11 +115,11 @@
             <transition name="fade">
               <div v-if="openSection === 'ticketInfo'" class="px-4 pb-4 text-sm text-mainText/50 space-y-3">
                 <div class="flex justify-between">
-                  <span class="font-medium">Ticket ID:</span>
+                  <span class="font-medium">{{ t('ticketId') }}:</span>
                   <span class="text-blue-400">#{{ ticket?.id }}</span>
                 </div>
                 <div class="flex justify-between items-center">
-                  <span class="font-medium">Status:</span>
+                  <span class="font-medium">{{ t('ticketStatus') }}:</span>
                   <span
                     :class="ticket?.status === 'active'
                       ? 'bg-green-300 text-green-600 px-3 py-1 rounded-full text-xs'
@@ -128,15 +128,15 @@
                   </span>
                 </div>
                 <div class="flex justify-between">
-                  <span class="font-medium">Priority:</span>
-                  <span class="bg-[#EAB30833] px-3 py-1 rounded-full text-[#FACC15]">{{ ticket?.priority || 'Medium' }}</span>
+                  <span class="font-medium">{{ t('ticketPriority') }}:</span>
+                  <span class="bg-[#EAB30833] px-3 py-1 rounded-full text-[#FACC15]">{{ ticket?.priority || t('ticketPriorityMedium') }}</span>
                 </div>
                 <div class="flex justify-between">
-                  <span class="font-medium">Created:</span>
+                  <span class="font-medium">{{ t('ticketCreated') }}:</span>
                   <span class="text-mainText">{{ formatCreatedDate(ticket?.created_at) }}</span>
                 </div>
                 <div class="flex justify-between">
-                  <span class="font-medium">Last Updated:</span>
+                  <span class="font-medium">{{ t('ticketUpdated') }}:</span>
                   <span class="text-mainText flex items-center gap-1">
                     <Icon name="lucide:clock" class="w-4 h-4 text-mainText/60" />
                     {{ formatUpdatedDate(ticket?.updated_at) }}
@@ -154,7 +154,7 @@
             >
               <div class="flex items-center gap-2 text-primary">
                 <Icon name="mdi:account-circle-outline" size="20" />
-                <h3 class="text-base text-mainText">User Details</h3>
+                <h3 class="text-base text-mainText">{{ t('ticketUserDetails') }}</h3>
               </div>
               <Icon
                 name="mdi:chevron-down"
@@ -166,8 +166,8 @@
 
             <transition name="fade">
               <div v-if="openSection === 'userDetails'" class="px-4 pb-4 text-sm text-onFooter space-y-2">
-                <div><strong>Name:</strong> {{ ticket?.name || '—' }}</div>
-                <div><strong>Email:</strong> {{ ticket?.email || '—' }}</div>
+                <div><strong>{{ t('ticketUserName') }}:</strong> {{ ticket?.name || '—' }}</div>
+                <div><strong>{{ t('ticketUserEmail') }}:</strong> {{ ticket?.email || '—' }}</div>
               </div>
             </transition>
           </div>
@@ -180,7 +180,7 @@
             >
               <div class="flex items-center gap-2 text-primary">
                 <Icon name="mdi:clipboard-list-outline" size="20" />
-                <h3 class="text-base text-mainText">Order Details</h3>
+                <h3 class="text-base text-mainText">{{ t('ticketOrderDetails') }}</h3>
               </div>
               <Icon
                 name="mdi:chevron-down"
@@ -192,8 +192,8 @@
 
             <transition name="fade">
               <div v-if="openSection === 'orderDetails'" class="px-4 pb-4 text-sm text-onFooter space-y-2">
-                <div><strong>Order ID:</strong> {{ ticket?.order_id || '—' }}</div>
-                <div><strong>Platform:</strong> {{ ticket?.platform || '—' }}</div>
+                <div><strong>{{ t('ticketOrderId') }}:</strong> {{ ticket?.order_id || '—' }}</div>
+                <div><strong>{{ t('ticketPlatform') }}:</strong> {{ ticket?.platform || '—' }}</div>
               </div>
             </transition>
           </div>
@@ -204,7 +204,7 @@
             class="w-full font-poppins bg-primary text-white px-4 py-3 rounded-full hover:bg-primary/90 transition"
             @click="makeResolved"
           >
-            Mark as Resolved
+            {{ t('ticketResolve') }}
           </AppButton>
         </div>
       </div>
@@ -219,6 +219,7 @@ import { useTicketStore } from '~/stores/ticketStore.js'
 import { useToast } from '#imports'
 
 const ticketStore = useTicketStore()
+const { t } = useI18n()
 const toast = useToast()
 const route = useRoute()
 const router = useRouter()
@@ -310,8 +311,8 @@ async function send() {
     // backend-level failure (reply limit etc.)
     if (!res.status) {
       toast.error({
-        title: 'Message not sent',
-        message: res.errors?.[0] || res.message || 'Something went wrong',
+        title: t('ticketToastSendFailTitle'),
+        message: res.errors?.[0] || res.message || t('ticketToastSendFail'),
         position: 'topCenter',
         duration: 3000,
       })
@@ -325,7 +326,7 @@ async function send() {
 
   } catch (error) {
     toast.error({
-      title: 'Error',
+      title: t('ticketToastError'),
       message: `Failed to send message: ${error.message || error}`,
       position: 'topCenter',
       duration: 3000,
@@ -342,11 +343,11 @@ async function makeResolved() {
   try {
     const res = await ticketStore.closeTicket(ticketUuid.value)
     if (res.status) {
-      toast.success({ title: 'Success', message: 'Ticket closed', position: 'topCenter', duration: 2500 })
+      toast.success({ title: t('ticketToastSuccess'), message: t('ticketToastClosed'), position: 'topCenter', duration: 2500 })
       ticketStore.ticketDetails.status = 'closed'
     }
   } catch {
-    toast.error({ title: 'Error', message: 'Failed to close ticket', position: 'topCenter', duration: 3000 })
+    toast.error({ title: t('ticketToastError'), message: t('ticketToastCloseFail'), position: 'topCenter', duration: 3000 })
   }
 }
 

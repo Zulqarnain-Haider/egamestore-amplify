@@ -5,64 +5,62 @@
       <!-- About -->
       <div class="space-y-3 sm:col-span-2 md:col-span-3 lg:col-span-1">
          <NuxtImg 
-         densities="x1" quality="80" format="webp" preload
+         densities="x1" quality="80" preload
           src="/games/Navbar-logo.svg.svg" alt="" class="h-[45px] w-auto mb-6 md:mb-4" />
         <p class="text-lg">
-          Step into the future of gaming with eGame Store. 
-          Explore top-tier reviews, news, and in-depth analysis on the latest and 
-          greatest games. Join the gaming community now to get exclusive content and features.
+          {{ t('footerAboutText') }}
         </p>
         <ul class="space-x-12 md:space-x-14 md:pl-8 px-4 flex">
         <li v-if="settings.facebook_link">
-          <a :href="settings.facebook_link" target="_blank"><Icon name="mdi:facebook" class="w-12 h-12 bg-blue-700 text-white"/></a></li>
+          <a :href="settings.facebook_link" target="_blank"><Icon name="mdi:facebook" class="w-8 h-8 sm:w-12 sm:h-12 bg-blue-700"/></a></li>
 
         <li v-if="settings.instagram_link">
-          <a :href="settings.instagram_link" target="_blank"><Icon name="mdi:instagram" class="w-12 h-12 bg-rose-700"/></a></li>
+          <a :href="settings.instagram_link" target="_blank"><Icon name="mdi:instagram" class="w-8 h-8 sm:w-12 sm:h-12 bg-rose-700"/></a></li>
 
         <li v-if="settings.youtube_link">
-          <a :href="settings.youtube_link" target="_blank"><Icon name="mdi:youtube" class="w-12 h-12 bg-red-700"/></a></li>
+          <a :href="settings.youtube_link" target="_blank"><Icon name="mdi:youtube" class="w-8 h-8 sm:w-12 sm:h-12 bg-red-700"/></a></li>
           
         <li v-if="settings.x_link">
-          <a :href="settings.x_link" target="_blank" class=""><Icon name="simple-icons:x" class="w-9 h-9 bg-white"/></a></li>
+          <a :href="settings.x_link" target="_blank" class=""><Icon name="simple-icons:x" class="w-8 h-8 sm:w-10 sm:h-10 bg-white"/></a></li>
         </ul>
       </div>
 
       <!-- Quick Links -->
       <div>
-        <h3 class="text-lg font-semibold text-outline mb-3">Quick Links</h3>
+        <h3 class="text-lg font-semibold text-outline mb-3">{{ t('footerQuickLinks') }}</h3>
         <ul class="space-y-3">
-        <li><NuxtLink to="/" class="hover:text-primary">Home</NuxtLink></li>
-        <li><NuxtLink to="/games?type=giftcards" class="hover:text-primary">Gift Cards</NuxtLink></li>
-        <li><NuxtLink to="/games?type=deals" class="hover:text-primary">Deals</NuxtLink></li>
-        <li><NuxtLink to="/news-blog" class="hover:text-primary">Blog</NuxtLink></li>
+        <li><NuxtLink to="/" class="hover:text-primary">{{ t('footerHome') }}</NuxtLink></li>
+        <li><NuxtLink to="/games?type=giftcards" class="hover:text-primary">{{ t('footerGiftCards') }}</NuxtLink></li>
+        <li><NuxtLink to="/games?type=deals" class="hover:text-primary">{{ t('footerDeals') }}</NuxtLink></li>
+        <li><NuxtLink to="/news-blog" class="hover:text-primary">{{ t('footerBlog') }}</NuxtLink></li>
         </ul>
       </div>
 
       <!-- Resources  -->
       <div>
-        <h3 class="text-lg font-semibold text-outline mb-3">Resources</h3>
+        <h3 class="text-lg font-semibold text-outline mb-3">{{ t('footerResources') }}</h3>
         <ul class="space-y-3">
-        <li><NuxtLink to="/games?type=latest" class="hover:text-primary">Trending Games</NuxtLink></li>
-        <li><NuxtLink to="/games?type=preorders" class="hover:text-primary">Upcoming Games</NuxtLink></li>
-        <li><NuxtLink to="/contact-us" class="hover:text-primary">Contact us</NuxtLink></li>
-        <li><NuxtLink to="/faq" class="hover:text-primary">FAQ</NuxtLink></li>
+        <li><NuxtLink to="/games?type=latest" class="hover:text-primary">{{ t('footerTrendingGames') }}</NuxtLink></li>
+        <li><NuxtLink to="/games?type=preorders" class="hover:text-primary">{{ t('footerUpcomingGames') }}</NuxtLink></li>
+        <li><NuxtLink to="/contact-us" class="hover:text-primary">{{ t('footerContact') }}</NuxtLink></li>
+        <li><NuxtLink to="/faq" class="hover:text-primary">{{ t('footerFaq') }}</NuxtLink></li>
         </ul>
       </div>
 
          <!-- Explore -->
       <div>
-        <h3 class="text-lg font-semibold text-outline mb-3">Explore</h3>
+        <h3 class="text-lg font-semibold text-outline mb-3">{{ t('footerExplore') }}</h3>
         <ul class="space-y-3">
-        <li><NuxtLink to="/category/50" class="hover:text-primary">PC Games</NuxtLink></li>
-        <li><NuxtLink to="/category/2" class="hover:text-primary">PlayStations</NuxtLink></li>
-        <li><NuxtLink to="/category/1" class="hover:text-primary">Nintendo</NuxtLink></li>
-        <li><NuxtLink to="/category/5" class="hover:text-primary">Xbox</NuxtLink></li>
+        <li><NuxtLink to="/category/50" class="hover:text-primary">{{ t('footerPcGames') }}</NuxtLink></li>
+        <li><NuxtLink to="/category/2" class="hover:text-primary">{{ t('footerPlaystation') }}</NuxtLink></li>
+        <li><NuxtLink to="/category/1" class="hover:text-primary">{{ t('footerNintendo') }}</NuxtLink></li>
+        <li><NuxtLink to="/category/5" class="hover:text-primary">{{ t('footerXbox') }}</NuxtLink></li>
         </ul>
       </div>
 
       <!-- Contact Us -->
       <div class="space-y-3">
-        <h3 class="text-lg font-semibold text-outline mb-3">Contact Us</h3>
+        <h3 class="text-lg font-semibold text-outline mb-3">{{ t('footerContactUs') }}</h3>
         <span v-if="settings.address" class="flex gap-1">
    <Icon name="heroicons-map-pin" class="w-8 h-10 text-white" />
           <p>{{ settings.address }}</p>
@@ -92,7 +90,7 @@
 
     <!-- Bottom -->
     <div class="text-center text-md text-onFooter mt-6 border-t border-outline pt-3">
-      © 2025 EGameStore.com — All Rights Reserved.
+      © {{ currentYear }} {{ t('footerCopyright') }}
     </div>
   </footer>
 </template>
@@ -104,6 +102,10 @@ import { ref, onMounted } from 'vue'
 
 const config = useRuntimeConfig()
 const settings = ref({})
+const { t } = useI18n()
+ 
+// Year for copyright
+const currentYear = new Date().getFullYear()
 
 //Fetch Footer API Data
 onMounted(async () => {

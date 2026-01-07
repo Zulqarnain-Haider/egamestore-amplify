@@ -1,25 +1,25 @@
 <template>
   <div class="min-h-screen text-mainText py-10 px-6 md:px-12">
     <div class="max-w-7xl mx-auto flex flex-col gap-10 font-poppins">
-      <h1 class="text-2xl font-semibold font-inter">New Ticket</h1>
+      <h1 class="text-2xl font-semibold font-inter">{{ t('ticketNewTitle') }}</h1>
 
       <div class="grid lg:grid-cols-2 gap-6">
         <!-- LEFT -->
         <div>
           <!-- Name -->
-          <label class="label">Name</label>
+          <label class="label">{{ t('ticketName') }}</label>
           <input v-model="form.name" class="input" placeholder="" />
           <p v-if="errors.name" class="text-error text-xs mt-1">{{ errors.name }}</p>
 
           <!-- Reason -->
-          <label class="label mt-4">Select Reason</label>
+          <label class="label mt-4">{{ t('ticketSelectReason') }}</label>
           <div class="relative">
             <div
               class="input flex justify-between items-center cursor-pointer select-none pr-10"
               @click="toggleDropdown"
             >
               <span class="truncate" :class="form.reason ? 'text-mainText' : 'text-onFooter/50'">
-                {{ form.reason?.name || 'Select' }}
+                {{ form.reason?.name || t('ticketSelect') }}
               </span>
               <Icon
                 name="heroicons:chevron-down"
@@ -56,7 +56,7 @@
           <p v-if="errors.reason" class="text-error text-xs mt-1">{{ errors.reason }}</p>
           <!-- Order Dropdown (Logged-in) -->
           <div v-if="requiresOrder && isLoggedIn" class="mt-4">
-            <label class="label">Select Order</label>
+            <label class="label">{{ t('ticketSelectOrder') }}</label>
           
             <div class="relative">
               <div
@@ -67,7 +67,7 @@
                   class="truncate"
                   :class="selectedOrder ? 'text-mainText' : 'text-onFooter/50'"
                 >
-                  {{ selectedOrder?.name || 'Select order' }}
+                  {{ selectedOrder?.name || t('ticketSelectOrderPlaceholder')  }}
                 </span>
           
                 <Icon
@@ -105,23 +105,23 @@
 
           <!-- Order Input (Guest) -->
           <div v-if="requiresOrder && !isLoggedIn" class="mt-4">
-            <label class="label">Order Number</label>
+            <label class="label">{{ t('ticketOrderNumber') }}</label>
             <input
               v-model="form.orderId"
               class="input"
-              placeholder="Enter order number"
+              :placeholder="t('ticketOrderNumberPlaceholder')"
             />
           </div>
           <p v-if="errors.orderId" class="text-error text-xs mt-1">
             {{ errors.orderId }}
           </p>
           <!-- Subject -->
-          <label class="label mt-4">Subject</label>
+          <label class="label mt-4">{{ t('ticketSubject') }}</label>
           <input v-model="form.subject" class="input" placeholder="" />
           <p v-if="errors.subject" class="text-error text-xs mt-1">{{ errors.subject }}</p>
 
           <!-- Attachment -->
-          <label class="label mt-4">Attachment</label>
+          <label class="label mt-4">{{ t('ticketAttachment') }}</label>
           <div class="flex items-center gap-3">
             <div
               @click="triggerFile"
@@ -135,8 +135,8 @@
               </button>
               <span v-if="fileName">{{ fileName }}</span>
               <span v-else class="text-onFooter">
-                <span @click.stop="triggerFile" class="text-primary cursor-pointer">Click here</span>
-                to upload or drop files here
+                <span @click.stop="triggerFile" class="text-primary cursor-pointer">{{ t('ticketUploadClick') }}</span>
+                {{ t('ticketUploadText') }}
               </span>
             </div>
             <input ref="fileInput" type="file" class="hidden" @change="onFileChange" multiple />
@@ -145,16 +145,16 @@
 
         <!-- RIGHT -->
         <div>
-          <label class="label">Email Address</label>
-          <input v-model="form.email" class="input" placeholder="Enter your email" />
+          <label class="label">{{ t('ticketEmail') }}</label>
+          <input v-model="form.email" class="input" :placeholder="t('ticketEmailPlaceholder')" />
           <p v-if="errors.email" class="text-error text-xs mt-1">{{ errors.email }}</p>
 
-          <label class="label mt-4">Message</label>
+          <label class="label mt-4">{{ t('ticketMessage') }}</label>
           <textarea
             v-model="form.message"
             rows="8"
             class="input resize-none"
-            placeholder="Describe your issue..."
+            :placeholder="t('ticketMessagePlaceholder')"
           ></textarea>
           <p v-if="errors.message" class="text-error text-xs mt-1">{{ errors.message }}</p>
         </div>
@@ -166,30 +166,30 @@
           @click="submitTicket"
           class="bg-primary text-white px-10 py-3 rounded-full hover:opacity-90 transition"
         >
-          Send Message
+          {{ t('ticketSendMessage') }}
         </button>
       </div>
 
       <!-- Guest Note -->
       <p v-if="!isLoggedIn" class="text-center text-onFooter mt-2 underline cursor-pointer font-poppins">
-        Don't have an account?
-        <NuxtLink to="/auth/signup" class="text-primary">Signup</NuxtLink>
+        {{ t('ticketNoAccount') }}
+        <NuxtLink to="/auth/signup" class="text-primary">{{ t('ticketSignup') }}</NuxtLink>
       </p>
 
       <!-- Previous Tickets -->
       <section v-if="ticketStore.tickets.length" class="mt-10 bg-bgDark border border-onMainText rounded-xl py-4 font-poppins px-0">
         <h3 class="text-lg font-semibold mb-4 px-4 pb-4 border-b border-onMainText">
-          Previous Tickets
+          {{ t('ticketPrevious') }}
         </h3>
 
         <div class="overflow-x-auto">
           <table class="w-full text-sm">
             <thead class="px-4">
               <tr class="text-onFooter">
-                <th class="text-left pb-3 px-4">Ticket</th>
-                <th class="text-left pb-3 px-4">Order</th>
-                <th class="text-left pb-3 px-4">Created At</th>
-                <th class="text-left pb-3 px-4">Status</th>
+                <th class="text-left pb-3 px-4">{{ t('ticketTableTicket') }}</th>
+                <th class="text-left pb-3 px-4">{{ t('ticketTableOrder') }}</th>
+                <th class="text-left pb-3 px-4">{{ t('ticketTableCreated') }}</th>
+                <th class="text-left pb-3 px-4">{{ t('ticketTableStatus') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -221,12 +221,13 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useTicketStore } from '~/stores/ticketStore.js'
 import { useUserStore } from '~/stores/userStore.js'
 import { useRouter } from 'vue-router'
 import { useToast } from '#imports'
 
+const { t, locale } = useI18n()
 const ticketStore = useTicketStore()
 const userStore = useUserStore()
 const router = useRouter()
@@ -285,11 +286,11 @@ async function fetchReasons() {
       reasons.value = response.data
     } else {
       reasonsError.value = true
-      toast.error({ title: 'Error', message: 'Failed to load ticket reasons', position: 'topCenter', duration: 3000 })
+      toast.error({ title: t('ticketToastError'), message: t('ticketToastLoadReasonsFail'), position: 'topCenter', duration: 3000 })
     }
   } catch (err) {
     reasonsError.value = true
-    toast.error({ title: 'Connection Error', message: 'Unable to load reasons. Please refresh.', position: 'topCenter', duration: 4000 })
+    toast.error({ title: t('ticketToastConnectionError'), message: t('ticketToastLoadReasonsRetry'), position: 'topCenter', duration: 4000 })
   } finally {
     loadingReasons.value = false
   }
@@ -305,7 +306,7 @@ async function fetchOrders() {
       {
         headers: {
           Authorization: `Bearer ${userStore.token}`,
-          'Accept-language': 'en',
+          'lang': locale.value,
         },
       }
     )
@@ -315,16 +316,16 @@ async function fetchOrders() {
       ordersFetched.value = true
     } else {
       toast.error({
-        title: 'Error',
-        message: 'Failed to load orders',
+        title: t('ticketToastError'),
+        message: t('ticketToastLoadOrdersFail'),
         position: 'topCenter',
         duration: 3000,
       })
     }
   } catch (err) {
     toast.error({
-      title: 'Connection Error',
-      message: 'Unable to load orders',
+      title: t('ticketToastConnectionError'),
+      message: t('ticketToastLoadOrdersRetry'),
       position: 'topCenter',
       duration: 3000,
     })
@@ -386,7 +387,7 @@ function onFileChange(e) {
     form.value.attachments.push({ file: f, name: f.name, size: f.size })
   })
   fileName.value = form.value.attachments.map(f => f.name).join(', ')
-  toast.success({ title: 'File Attached', message: fileName.value, position: 'topCenter', duration: 2000 })
+  toast.success({ title: t('ticketToastFileAttached'), message: fileName.value, position: 'topCenter', duration: 2000 })
 }
 
 function formatDate(dt) {
@@ -395,13 +396,13 @@ function formatDate(dt) {
 
 function validateForm() {
   errors.value = {}
-  if (!form.value.name) errors.value.name = 'Name is required.'
-  if (!form.value.email) errors.value.email = 'Email is required.'
-  if (!form.value.reason) errors.value.reason = 'Please select a reason.'
-  if (!form.value.subject) errors.value.subject = 'Subject is required.'
-  if (!form.value.message) errors.value.message = 'Message cannot be empty.'
+  if (!form.value.name) errors.value.name = t('ticketErrorName')
+  if (!form.value.email) errors.value.email = t('ticketErrorEmail')
+  if (!form.value.reason) errors.value.reason = t('ticketErrorReason')
+  if (!form.value.subject) errors.value.subject = t('ticketErrorSubject')
+  if (!form.value.message) errors.value.message = t('ticketErrorMessage')
   if (requiresOrder.value && !form.value.orderId) {
-     errors.value.orderId = 'Order is required for this reason.'
+     errors.value.orderId = t('ticketErrorOrder')
    }
   return Object.keys(errors.value).length === 0
 }
@@ -420,18 +421,18 @@ async function submitTicket() {
     }
     const response = await ticketStore.createTicket(payload)
     if (response.status) {
-      toast.success({ title: 'Success', message: 'Ticket created successfully', position: 'topCenter', duration: 2500 })
+      toast.success({ title: t('ticketToastSuccess'), message: t('ticketToastCreated'), position: 'topCenter', duration: 2500 })
       router.push({ path: '/contact-us/chat', query: { uuid: response.data.uuid } })
     } else throw new Error(response.message || 'Failed to create ticket')
   } catch (err) {
-    toast.error({ title: 'Error', message: err.message, position: 'topCenter', duration: 3000 })
+    toast.error({ title: t('ticketToastError'), message: err.message, position: 'topCenter', duration: 3000 })
   }
 }
 
 function openConversation(uuid) {
   const ticket = ticketStore.getTicketById(uuid)
   if (!ticket || ticket.status === 'closed') {
-    toast.error({ title: 'Ticket Closed', message: 'This ticket is closed and cannot be reopened', position: 'topCenter', duration: 3000 })
+    toast.error({ title: t('ticketToastClosedTitle'), message: t('ticketToastClosedMsg'), position: 'topCenter', duration: 3000 })
     return
   }
   router.push({ path: '/contact-us/chat', query: { uuid: uuid } })

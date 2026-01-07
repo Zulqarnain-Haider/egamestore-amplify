@@ -8,14 +8,14 @@
         :class="{ 'border border-outline text-white': activeType === 'blog' }"
         @click="switchType('blog')"
       >
-        Blogs
+        {{ t('Blogs') }}
       </AppButton>
       <AppButton
         :variant="activeType === 'news' ? 'primary' : 'outline'"
         class="px-16 py-3 text-sm rounded-xl transition-all duration-300"
         @click="switchType('news')"
       >
-        News
+        {{ t('News') }}
       </AppButton>
     </section>
 
@@ -97,13 +97,13 @@
         @click="loadBlogs"
         :disabled="pending"
       >
-        Load More Articles
+        {{ t('loadMoreArticles') }}
       </AppButton>
     </div>
 
     <!-- Loading / Error / Empty -->
     <div v-if="pending && blogs.length" class="text-center text-gray-400 py-16">
-      Loading blogs...
+      {{ t('loadingBlogs') }}
     </div>
     <div v-else-if="error" class="text-center text-red-400 py-16">
       Failed to load blogs.
@@ -112,13 +112,16 @@
       v-else-if="!blogs.length && !pending"
       class="text-center text-gray-400 py-16"
     >
-      No posts found for this category.
+      {{ t('noPostsFound') }}
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+
+// usei!8n
+const { t } = useI18n()
 
 /* =======================
    SEO + META + OG TAGS

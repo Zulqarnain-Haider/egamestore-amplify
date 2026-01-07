@@ -3,13 +3,13 @@
 
     <!-- ===== Header (Filters + Clear) ===== -->
     <div class="flex justify-between items-center mb-5">
-      <h3 class="text-xl ">Filters</h3>
+      <h3 class="text-xl">{{ t('filters') }}</h3>
 
       <button
         @click="clearFilters"
         class="text-md px-5 py-2 rounded-full border border-onOutline text-mainText hover:bg-outline hover:text-white hover:border-primary"
       >
-        Clear All
+        {{ t('clearAll') }}
       </button>
     </div>
 
@@ -23,7 +23,7 @@
         <div class="flex justify-between items-center mb-3 cursor-pointer select-none"
          @click="toggleSection('genre')"
         >
-          <h4 class="text-lg font-medium">Genre</h4>
+          <h4 class="text-lg font-medium">{{ t('genre') }}</h4>
           <Icon name="mdi:chevron-up"
            class="w-9 h-9 text-mainText transition-transform duration-300"
           :class="{ 'rotate-180': !openSections.genre }"
@@ -46,7 +46,7 @@
               class="accent-primary cursor-pointer appearance-none w-4 h-4 bg-mainText checked:bg-primary checked:before:content-['✓']
                checked:before:text-white checked:before:text-xs checked:before:flex checked:before:items-center checked:before:justify-center"
             />
-            <span class="text-md">All Genres</span>
+            <span class="text-md">{{ t('allGenres') }}</span>
           </label>
           <span class="text-md text-mainText">({{ totalCount }})</span>
         </div>
@@ -80,7 +80,7 @@
         <div class="flex justify-between items-center mb-3 cursor-pointer select-none"
         @click="toggleSection('price')"
        >
-          <h4 class="text-lg font-medium">Price</h4>
+          <h4 class="text-lg font-medium">{{ t('price') }}</h4>
           <Icon name="mdi:chevron-up" 
           class="text-mainText w-9 h-9 transition-transform duration-300"
          :class="{ 'rotate-180': !openSections.price }"
@@ -127,7 +127,9 @@
 </template>
 
 <script setup>
-import { ref, watch, computed, onMounted, onBeforeUnmount } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
+
+const { t } = useI18n()
 
 /* -------------------- Props & Emits -------------------- */
 const props = defineProps({

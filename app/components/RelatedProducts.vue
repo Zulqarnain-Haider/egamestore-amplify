@@ -1,7 +1,7 @@
 <template>
   <section class="p-2 md:p-0 text-white">
     <h2 class="text-xl md:text-2xl font-semibold mb-4">
-      Related Items
+     {{ t('relatedItemsTitle')}}
     </h2>
 
     <!-- Skeleton Loader (Instagram-like) -->
@@ -39,12 +39,13 @@
       v-else
       class="text-onMainText text-sm"
     >
-      No related products found.
+      {{ t('relatedItemsEmpty') }}
     </p>
   </section>
 </template>
 
 <script setup>
+const { t } = useI18n()
 
 defineProps({
   products: {

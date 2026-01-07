@@ -34,10 +34,10 @@
 
       <!-- Heading -->
       <h2 class="text-2xl md:text-3xl font-semibold text-left mb-2">
-        Set New Password
+        {{ t('resetPasswordTitle') }}
       </h2>
       <p class="text-inputsIn text-sm pr-6 text-left mb-6 md:mb-12">
-        Enter your new password to complete the reset process
+        {{ t('resetPasswordSubtitle') }}
       </p>
 
       <!-- New Password -->
@@ -50,11 +50,11 @@
           loading="lazy"
           class="absolute left-3 top-11 -translate-y-1/2 text-inputsIn"
         />
-        <label class="block mb-1 text-sm text-inputsIn">New Password</label>
+        <label class="block mb-1 text-sm text-inputsIn">{{ t('newPasswordLabel') }}</label>
         <input
-          :type="showNewPassword ? 'text' : 'password'"
           v-model="newPassword"
-          placeholder="New Password"
+          :type="showNewPassword ? 'text' : 'password'"
+          :placeholder="t('newPasswordPlaceholder')"
           class="w-full bg-bgDark rounded-md py-2 pl-10 pr-10
                  outline outline-1 outline-mainText/80 focus:outline-none
                  text-inputsIn placeholder:text-inputsIn
@@ -78,11 +78,11 @@
           loading="lazy"
           class="absolute left-3 top-11 -translate-y-1/2 text-inputsIn"
         />
-        <label class="block mb-1 text-sm text-inputsIn">Confirm New Password</label>
+        <label class="block mb-1 text-sm text-inputsIn">{{ t('confirmNewPasswordLabel') }}</label>
         <input
-          :type="showConfirmPassword ? 'text' : 'password'"
           v-model="confirmPassword"
-          placeholder="Confirm New Password"
+          :type="showConfirmPassword ? 'text' : 'password'"
+          :placeholder="t('confirmNewPasswordPlaceholder')"
           class="w-full bg-bgDark rounded-md py-2 pl-10 pr-10
                  outline outline-1 outline-mainText/80
                  focus:outline-none text-inputsIn
@@ -109,13 +109,13 @@
         :disabled="loading"
         @click="saveNewPassword"
       >
-        {{ loading ? 'Saving...' : 'Save New Password' }}
+        {{ loading ? t('saving') : t('saveNewPassword') }}
       </AppLink>
 
       <p class="text-mainText text-center text-md mt-4 md:mt-7 whitespace-nowrap">
-        Remember old password?
+        {{ t('rememberOldPassword') }}
         <NuxtLink to="/auth/login" class="text-primary hover:underline">
-          Sign in
+          {{ t('signInLink') }}
         </NuxtLink>
       </p>
     </div>
@@ -134,6 +134,7 @@ useHead({
 })
 
 const config = useRuntimeConfig()
+const { t } = useI18n()
 
 const newPassword = ref('')
 const confirmPassword = ref('')
@@ -146,18 +147,18 @@ const saveNewPassword = async () => {
   error.value = ''
 
   if (!newPassword.value || !confirmPassword.value) {
-    error.value = 'Please fill in both fields.'
+    error.value = t('errorFieldsRequired')
     return
   }
 
   if (newPassword.value !== confirmPassword.value) {
-    error.value = 'Passwords do not match.'
+    error.value = t('errorPasswordMismatch')
     return
   }
 
   const resetCode = localStorage.getItem('resetCode')
   if (!resetCode) {
-    error.value = 'Session expired. Restart reset process.'
+    error.value = t('errorSessionExpired')
     return
   }
 
@@ -181,7 +182,7 @@ const saveNewPassword = async () => {
       error.value = res.message
     }
   } catch {
-    error.value = 'Something went wrong.'
+    error.value = t('errorSomethingWrong')
   }
 
   loading.value = false

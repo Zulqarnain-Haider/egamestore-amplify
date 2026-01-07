@@ -20,12 +20,12 @@
       <div class="w-full lg:w-1/2 md:text-center lg:text-left order-2 lg:order-1 px-2 md:px-3 lg:px-0">
         <h1
           class="text-3xl sm:text-4xl lg:text-4xl font-bold font-poppins leading-tight mb-4 whitespace-nowrap text-primary">
-          Your Next Game Is <br />
-          <span class="text-mainText">Just One Click Away.</span>
+          {{ t('heroTitleOne') }} <br />
+          <span class="text-mainText">{{ t('heroTitleTwo') }}</span>
         </h1>
 
         <p class="text-mainText font-poppins text-base sm:text-lg max-w-xl mx-auto lg:mx-0 mb-6">
-          Get instant CDKeys for less — play in seconds.
+          {{ t('heroSubtitle') }}
         </p>
 
         <div class="flex flex-wrap justify-center lg:justify-start gap-3">
@@ -35,7 +35,7 @@
             :width="0" 
             :height="48"
             extraClass="px-6 md:px-7 py-3 text-xs font-poppins rounded-2xl shadow-lg shadow-primary/40 hover:shadow-primary/60 transition-all duration-300">
-            Browse Deals
+            {{ t('browseDeals') }}
           </AppButton>
           <AppButton 
             to="/games?type=latest" 
@@ -43,7 +43,7 @@
             :width="0" 
             :height="48"
             extraClass="px-6 md:px-7 py-3 text-xs font-poppins border-[2.5px] sm:border-[3px] rounded-2xl">
-            View Games
+            {{ t('viewGames') }}
           </AppButton>
         </div>
       </div>
@@ -53,7 +53,7 @@
         <!-- Heading -->
         <h2
           class="hidden sm:block sm:text-2xl lg:text-xl whitespace-nowrap font-poppins font-semibold mb-3 text-center lg:text-left lg:pr-10">
-          The Most <span class="text-primary">Popular</span> Games
+          {{ t('theMost') }}<span class="text-primary">{{ t('popular') }}</span> {{ t('games') }}
         </h2>
 
         <!-- Grid -->
@@ -104,6 +104,8 @@
 </template>
 
 <script setup>
+const { t } = useI18n()
+
 const thumbnails = [
   { title: '', image: '/games/Hero.Thumbnail.2.png' },
   { title: '', image: '/games/Hero.Thumbnail.3.png' },

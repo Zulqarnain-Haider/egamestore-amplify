@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="userStore.currentUser && userStore.isActivated"
+    v-if="auth.user && auth.isActivated"
     class="min-h-screen font-poppins text-mainText flex flex-col items-center py-10 animate-fadeIn"
   >
     <!-- Profile Card -->
@@ -39,14 +39,14 @@
       <!-- User Info -->
       <div class="flex flex-col">
         <h2 class="text-2xl font-semibold text-mainText">
-          {{ user.fullName || 'Guest User' }}
+          {{ user.fullName || t('profileGuestUser') }}
         </h2>
-        <p class="text-onMainText text-sm">{{ user.username || '@Guest' }}</p>
+        <p class="text-onMainText text-sm">{{ user.username || t('profileGuestUsername') }}</p>
         <div class="flex items-center gap-2 mt-1 text-sm text-onMainText">
           <Icon name="mdi:star" class="text-secondary" />
-          <span class="text-mainText">Level 47 Gamer</span>
+          <span class="text-mainText">{{ t('profileLevel', { level: 47 }) }}</span>
           <span>•</span>
-          <span>Member since {{ user.memberSince || '2024' }}</span>
+          <span>{{ t('profileMemberSince', { year: user.memberSince || '2026' }) }}</span>
         </div>
       </div>
     </div>
@@ -60,7 +60,7 @@
         :height="44"
         extraClass="px-3 py-2 text-sm sm:text-base rounded-lg"
       >
-        Save Changes
+        {{ t('profileSaveChanges') }}
       </AppButton>
     </div>
 
@@ -69,7 +69,7 @@
       <div class="flex items-center gap-2 mb-4">
         <Icon name="mdi-account" class="w-7 h-7 text-primary" />
         <h3 class="text-lg font-semibold text-mainText">
-          Personal Information
+          {{ t('profilePersonalInfo') }}
         </h3>
       </div>
 
@@ -77,17 +77,17 @@
         <!-- Left -->
         <div class="flex flex-col gap-6">
           <div>
-            <label class="block text-sm text-onMainText mb-1">Full Name</label>
+            <label class="block text-sm text-onMainText mb-1">{{ t('profileFullName') }}</label>
             <input
               v-model="user.fullName"
               type="text"
-              placeholder="Enter your full name"
+              :placeholder="t('profileFullNamePlaceholder')"
               class="w-full bg-bgDark text-mainText px-4 py-3 rounded-lg outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
 
           <div>
-            <label class="block text-sm text-onMainText mb-1">Email</label>
+            <label class="block text-sm text-onMainText mb-1">{{ t('profileEmail') }}</label>
             <input
               v-model="user.email"
               type="email"
@@ -97,12 +97,12 @@
           </div>
 
           <div>
-            <label class="block text-sm text-onMainText mb-1">Bio</label>
+            <label class="block text-sm text-onMainText mb-1">{{ t('profileBio') }}</label>
             <textarea
               v-model="user.bio"
               rows="4"
               class="w-full bg-bgDark text-mainText px-4 py-3 rounded-lg outline-none resize-none focus:ring-2 focus:ring-primary"
-              placeholder="Tell us about yourself..."
+              :placeholder="t('profileBioPlaceholder')"
             />
           </div>
         </div>
@@ -110,17 +110,17 @@
         <!-- Right -->
         <div class="flex flex-col gap-6">
           <div>
-            <label class="block text-sm text-onMainText mb-1">Username</label>
+            <label class="block text-sm text-onMainText mb-1">{{ t('profileUsername') }}</label>
             <input
               v-model="user.username"
               type="text"
-              placeholder="Enter your username"
+              :placeholder="t('profileUsernamePlaceholder')"
               class="w-full bg-bgDark text-mainText px-4 py-3 rounded-lg outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
 
           <div>
-            <label class="block text-sm text-onMainText mb-1">Phone</label>
+            <label class="block text-sm text-onMainText mb-1">{{ t('profilePhone') }}</label>
             <input
               v-model="user.phone"
               type="text"
@@ -129,7 +129,7 @@
           </div>
 
           <div class="relative">
-            <label class="block text-sm text-onMainText mb-1">Password</label>
+            <label class="block text-sm text-onMainText mb-1">{{ t('profilePassword') }}</label>
             <input
               type="password"
               value="***********"
@@ -140,7 +140,7 @@
               class="absolute right-3 top-9 text-primary underline text-sm"
               @click="showPasswordModal = true"
             >
-              change
+              {{ t('profileChange') }}
             </button>
           </div>
 
@@ -156,7 +156,7 @@
 
           <div>
             <label class="block text-sm text-onMainText mb-1">
-              Birthday date
+              {{ t('profileBirthday') }}
             </label>
             <input
               v-model="user.dob"
@@ -187,10 +187,10 @@
         class="w-20 h-20 mx-auto mb-6 opacity-90"
       />
       <h2 class="text-2xl font-semibold mb-3 text-white">
-        You’re not logged in
+        {{ t('profileNotLoggedInTitle') }}
       </h2>
       <p class="text-onMainText mb-8">
-        Please log in to access your profile and manage your account settings.
+        {{ t('profileNotLoggedInDesc') }}
       </p>
 
       <NuxtLink
@@ -198,7 +198,7 @@
         replace
         class="inline-block bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg font-medium transition transform hover:scale-[1.03] shadow-md"
       >
-        Go to Login
+        {{ t('profileGoToLogin') }}
       </NuxtLink>
     </div>
   </div>
@@ -206,13 +206,16 @@
 
 <script setup>
 import { ref, reactive, watch } from 'vue'
-import { useUserStore } from '~/stores/userStore'
+import { useAuth } from '~/composables/useAuth'
+import { useUser } from '~/composables/useUser'
 import { useToast, useHead } from '#imports'
 
 definePageMeta({ middleware: 'profile-guard' })
 
 const toast = useToast()
-const userStore = useUserStore()
+const auth = useAuth()
+const userComposable = useUser()
+const { t } = useI18n()
 
 const showPasswordModal = ref(false)
 const showSuccessModal = ref(false)
@@ -231,7 +234,7 @@ const user = reactive({
 const previewImage = ref('/games/ProfileAvatar.png')
 
 watch(
-  () => userStore.currentUser,
+  () => auth.user.value,
   (u) => {
     if (!u) return
     Object.assign(user, u)
@@ -241,19 +244,19 @@ watch(
 )
 
 const saveChanges = async () => {
-  const res = await userStore.updateProfile({
+  const res = await userComposable.updateProfile({
     email: user.email,
     phone: user.phone,
     dob: user.dob,
   })
 
   if (!res.success) {
-    toast.error(res.message || 'Failed to update profile')
+    toast.error(res.message || t('profileUpdateFailed'))
     return
   }
 
   showSuccessModal.value = true
-  toast.success('Profile updated successfully')
+  toast.success(t('profileUpdateSuccess'))
 }
 
 const fileInput = ref(null)

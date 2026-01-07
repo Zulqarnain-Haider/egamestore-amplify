@@ -26,7 +26,7 @@
       <!-- Heading -->
       <div class="relative z-10 flex flex-col items-center py-16 sm:py-20 text-center">
         <h2 class="text-2xl md:text-4xl font-extrabold mb-10 font-poppins uppercase tracking-wide">
-          <span class="text-primary">Join </span> the Big Tournament
+          <span class="text-primary">{{ t('join') }}</span> {{ t('theBigTournament') }}
         </h2>
       </div>
 
@@ -84,18 +84,18 @@
            transition-all duration-500 scale-50 sm:scale-50 md:scale-50 lg:scale-75 xl:scale-90">
           <h3 class="font-poppins font-extrabold mb-3 sm:mb-4 md:mb-5 text-white 
              text-[1.2rem] sm:text-[1.6rem] md:text-[2rem] lg:text-[2.4rem] leading-tight">
-            Ready for <span class="text-primary">Battle</span>?
+            {{ t('readyFor') }}<span class="text-primary">{{ t('battles') }}</span>?
           </h3>
           <!-- Pyramid Style Text -->
           <div class="flex flex-col items-center  text-white font-poppins leading-relaxed space-y-1">
             <p class="text-[0.95rem] sm:text-[1rem] md:text-[1.1rem] max-w-sm sm:max-w-sm md:max-w-md mx-auto">
-              Dive into thrilling esports tournaments, global
+              {{ t('tournamentDescLine1') }}
             </p>
             <p class="text-[0.9rem] sm:text-[0.95rem] md:text-[1rem] max-w-sm sm:max-w-sm mx-auto opacity-90">
-              Global gaming events, and epic community
+              {{ t('tournamentDescLine2') }}
             </p>
             <p class="text-[0.85rem] sm:text-[0.9rem] md:text-[0.95rem] max-w-[70%] mx-auto opacity-80">
-              challenges. Victory awaits.
+              {{ t('tournamentDescLine3') }}
             </p>
           </div>
 
@@ -103,7 +103,7 @@
           <AppButton variant="primary" :width="0" :height="42" extraClass="px-5 sm:px-7 md:px-8 py-2 mt-2 text-[0.8rem] sm:text-[0.9rem] md:text-[1rem] lg:text-[1.1rem]
                  font-poppins rounded-3xl shadow-lg shadow-primary/40 hover:shadow-primary/60 
                  transition-all duration-300">
-            Join Now
+            {{ t('joinNow') }}
           </AppButton>
         </div>
       </div>
@@ -115,6 +115,8 @@
 <script setup lang="ts">
 import { Swiper, SwiperSlide } from "swiper/vue"
 import { Autoplay, Navigation } from "swiper/modules"
+
+const { t } = useI18n()
 
 const games = [
   { title: "League of Legends", image: "/games/TournamentCard.1.png", button: "Buy Now" },
