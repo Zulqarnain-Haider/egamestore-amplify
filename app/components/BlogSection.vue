@@ -118,17 +118,6 @@ const { t } = useI18n()
 // --------------------------------------
 const config = useRuntimeConfig()
 
-// --------------------------------------
-// Local fallback (your existing static blogs)
-// --------------------------------------
-// const fallbackBlogs = [
-//   { image: '/games/BlogPoster1.png', title: 'FC25 Prepares for October 2024 Release with Enhanced', category: 'Realism' },
-//   { image: '/games/BlogPoster2.png', title: 'FC25 Prepares for October 2024', category: 'Release with Enhanced Realism' },
-//   { image: '/games/BlogPoster3.png', title: 'Marvel’s Wolverine Set for an Epic', category: '2025 Launch on PS5' },
-//   { image: '/games/BlogPoster4.png', title: 'The Witcher 4 Expected to Bring Back', category: 'Fan-Favorite Characters' },
-//   { image: '/games/BlogPoster5.png', title: 'Star Wars Outlaws Combines Open', category: '-World Action and Storytelling' },
-// ]
-
 const allBlogs = ref([])
 const activeIndex = ref(0)
 const mobileScroll = ref(null)

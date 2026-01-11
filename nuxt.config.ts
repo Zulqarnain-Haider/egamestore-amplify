@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   ssr: true,
 
-  devtools: { enabled: true },
+  devtools: { enabled: process.env.NODE_ENV !== 'production' },
 
   css: [
     "~/assets/css/tailwind.css",
@@ -12,11 +12,8 @@ export default defineNuxtConfig({
   ],
 
   modules: [
-    "@nuxt/scripts",
     "@nuxt/icon",
     "@nuxt/image",
-    "@nuxt/fonts",
-    "@nuxt/eslint",
     "@nuxt/content",
     "@pinia/nuxt",
     "@nuxtjs/google-fonts",

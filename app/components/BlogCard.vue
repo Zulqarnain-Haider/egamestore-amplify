@@ -59,7 +59,7 @@
 import { computed } from 'vue'
 
 const props = defineProps({
-  id: { type: [Number, String], required: true }, // ✅ added
+  id: { type: [Number, String], required: true },
   image: String,
   tag: { type: String, default: 'General' },
   title: String,
@@ -70,7 +70,7 @@ const props = defineProps({
   slug: String
 })
 
-/* ✅ FINAL URL LOGIC */
+/* FINAL URL LOGIC */
 const postUrl = computed(() => {
   return props.slug
     ? `/news-blog/${props.id}/${props.slug}`

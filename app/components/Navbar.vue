@@ -311,9 +311,8 @@ const selectLang = async (code) => {
   // Update cookie
   langCookie.value = normalized
   
-  // Update HTML direction for RTL/LTR
+  // Update HTML for RTL/LTR
   if (process.client) {
-    document.documentElement.dir = normalized === 'ar' ? 'rtl' : 'ltr'
     document.documentElement.lang = normalized
   }
   

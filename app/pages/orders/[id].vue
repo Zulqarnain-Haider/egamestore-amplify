@@ -17,7 +17,7 @@
         <div class="flex justify-between items-center flex-wrap gap-3">
           <h2 class="text-lg text-primary">{{ t('orderSummaryTitle') }}</h2>
 
-          <!-- ✅ Beautiful status badge for ALL states -->
+          <!-- Beautiful status badge for ALL states -->
           <button
             class="px-4 py-2 rounded-xl text-md font-medium"
             :class="{
@@ -59,7 +59,7 @@
             </div>
             <div>
               <p class="text-onMainText text-sm whitespace-nowrap">{{ t('orderPaymentMethod') }}</p>
-              <!-- ✅ API driven -->
+              <!-- API driven -->
               <p class="whitespace-nowrap">
                 {{ order.payment_method || 'N/A' }}
               </p>
@@ -112,7 +112,7 @@
       <!-- Main Grid -->
       <div v-if="order" class="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-8">
 
-        <!-- ✅ ORDER ITEMS (correct source) -->
+        <!-- ORDER ITEMS (correct source) -->
         <div v-if="order.items?.length" class="space-y-5">
           <h3 class="text-lg text-primary">{{ t('orderItemsTitle') }}</h3>
 
@@ -145,7 +145,7 @@
           </div>
         </div>
 
-        <!-- ✅ Order Progress ONLY if tracking exists -->
+        <!-- Order Progress ONLY if tracking exists -->
         <div class="hidden lg:block">
           <OrderProgress
             v-if="order.tracking_data && order.tracking_data.length > 0"
