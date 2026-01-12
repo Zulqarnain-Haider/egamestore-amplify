@@ -10,28 +10,28 @@
       <LazyTrendingGames class="mt-16 pr-2 sm:pr-3 lg:pr-9" />
     </div>
 
-    <main class="mt-12">
+    <div class="mt-12">
       <LazyTournamentsGame />
-    </main>
+    </div>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0 mt-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0 mt-6">
       <!--Lazy load - Best Sellers -->
       <LazyBestsellersSection class="mt-16 pr-2 sm:pr-3 lg:pr-9" />
 
       <!--Lazy load - Upcoming Games -->
       <LazyUpComingGames class="mt-16 pr-2 sm:pr-3 lg:pr-9" />
-    </main>
+    </div>
 
     <!--Lazy load - Hero Section 2 -->
     <LazyHeroSection2 class="mt-14" />
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0 mt-0">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0 mt-0">
       <!--Lazy load - Customer Reviews -->
       <LazyCustomerReviews class="mt-10" />
 
       <!--Lazy load - Blog Section -->
       <LazyBlogSection class="mt-16 mb-16" />
-    </main>
+    </div>
   </main>
 </template>
 

@@ -235,9 +235,9 @@ const links = [
   { key: 'xbox', path: `/category/${categoryMap.xbox}` },
   { key: 'playstation', path: `/category/${categoryMap.playstation}` },
   { key: 'nintendo', path: `/category/${categoryMap.nintendo}` },
-  { key: 'gift-cards', path: '/games?type=giftcards' },
+  // { key: 'gift-cards', path: '/games?type=giftcards' },
   { key: 'deals', path: '/games?type=deals' },
-  { key: 'pre-orders', path: '/games?type=preorders' },
+  // { key: 'pre-orders', path: '/games?type=preorders' },
   { key: 'news-blog', path: '/news-blog' }
 ]
 
