@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { useRuntimeConfig } from '#imports'
 
 export const useCountriesStore = defineStore('countries', {
   state: () => ({
@@ -8,12 +9,21 @@ export const useCountriesStore = defineStore('countries', {
   }),
   
   actions: {
+
+    // ==========================
+    // Helpers
+    // ==========================
+    _getApiBase() {
+      const config = useRuntimeConfig()
+      return config.public.apiBase
+    },
+
     async fetchCountries(subcategoryId) {
       this.loading = true
       this.error = null
       
       try {
-        const response = await $fetch('https://api.egamestore.com/api/countries', {
+        const response = await $fetch(`${this._getApiBase()}/countries`, {
           params: { category_id: subcategoryId },
           headers: { 'Accept-language': 'en' }
         })

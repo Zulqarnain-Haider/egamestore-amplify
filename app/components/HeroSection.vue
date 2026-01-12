@@ -5,7 +5,7 @@
       src="/games/Hero.bg.png" 
       alt="Hero Background" 
       format="webp" 
-      quality="80"
+      quality="75"
       densities="x1 x2"
       loading="eager"
       fetchpriority="high"

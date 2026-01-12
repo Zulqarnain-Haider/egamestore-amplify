@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { useRuntimeConfig } from '#imports'
 
 export const useCategoriesStore = defineStore('categories', {
   state: () => ({
@@ -9,6 +10,15 @@ export const useCategoriesStore = defineStore('categories', {
   }),
 
   actions: {
+
+    // ==========================
+    // Helpers
+    // ==========================
+    _getApiBase() {
+      const config = useRuntimeConfig()
+      return config.public.apiBase
+    },
+
     // Fetch top-level categories (PC, PlayStation, Xbox, etc.)
     async fetchParentCategories() {
       this.loading = true
@@ -16,7 +26,7 @@ export const useCategoriesStore = defineStore('categories', {
 
       try {
         const response = await $fetch(
-          'https://api.egamestore.com/api/categories/parents',
+          `${this._getApiBase()}/categories/parents`,
           {
             headers: { 'Accept-language': 'en' }
           }
@@ -42,7 +52,7 @@ export const useCategoriesStore = defineStore('categories', {
 
       try {
         const response = await $fetch(
-          'https://api.egamestore.com/api/categories/children',
+          `${this._getApiBase()}/categories/children`,
           {
             params: { category_id: categoryId },
             headers: { 'Accept-language': 'en' }

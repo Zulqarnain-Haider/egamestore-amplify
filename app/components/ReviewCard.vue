@@ -27,7 +27,7 @@ densities="x1" quality="80" format="webp" preload
     ]"
   >
     <NuxtImg
-    densities="x1" quality="80" format="webp" loading="lazy"
+    densities="x1" quality="60" format="webp" loading="lazy"
     :src="image" alt="avatar" class="w-full h-full object-cover" />
   </div>
 

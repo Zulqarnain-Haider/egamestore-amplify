@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { useUserStore } from '~/stores/userStore.js'
+import { useRuntimeConfig } from '#app'
 
 export const useTicketStore = defineStore('ticket', {
   state: () => ({
@@ -12,6 +13,16 @@ export const useTicketStore = defineStore('ticket', {
   }),
 
   actions: {
+
+    // ==========================
+    // Helpers
+    // ==========================
+    _getApiBase() {
+      const config = useRuntimeConfig()
+      return config.public.apiBase
+    },
+
+
     // -----------------------------
     // 1) GET TICKET LIST (GET)
     // -----------------------------
@@ -20,7 +31,7 @@ export const useTicketStore = defineStore('ticket', {
       this.loading = true
 
       try {
-        const res = await $fetch("https://api.egamestore.com/api/users/tickets", {
+        const res = await $fetch(`${this._getApiBase()}/users/tickets`, {
           headers: {
             Authorization: `Bearer ${userStore.token}`,
             'Accept-language': "en",
@@ -56,7 +67,7 @@ export const useTicketStore = defineStore('ticket', {
 
       try {
         const res = await axios.post(
-          "https://api.egamestore.com/api/users/tickets",
+          `${this._getApiBase()}/users/tickets`,
           formData,
           {
             headers: {
@@ -81,7 +92,7 @@ export const useTicketStore = defineStore('ticket', {
       this.loading = true
 
       try {
-        const res = await $fetch(`https://api.egamestore.com/api/users/tickets/${uuid}`, {
+        const res = await $fetch(`${this._getApiBase()}/users/tickets/${uuid}`, {
           headers: {
             Authorization: `Bearer ${userStore.token}`,
             'Accept-language': "en",
@@ -111,7 +122,7 @@ export const useTicketStore = defineStore('ticket', {
 
       try {
         const res = await axios.post(
-          `https://api.egamestore.com/api/users/tickets/${uuid}/reply`,
+          `${this._getApiBase()}/users/tickets/${uuid}/reply`,
           formData,
           {
             headers: {
@@ -144,7 +155,7 @@ export const useTicketStore = defineStore('ticket', {
 
       try {
         const res = await axios.post(
-          `https://api.egamestore.com/api/users/tickets/${uuid}/close`,
+          `${this._getApiBase()}/users/tickets/${uuid}/close`,
           formData,
           {
             headers: {

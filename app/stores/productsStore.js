@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { useRuntimeConfig } from '#app'
 
 export const useProductsStore = defineStore('products', {
   state: () => ({
@@ -9,12 +10,21 @@ export const useProductsStore = defineStore('products', {
   }),
 
   actions: {
+
+    // ==========================
+    // Helpers
+    // ==========================
+    _getApiBase() {
+      const config = useRuntimeConfig()
+      return config.public.apiBase
+    },
+
     async fetchProducts(countryId, subcategoryId, page = 1, perPage = 16, sortType = 'asc_price') {
       this.loading = true
       this.error = null
 
       try {
-        const response = await $fetch('https://api.egamestore.com/api/cards/category', {
+        const response = await $fetch(`${this._getApiBase()}/cards/category`, {
           params: { 
             category_id: subcategoryId,
             country_id: countryId,

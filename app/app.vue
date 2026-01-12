@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, watch } from 'vue'
+import { watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import { useCategoriesStore } from '~/stores/categoriesStore'
@@ -47,9 +47,5 @@ watch(
 await auth.initAuth()
 
 /* -------------------- CATEGORIES -------------------- */
-onMounted(() => {
-  if (!categoriesStore.parentCategories.length) {
-    categoriesStore.fetchParentCategories()
-  }
-})
+await categoriesStore.fetchParentCategories()
 </script>

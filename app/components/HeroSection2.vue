@@ -57,7 +57,7 @@
         class="hero-right w-full lg:w-1/2 flex justify-center items-center lg:items-end order-1 lg:order-2 ipad:order-1 lg:pr-8"
       >
          <NuxtImg
-         densities="x1" quality="80" format="webp" preload
+         densities="x1" quality="80" format="webp" lazy
           src="/games/HeroSection2.Right.png"
           alt="Hero Section Right"
           class="w-[85%] sm:w-[75%] md:w-[70%] lg:w-[92%] xl:w-[100%] object-contain"

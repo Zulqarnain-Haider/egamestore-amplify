@@ -92,7 +92,7 @@
       <!-- Login / Profile -->
       <NuxtLink v-if="!isLoggedIn" to="/auth/login" class="bg-primary text-mainText px-4 py-1.5 rounded-md 
           text-[15px] font-medium hover:opacity-90 transition font-roboto">
-        {{ t('sign-up') }}
+        {{ t('sign-in') }}
       </NuxtLink>
 
       <div v-else class="relative" ref="profileRef">
