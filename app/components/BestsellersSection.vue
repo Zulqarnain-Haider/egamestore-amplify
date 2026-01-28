@@ -101,15 +101,17 @@
 import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
 
 const config = useRuntimeConfig()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 /* ---------------------------
    SSR FETCH (BESTSELLERS)
 --------------------------- */
-const { data, pending } = await useFetch(
+const { data, pending } = useFetch(
   `${config.public.apiBase}/products/best-selling?limit=15&days=100`,
   {
-    headers: { 'lang': 'en' },
+    headers: { 'lang': locale.value },
+    server: false,
+    lazy: true,
   }
 )
 

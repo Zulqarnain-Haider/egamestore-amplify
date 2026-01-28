@@ -121,11 +121,13 @@ const config = useRuntimeConfig()
 /* ---------------------------
    SSR FETCH (ONLY CHANGE)
 --------------------------- */
-const { data, pending } = await useFetch(
+const { data, pending } = useFetch(
   `${config.public.apiBase}/products/latest?limit=26`,
   {
     headers: { 'lang': locale.value },
-    key: 'trending-games'
+    key: 'trending-games',
+    server: false,
+    lazy: true,
   }
 )
 
