@@ -16,7 +16,7 @@
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0 mt-6">
       <!--Lazy load - Best Sellers -->
-      <LazyBestsellersSection class="mt-16 pr-2 sm:pr-3 lg:pr-9" />
+      <LazyBestsellersSection class="mt-16 pr-2 sm:pr-3 lg:pr-9" /> 
 
       <!--Lazy load - Upcoming Games -->
       <LazyUpComingGames class="mt-16 pr-2 sm:pr-3 lg:pr-9" />
@@ -47,5 +47,9 @@ useSeoMeta({
   ogUrl: 'https://egamestore.com/',
   twitterCard: 'summary_large_image',
 });
+// ISR Meta
+definePageMeta({
+isr: 60
+})
 
 </script>
