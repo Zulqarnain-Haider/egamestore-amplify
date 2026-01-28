@@ -281,6 +281,11 @@ const placing = ref(false)
 
 // Display Items (either buy now item or cart items)
 const displayItems = computed(() => {
+  if (isBuyNow.value && buyNowCardId.value) {
+    return cartStore.items.filter(
+      item => item.id === buyNowCardId.value
+    )
+  }
   console.log('Cart items:', cartStore.items)
   return cartStore.items
 })
@@ -387,12 +392,41 @@ const handlePlaceOrder = async () => {
   placing.value = true
   
   try {
-    const result = await placeOrder(
-      form.value,
-      isBuyNow.value,
-      buyNowCardId.value,
-      buyNowQty.value
-    )
+    const orderPayload = {
+  full_name: form.value.fullName,
+  country: form.value.country,
+  city: form.value.city,
+  address: form.value.address,
+  phone: form.value.phone,
+
+  payment_id: checkoutStore.selectedPaymentId,
+  platform: 'web',
+  shipping_method: 1,
+
+  success_url: `${window.location.origin}/checkout/success`,
+  cancel_url: `${window.location.origin}/checkout/cancel`
+}
+
+// BUY NOW
+if (isBuyNow.value && buyNowCardId.value) {
+  orderPayload.is_buy_now = 1
+  orderPayload.cart_items = [
+    {
+      card_id: buyNowCardId.value,
+      qty: buyNowQty.value
+    }
+  ]
+}
+// NORMAL CART
+else {
+  orderPayload.cart_items = cartStore.items.map(item => ({
+    card_id: item.id,
+    qty: item.qty
+  }))
+}
+
+const result = await placeOrder(orderPayload)
+
     console.log('Order result:', result)
   } finally {
     placing.value = false
