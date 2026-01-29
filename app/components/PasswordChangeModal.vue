@@ -162,7 +162,7 @@
                   {{ t('forgotPasswordTitle') }}
                 </p>
               </NuxtLink>
-            </form>
+            </form> 
           </div>
         </template>
       </div>
@@ -172,13 +172,13 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useUserStore } from '~/stores/userStore'
+import { useUser} from '~/composables/useUser'
 
 const { t } = useI18n()
 const props = defineProps({ visible: Boolean })
 const emit = defineEmits(['close'])
 
-const userStore = useUserStore()
+const user = useUser()
 
 const success = ref(false)
 const currentPassword = ref('')
@@ -208,7 +208,7 @@ const handleSave = async () => {
     return
   }
 
-  const res = await userStore.updatePassword(
+  const res = await user.updatePassword(
     currentPassword.value,
     newPassword.value
   )

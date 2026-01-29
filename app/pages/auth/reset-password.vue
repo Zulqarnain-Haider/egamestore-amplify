@@ -42,13 +42,8 @@
 
       <!-- New Password -->
       <div class="relative mb-4">
-        <NuxtImg
-          src="/games/InputsLockicon.svg"
-          alt="Lock Icon"
-          quality="80"
-          densities="x1"
-          loading="lazy"
-          class="absolute left-3 top-11 -translate-y-1/2 text-inputsIn"
+        <Icon name="mdi-lock"
+          class="w-4 h-4 absolute left-3 top-11 -translate-y-1/2 text-inputsIn"
         />
         <label class="block mb-1 text-sm text-inputsIn">{{ t('newPasswordLabel') }}</label>
         <input
@@ -58,25 +53,20 @@
           class="w-full bg-bgDark rounded-md py-2 pl-10 pr-10
                  outline outline-1 outline-mainText/80 focus:outline-none
                  text-inputsIn placeholder:text-inputsIn
-                 focus:ring-1 focus:ring-primary"
+                 focus:ring-1 focus:ring-primary z-10"
         />
         <Icon
           :name="showNewPassword ? 'heroicons:eye-slash' : 'heroicons:eye'"
           class="w-4 h-4 absolute right-3 top-11 -translate-y-1/2
-                 text-inputsIn cursor-pointer"
+                 text-inputsIn cursor-pointer z-20"
           @click="showNewPassword = !showNewPassword"
         />
       </div>
 
       <!-- Confirm Password -->
       <div class="relative mb-4">
-        <NuxtImg
-          src="/games/InputsLockicon.svg"
-          alt="Lock Icon"
-          quality="80"
-          densities="x1"
-          loading="lazy"
-          class="absolute left-3 top-11 -translate-y-1/2 text-inputsIn"
+        <Icon name="mdi-lock"
+          class="w-4 h-4 absolute left-3 top-11 -translate-y-1/2 text-inputsIn"
         />
         <label class="block mb-1 text-sm text-inputsIn">{{ t('confirmNewPasswordLabel') }}</label>
         <input
@@ -87,12 +77,12 @@
                  outline outline-1 outline-mainText/80
                  focus:outline-none text-inputsIn
                  placeholder:text-inputsIn
-                 focus:ring-1 focus:ring-primary"
+                 focus:ring-1 focus:ring-primary z-10"
         />
         <Icon
           :name="showConfirmPassword ? 'heroicons:eye-slash' : 'heroicons:eye'"
           class="w-4 h-4 absolute right-3 top-11 -translate-y-1/2
-                 text-inputsIn cursor-pointer"
+                 text-inputsIn cursor-pointer z-20"
           @click="showConfirmPassword = !showConfirmPassword"
         />
       </div>
