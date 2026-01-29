@@ -95,6 +95,7 @@
                   v-model="dob.month"
                   @focus="activeField = 'month'"
                   @blur="activeField = ''"
+                    @input="onMonthInput"
                   type="text"
                   inputmode="numeric"
                   maxlength="2"
@@ -127,6 +128,7 @@
                   v-model="dob.day"
                   @focus="activeField = 'day'"
                   @blur="activeField = ''"
+                    @input="onDayInput"
                   type="text"
                   inputmode="numeric"
                   maxlength="2"
@@ -158,6 +160,7 @@
               <div class="relative w-1/3">
                 <input
                   v-model="dob.year"
+                    @input="onYearInput"
                   type="text"
                   inputmode="numeric"
                   maxlength="4"
@@ -295,6 +298,36 @@ const form = ref({
   agree: false,
   agree_sms: false,
 })
+
+const onMonthInput = () => {
+  let val = dob.value.month.replace(/\D/g, '')
+
+  if (+val > 12) val = '12'
+  if (+val < 1 && val !== '') val = '01'
+
+  dob.value.month = val
+}
+
+const onDayInput = () => {
+  let val = dob.value.day.replace(/\D/g, '')
+
+  if (+val > 31) val = '31'
+  if (+val < 1 && val !== '') val = '01'
+
+  dob.value.day = val
+}
+
+const CURRENT_YEAR = new Date().getFullYear()
+
+const onYearInput = () => {
+  let val = dob.value.year.replace(/\D/g, '')
+
+  if (+val > CURRENT_YEAR) val = CURRENT_YEAR.toString()
+  if (+val < 1900 && val.length === 4) val = '1900'
+
+  dob.value.year = val
+}
+
 
 const phoneIsValid = ref(false) // will track if user input is valid
 

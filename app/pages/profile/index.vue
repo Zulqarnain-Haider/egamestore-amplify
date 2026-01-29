@@ -243,21 +243,31 @@ watch(
   { immediate: true }
 )
 
+const isSaving = ref(false)
+
 const saveChanges = async () => {
-  const res = await userComposable.updateProfile({
-    email: user.email,
-    phone: user.phone,
-    dob: user.dob,
-  })
+  if (isSaving.value) return
+  isSaving.value = true
 
-  if (!res.success) {
-    toast.error(res.message || t('profileUpdateFailed'))
-    return
+  try {
+    const res = await userComposable.updateProfile({
+      email: user.email,
+      phone: user.phone,
+      dob: user.dob,
+    })
+
+    if (!res.success) {
+      toast.error('Update failed')
+      return
+    }
+
+    showSuccessModal.value = true
+    toast.success('Profile updated')
+  } finally {
+    isSaving.value = false
   }
-
-  showSuccessModal.value = true
-  toast.success(t('profileUpdateSuccess'))
 }
+
 
 const fileInput = ref(null)
 const triggerFileInput = () => fileInput.value?.click()
