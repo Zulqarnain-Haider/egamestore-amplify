@@ -232,55 +232,45 @@ export const useCheckoutStore = defineStore('checkoutStore', {
     // Place Order
     // =====================================
     async placeOrder(orderData) {
-  try {
-    // ✅ VALIDATE FIRST
-    if (!orderData.cart_items || !orderData.cart_items.length) {
-      return {
-        success: false,
-        message: 'Cart items missing'
-      }
-    }
+      try {
+        const formData = new FormData()
+        
+        // Add all order data to FormData
+        Object.entries(orderData).forEach(([key, value]) => {
+          if (value !== null && value !== undefined) {
+            formData.append(key, value)
+          }
+        })
 
-    if (!orderData.success_url || !orderData.cancel_url) {
-      return {
-        success: false,
-        message: 'Redirect URLs missing'
-      }
-    }
+        console.log('Sending order with data:', Object.fromEntries(formData))
 
-    const formData = new FormData()
+        const res = await $fetch(`${this._getApiBase()}/users/orders`, {
+          method: 'POST',
+          body: formData,
+          headers: this._getHeaders()
+        })
 
-    Object.entries(orderData).forEach(([key, value]) => {
-      if (Array.isArray(value)) {
-        formData.append(key, JSON.stringify(value))
-      } else {
-        formData.append(key, value)
-      }
-    })
+        console.log('Order API response:', res)
 
-    const res = await $fetch(`${this._getApiBase()}/users/orders`, {
-      method: 'POST',
-      body: formData,
-      headers: this._getHeaders()
-    })
+        if (res?.status && res.data) {
+          return {
+            success: true,
+            orderId: res.data.order_id,
+            paymentLink: res.data.payment_link,
+            message: res.message
+          }
+        }
 
-    if (res?.status && res.data) {
-      return {
-        success: true,
-        orderId: res.data.order_id,
-        paymentLink: res.data.payment_link,
-        message: res.message
-      }
-    }
-
-    return {
-      success: false,
-      message: res?.message || 'Order creation failed'
-    }
-  } catch (err) {
-    return {
-      success: false,
-      message: err?.response?.data?.message || 'Order placement failed'
+        return {
+          success: false,
+          message: res?.message || 'Order failed'
+        }
+      } catch (err) {
+        console.error('Place order failed:', err)
+        console.error('Error details:', err?.data || err?.response?.data)
+        return {
+          success: false,
+          message: err?.data?.message || err.response?.data?.message || 'Order placement failed'
         }
       }
     },

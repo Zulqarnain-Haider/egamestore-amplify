@@ -74,14 +74,14 @@
     class="w-16 h-16 text-mainText/40 mb-4"
   />
   <h3 class="text-xl font-semibold text-mainText mb-2">
-    No Products Available!
+   {{ t ('noProductsTitle') }}
   </h3>
   <p class="text-mainText/70 max-w-md">
-    There are currently no products available in  <span class="font-medium font-poppins text-primary">
+        {{ t('noProductsDescStart') }}
+ <span class="font-medium font-poppins text-primary">
     {{ subcategoryName || categoryName }}
-  </span> for the selected
-    country. Please check back later or try a different category.
-  </p>
+  </span>     {{ t('noProductsDescEnd') }} </p>
+  
 </div>
         <!-- Pagination -->
         <Pagination

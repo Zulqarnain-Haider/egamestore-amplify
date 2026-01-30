@@ -501,6 +501,10 @@
     "errorEnterNewPassword":"Enter new password",
     "errorConfirmNewPassword":"Confirm new password",
     "errorFixFields":"Please fix the errors",
-    "errorUpdatePasswordFailed":"Failed to update password"
+    "errorUpdatePasswordFailed":"Failed to update password",
+
+ "noProductsTitle": "No Products Available!",
+  "noProductsDescStart": "There are currently no products available in",
+  "noProductsDescEnd": "for the selected country. Please check back later or try a different category."
 
 }

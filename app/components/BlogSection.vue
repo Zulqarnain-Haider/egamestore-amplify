@@ -134,10 +134,9 @@ const loadBlogs = async () => {
     const { data } = await useFetch(
       `${config.public.apiBase}/posts`,
       {
-     server: false,
      headers: { Accept: "application/json" },
      query: {
-        type: "blog",      // <-- REQUIRED
+        type: "news",      // <-- REQUIRED
         per_page: 25       // optional
       }
      }
