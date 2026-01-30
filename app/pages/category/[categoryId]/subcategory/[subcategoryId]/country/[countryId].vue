@@ -59,10 +59,30 @@
         </div>
 
         <!-- Products -->
-        <div v-else class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div v-else-if="products.length > 0" class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           <ProductCard v-for="p in products" :key="p.id" :product="normalizeProduct(p)" />
         </div>
+  
 
+        <!-- Empty State -->
+<div
+  v-else
+  class="flex flex-col items-center justify-center py-20 text-center"
+>
+  <Icon
+    name="heroicons-archive-box-x-mark-20-solid"
+    class="w-16 h-16 text-mainText/40 mb-4"
+  />
+  <h3 class="text-xl font-semibold text-mainText mb-2">
+    No Products Available!
+  </h3>
+  <p class="text-mainText/70 max-w-md">
+    There are currently no products available in  <span class="font-medium font-poppins text-primary">
+    {{ subcategoryName || categoryName }}
+  </span> for the selected
+    country. Please check back later or try a different category.
+  </p>
+</div>
         <!-- Pagination -->
         <Pagination
           v-if="total > perPage"
