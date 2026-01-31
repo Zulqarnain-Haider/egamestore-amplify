@@ -504,6 +504,10 @@
   "errorEnterNewPassword":"يرجى إدخال كلمة المرور الجديدة",
   "errorConfirmNewPassword":"يرجى تأكيد كلمة المرور",
   "errorFixFields":"يرجى تصحيح الأخطاء",
-  "errorUpdatePasswordFailed":"فشل تحديث كلمة المرور"
+  "errorUpdatePasswordFailed":"فشل تحديث كلمة المرور",
+
+  "noProductsTitle": "لا توجد منتجات متاحة",
+  "noProductsDescStart": "لا توجد حالياً أي منتجات متاحة في",
+  "noProductsDescEnd": "للبلد المحدد. يرجى المحاولة لاحقاً أو اختيار فئة مختلفة."
 
 }
