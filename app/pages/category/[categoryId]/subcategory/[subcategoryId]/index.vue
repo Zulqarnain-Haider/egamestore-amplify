@@ -127,4 +127,7 @@ const handleCountrySelect = (countryId) => {
 
 onMounted(fetchData)
 watch(subcategoryId, fetchData)
+definePageMeta({
+  isr: 300 // regenerate every 5 minutes
+})
 </script>

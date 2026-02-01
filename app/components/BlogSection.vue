@@ -136,8 +136,10 @@ const loadBlogs = async () => {
       {
      headers: { Accept: "application/json" },
      query: {
-        type: "news",      // <-- REQUIRED
-        per_page: 25       // optional
+        type: "blog",      // <-- REQUIRED
+        lazy: true,      // optional
+        per_page: 25,       // optional
+        cache: true
       }
      }
     )
