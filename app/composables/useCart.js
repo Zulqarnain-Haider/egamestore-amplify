@@ -40,6 +40,15 @@ export function useCart() {
   // UPDATE QTY (+ / -)
   // ============================
   const updateQty = async (item, qty) => {
+      if (qty > 5) {
+    toast.error({
+      title: 'Limit exceeded',
+      message: 'Maximum 5 items per product allowed',
+      position: 'topCenter',
+      duration: 3000
+    })
+    return
+  }
     const res = await cartStore.addOrUpdateCard(
       item.id,
       qty,

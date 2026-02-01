@@ -82,7 +82,7 @@
         :height="38"
         variant="outline"
         as="button"
-        extraClass="text-xs py-2 px-2 rounded-xl whitespace-nowrap"
+        extraClass="text-[9px] sm:text-xs py-2 px-2 rounded-xl whitespace-nowrap"
         @click.stop="handleAddToCart"
       >
         {{ t('addToCart') }}
@@ -93,7 +93,7 @@
         :height="38"
         variant="primary"
         as="button"
-        extraClass="text-xs py-2 px-2 rounded-xl whitespace-nowrap"
+        extraClass="text-[9px] sm:text-xs py-2 px-2 rounded-xl whitespace-nowrap"
         @click.stop="handleBuyNow"
       >
         {{ t('buyNow') }}

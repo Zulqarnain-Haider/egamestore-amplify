@@ -31,7 +31,7 @@
       </div>
 
       <!-- Carousel -->
-      <div class="relative w-full pl-20 md:pl-0 md:pr-0 sm:pr-20">
+      <div class="relative w-full pl-5 md:pl-0 md:pr-0 sm:pr-20">
         <Swiper :modules="[Autoplay, Navigation]" :loop="true" :autoplay="{ delay: 3500, disableOnInteraction: false }"
           :navigation="{
             nextEl: '.swiper-button-next-custom',
@@ -52,7 +52,8 @@
         </Swiper>
 
         <!-- Left Arrow -->
-        <button class="swiper-button-prev-custom absolute top-1/3 left-4 lg:left-2 xl:-left-14 bg-black/40 hover:bg-primary/70 p-1 z-30 hidden sm:flex">
+        <button class="swiper-button-prev-custom absolute top-1/3 left- lg:left-2 xl:-left-14
+         bg-black/40 hover:bg-primary/70 p-1 z-30 hidden sm:flex">
      <Icon name="heroicons:chevron-left" class="w-12 h-12" />
         </button>
 
@@ -155,7 +156,7 @@ section::after {
 /* Mobile fix: Only left arrow visible */
 @media (max-width: 640px) {
   .swiper-button-prev-custom {
-    display: flex !important;
+    display: none !important;
   }
 
   .swiper-button-next-custom {

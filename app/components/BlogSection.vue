@@ -21,7 +21,7 @@
         <!-- Featured -->
         <div
           v-if="currentSet.length && currentSet[4]"
-          @click="goToBlog(currentSet[4].slug)"
+          @click="goToBlog(currentSet[4])"
           class="w-full lg:w-1/2 relative rounded-2xl cursor-pointer overflow-hidden transition-all duration-700"
         >
           <NuxtImg
@@ -43,7 +43,7 @@
           <div
             v-for="(blog, i) in currentSet.length ? currentSet.slice(0, 4) : []"
             :key="i"
-            @click="goToBlog(blog.slug)"
+            @click="goToBlog(blog)"
             class="relative rounded-2xl overflow-hidden group transition-all duration-700"
           >
             <NuxtImg
@@ -71,7 +71,7 @@
         <div
           v-for="(blog, i) in [...allBlogs].slice().reverse()"
           :key="i"
-           @click="goToBlog(blog.slug)"
+           @click="goToBlog(blog)"
           class="flex none min-w-[70%] h-[170px] snap-start cursor-pointer relative rounded-2xl overflow-hidden"
         >
           <NuxtImg
@@ -167,8 +167,11 @@ const loadBlogs = async () => {
 // -----------------------
 // CLICK HANDLER FOR CARDS
 // -----------------------
-const goToBlog = (slug) => {
-  navigateTo(`/blogs/${slug}`)
+const goToBlog = (blog) => {
+  navigateTo
+   (blog.slug
+      ? `/news-blog/${blog.id}/${blog.slug}`
+      : `/news-blog/${blog.id}`)
 }
 
 // -----------------------

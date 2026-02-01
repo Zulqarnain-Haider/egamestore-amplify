@@ -4,14 +4,17 @@
 
       <!--Left: Cart Items -->
       <div class="flex-1 space-y-6">
-        <div v-for="item in cartItems" :key="item.id"
-          class="flex flex-col md:flex-row gap-5 border border-onFooter/80 rounded-xl bg-[#22262B] p-5 relative">
+        <NuxtLink v-for="item in cartItems" 
+         :key="item.id"
+         :to="`/product/${item.id}`"
+          class="flex flex-col md:flex-row gap-5 border border-onFooter/80 rounded-xl
+           bg-[#22262B] hover:border-primary transition p-5 relative">
           <!--Remove Button -->
           <button
             class="absolute top-3 right-3 text-onMainText/70 hover:text-red-500 transition" :title="t('cartRemoveItem')"
-            @click="removeItem(item.id)"
+            @click.stop.prevent="removeItem(item.id)"
             >
-            <i class="fa-solid fa-xmark text-lg"></i>
+            <Icon name="mdi:close" class="w-5 h-5"/>
           </button>
 
           <!-- Image -->
@@ -28,9 +31,9 @@
 
             <!-- Qty Controls -->
             <div class="flex border items-center border-onMainText/30 rounded-xl overflow-hidden w-fit">
-              <button class="px-3 py-1 hover:bg-primary transition" @click="decreaseQty(item)">-</button>
+              <button class="px-3 py-1 hover:bg-primary transition" @click.stop.prevent="decreaseQty(item)">-</button>
               <span class="px-5 py-1 text-primary">{{ item.qty }}</span>
-              <button class="px-3 py-1 hover:bg-primary transition" @click="increaseQty(item)">+</button>
+              <button class="px-3 py-1 hover:bg-primary transition" @click.stop.prevent="increaseQty(item)">+</button>
             </div>
 
             <!-- Extra Info -->
@@ -44,7 +47,7 @@
               <span class="text-green-600 font-medium">{{ item.stockStatus }}</span>
             </div>
           </div>
-        </div>
+        </NuxtLink>
 
         <p v-if="!cartItems.length" class="text-center text-onMainText/60 mt-16 text-lg">
           {{ t('cartEmpty') }}

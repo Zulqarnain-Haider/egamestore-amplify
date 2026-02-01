@@ -12,8 +12,8 @@
         {{ categoryName }}
       </NuxtLink>
 
-      <Icon name="heroicons-chevron-right-20-solid" class="text-mainText w-7 h-7" />
-      <span class="text-mainText">{{ subcategoryName }}</span>
+      <Icon name="heroicons-chevron-right-20-solid" class="text-mainText w-7 h-7 mb-1" />
+      <span class="text-mainText whitespace-nowrap text-">{{ subcategoryName }}</span>
     </div>
 
     <!-- Loading State -->
