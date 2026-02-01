@@ -116,16 +116,18 @@
               variant="primary"
               full
               :height="42"
-              extraClass="text-sm flex items-center rounded-full justify-center gap-2"
+              extraClass="text-xs sm:text-sm whitespace-nowrap flex items-center rounded-full justify-center "
               @click="goToRedeem"
             >
               <Icon
-                name="heroicons-solid:question-mark-circle"
+                name="heroicons-solid:question-mark-circle mr-1"
                 class="text-xl text-white"
               />
               How to redeem
             </AppButton>
           </div>
+          <RedeemModal v-model="showRedeemModal" />
+
         </div>
       </div>
     </div>
@@ -136,11 +138,13 @@
 import { computed, watch } from 'vue'
 import { useToast, useRouter } from '#imports'
 import { useOrdersStore } from '~/stores/ordersStore.js'
+import RedeemModal from '~/components/RedeemModal.vue'
 
 /* ================= Setup ================= */
 const toast = useToast()
 const router = useRouter()
 const ordersStore = useOrdersStore()
+const showRedeemModal = ref(false)
 
 /* ================= Props (DO NOT REMOVE ANY) ================= */
 const props = defineProps({
@@ -208,7 +212,7 @@ const reportProblem = () => {
 }
 
 const goToRedeem = () => {
-  router.push('/product_activation')
+  showRedeemModal.value = true
 }
 
 /* ================= Watchers ================= */

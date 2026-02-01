@@ -129,12 +129,33 @@ export const useCartStore = defineStore('cartStore', {
           await this.fetchCart()
           return { success: true, message: res.message }
         }
+  let errorMessage = 'Cart update failed'
+    if (res?.errors && res.errors.length > 0) {
+      // Pehla error message lena
+      errorMessage = res.errors[0]
+    } else if (res?.message) {
+      errorMessage = res.message
+    }
 
-        return { success: false, message: res?.message }
-      } catch (err) {
-        console.error('Add/update cart failed:', err)
-        return { success: false, message: 'Cart update failed' }
-      }
+    return { 
+      success: false, 
+      message: errorMessage,
+      rawResponse: res // Optional: debug ke liye
+    }
+  } catch (err) {
+    console.error('Add/update cart failed:', err)
+    
+    // Network error ya server error ke liye
+    let errorMessage = 'Cart update failed'
+    if (err?.response?.data?.errors?.length > 0) {
+      errorMessage = err.response.data.errors[0]
+    }
+    
+    return { 
+      success: false, 
+      message: errorMessage 
+    }
+  }
     },
 
     // =====================================

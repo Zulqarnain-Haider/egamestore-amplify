@@ -169,7 +169,7 @@ watch([identifier, password], () => {
  * Input class helper
  * ----------------------------------- */
 const inputClass = (field) => [
-  'w-full h-10 p-2 text-sm rounded-md bg-bgDark text-onFooter placeholder:text-inputsIn focus:outline-none',
+  'w-full h-10 p-2 text-sm rounded-md bg-bgDark text-onPrimary/80 placeholder:text-inputsIn focus:outline-none',
   errors.value[field]
     ? 'border border-error'
     : 'border border-transparent focus:border-primary',

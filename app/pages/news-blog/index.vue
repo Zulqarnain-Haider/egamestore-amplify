@@ -24,7 +24,7 @@
       class="relative max-w-7xl mx-auto xl:rounded-2xl overflow-hidden bg-cover bg-center font-poppins"
     >
       <NuxtImg
-        src="/games/BlogBg.jpg"
+        :src="heroBlog.img || heroBlog.image || '/games/BlogBg.jpg'"
         alt="Blog Background"
         densities="x1"
         quality="85"
@@ -39,17 +39,23 @@
       <div
         class="flex flex-col items-start relative z-10 px-8 py-10 sm:py-16 sm:px-10 max-w-md text-white space-y-2"
       >
-        <span class="text-primary text-sm font-semibold">Breaking</span>
-        <h2 class="text-3xl sm:text-4xl font-bold leading-tight">
-          Cyberpunk 2077: Phantom Liberty
-        </h2>
-        <p class="text-sm sm:text-base text-mainText mt-3">
-          Explore Dogtown, uncover a deadly spy conspiracy, and unlock new
-          missions, weapons, and abilities.
-        </p>
+      <span class="text-primary text-sm font-semibold">
+      {{ heroBlog.tags?.[0]?.name || 'Breaking' }}
+    </span>
+
+    <h2 class="text-3xl sm:text-4xl font-bold leading-tight">
+      {{ heroBlog.title }}
+    </h2>
+
+    <p class="text-sm sm:text-base text-mainText mt-3">
+      {{ shortDesc(heroBlog.desc) }}
+    </p>
         <AppButton
           variant="primary"
           class="px-12 py-4 text-xs font-poppins rounded-full"
+            :to="heroBlog.slug
+            ? `/news-blog/${heroBlog.id}/${heroBlog.slug}`
+            : `/news-blog/${heroBlog.id}`"
         >
           Read More
         </AppButton>
@@ -71,7 +77,7 @@
       <!-- Cards -->
       <template v-else>
         <BlogCard
-          v-for="blog in blogs"
+          v-for="blog in listBlogs"
           :key="blog.id"
           :id="blog.id"
           :image="blog.img || blog.image"
@@ -118,7 +124,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 // usei!8n
 const { t } = useI18n()
@@ -216,6 +222,15 @@ const switchType = async (type) => {
   allLoaded.value = false
   await refresh()
 }
+
+
+const heroBlog = computed(() => {
+  return blogs.value.length ? blogs.value[0] : null
+})
+
+const listBlogs = computed(() => {
+  return blogs.value.length > 1 ? blogs.value.slice(1) : []
+})
 
 /* =======================
    HELPERS

@@ -19,7 +19,7 @@
           </div>
 
           <!-- Chat messages -->
-          <div ref="chatWrap" class="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+          <div ref="chatWrap" class="space-y-4 h-[60vh] overflow-y-auto pr-2">
             <ChatMessage
               v-for="msg in messages"
               :key="msg.id"
@@ -166,8 +166,8 @@
 
             <transition name="fade">
               <div v-if="openSection === 'userDetails'" class="px-4 pb-4 text-sm text-onFooter space-y-2">
-                <div><strong>{{ t('ticketUserName') }}:</strong> {{ ticket?.name || '—' }}</div>
-                <div><strong>{{ t('ticketUserEmail') }}:</strong> {{ ticket?.email || '—' }}</div>
+                <div><strong>{{ t('ticketUserName') }}:</strong> <span class="text-onPrimary"></span>{{ ticket?.name || '—' }}</div>
+                <div><strong>{{ t('ticketUserEmail') }}:</strong> <span class="text-onPrimary"></span>{{ ticket?.email || '—' }}</div>
               </div>
             </transition>
           </div>
@@ -192,8 +192,8 @@
 
             <transition name="fade">
               <div v-if="openSection === 'orderDetails'" class="px-4 pb-4 text-sm text-onFooter space-y-2">
-                <div><strong>{{ t('ticketOrderId') }}:</strong> {{ ticket?.order_id || '—' }}</div>
-                <div><strong>{{ t('ticketPlatform') }}:</strong> {{ ticket?.platform || '—' }}</div>
+                <div><strong>{{ t('ticketOrderId') }}:</strong> <span class="text-onPrimary">{{ ticket?.order_id || '—' }}</span></div>
+                <div><strong>{{ t('ticketPlatform') }}:</strong> <span class="text-onPrimary">{{ ticket?.platform || '—' }}</span></div>
               </div>
             </transition>
           </div>

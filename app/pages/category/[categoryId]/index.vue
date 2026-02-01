@@ -12,21 +12,21 @@
       <SkeletonCard v-for="n in 8" :key="n" />
     </div>
 
-    <!-- Error State -->
-    <div v-else-if="error" class="text-center py-12">
+    <!-- Error State (only show if not loading and error exists) -->
+    <!-- <div v-else-if="error" class="text-center py-12">
       <p class="text-error text-lg mb-4">{{ error }}</p>
       <NuxtLink
-      to="/"
+        to="/"
         class="bg-primary text-white px-6 py-2 mt-4 rounded-lg hover:opacity-90"
-        >
+      >
         Go To Home
       </NuxtLink>
-    </div>
+    </div> -->
 
-    <!-- Empty State -->
-    <div v-else-if="!categories.length" class="text-center py-12">
+    <!-- Empty State (only show if not loading and categories is empty array) -->
+    <!-- <div v-else-if="categories.length === 0" class="text-center py-12">
       <p class="text-onFooter text-lg">{{ t('noSubcategoriesFound') }}</p>
-    </div>
+    </div> -->
 
     <!-- Categories Grid -->
     <div v-else class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -57,6 +57,7 @@ const { categoryId } = useCategoryContext()
 const categories = ref([])
 const loading = ref(true)
 const error = ref(null)
+const hasLoaded = ref(false) // Add this flag
 
 // Category name
 const categoryName = computed(() =>
@@ -78,16 +79,21 @@ useHead({
 const fetchData = async () => {
   loading.value = true
   error.value = null
+  hasLoaded.value = false // Reset flag
 
   try {
     await categoriesStore.fetchChildren(categoryId.value)
     categories.value = categoriesStore.childrenCategories
+    
+    hasLoaded.value = true // Set flag after successful load
 
-    if (!categories.value.length) {
+    // Only show error if API returns empty array AFTER loading
+    if (hasLoaded.value && categories.value.length === 0) {
       error.value = 'No subcategories available for this category'
     }
   } catch (err) {
     console.error('Category Page Error:', err)
+    hasLoaded.value = true
     error.value = 'Failed to load categories. Please try again.'
   } finally {
     loading.value = false
