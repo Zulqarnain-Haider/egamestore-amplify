@@ -5,11 +5,12 @@
       class="fixed inset-0 bg-black/70 backdrop-blur-sm
              flex items-center justify-center
              z-50 px-4"
+               @click="$emit('update:modelValue', false)"
     >
       <!-- Card -->
       <div
         class="relative w-full
-               max-w-full sm:max-w-4xl
+               max-w-[92%] sm:max-w-4xl
                h-[76vh] sm:h-[82vh]
                rounded-[2.8rem]
                overflow-hidden
@@ -17,12 +18,13 @@
                textalign-truncate
                shadow-2xl animate-fadeIn
                bg-[url('/games/PopupMainCard.png')] bg-cover bg-center bg-no-repeat"
+                 @click.stop
       >
         <!-- Content Wrapper -->
         <div
           class="relative z-10 flex flex-col h-full
                  px-4 sm:px-10
-                 py-16 sm:py-28"
+                 py-9 sm:py-16"
         >
           <!-- Title -->
           <div class="flex justify-center mb-4 sm:mb-5">
@@ -35,7 +37,7 @@
           <div
             class="flex-1 rounded-2xl
                    px-5 sm:px-7
-                   py-3 sm:py-5
+                   py-4 sm:py-6
                    overflow-y-auto custom-scroll"
           >
             <div
@@ -63,7 +65,7 @@
           </div>
 
           <!-- Footer -->
-          <div class="flex justify-center mt-4 sm:mt-6">
+          <div class="flex justify-center mt-3 sm:mt-5">
             <button
               @click="$emit('update:modelValue', false)"
               class="px-8 sm:px-10 py-2 rounded-md
@@ -81,6 +83,8 @@
 </template>
 
 <script setup>
+import { watch, onUnmounted } from 'vue'
+
 const { t, locale } = useI18n()
 const props = defineProps({
   modelValue: Boolean,
@@ -112,6 +116,23 @@ const redeemContent = computed(() => {
   return redeemData.value?.data?.content || 
     `<p class="text-onMainText">No redeem instructions available.</p>`
 })
+
+
+/* ================= Watchers ================= */
+watch(
+  () => props.modelValue,
+  (modalValue) => {
+    // SSR-safe body lock
+    if (process.client) {
+      document.body.style.overflow = modalValue ? 'hidden' : 'auto'
+    }
+  }
+)
+
+onUnmounted(() => {
+  document.body.style.overflow = ''
+})
+
 </script>
 
 <style scoped>

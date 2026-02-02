@@ -23,6 +23,7 @@
       </NuxtLink>
     </div> -->
 
+
     <!-- Empty State -->
     <div v-else-if="categories.length === 0" class="text-center py-12">
       <p class="text-onFooter text-lg">{{ t('noSubcategoriesFound') }}</p>

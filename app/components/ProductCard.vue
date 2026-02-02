@@ -82,7 +82,8 @@
         :height="38"
         variant="outline"
         as="button"
-        extraClass="text-[9px] sm:text-xs py-2 px-2 rounded-xl whitespace-nowrap"
+        extraClass="text-[9px] sm:text-[10px] lg:text-xs py-2 px-2 rounded-xl whitespace-nowrap"
+        :disabled="!isInStock(product)"
         @click.stop="handleAddToCart"
       >
         {{ t('addToCart') }}
@@ -93,7 +94,8 @@
         :height="38"
         variant="primary"
         as="button"
-        extraClass="text-[9px] sm:text-xs py-2 px-2 rounded-xl whitespace-nowrap"
+        extraClass="text-[9px] sm:text-[10px] lg:text-xs py-2 px-2 rounded-xl whitespace-nowrap"
+        :disabled="!isInStock(product)"
         @click.stop="handleBuyNow"
       >
         {{ t('buyNow') }}
@@ -104,6 +106,12 @@
 
 <script setup>
 import { useCart } from '~/composables/useCart'
+import { useStock } from '~/composables/useStock'
+import { useToast } from '#imports'
+
+const { isInStock } = useStock()
+const toast = useToast()
+
 
 // I18N
 const { t } = useI18n()
@@ -121,21 +129,39 @@ const props = defineProps({
 const { addToCart, buyNow } = useCart()
 
 /* -----------------------------------
- * Handlers
- * ----------------------------------- */
-const handleAddToCart = () => {
-  addToCart(props.product)
-}
-
-const handleBuyNow = () => {
-  buyNow(props.product)
-}
-
-/* -----------------------------------
  * Helpers
  * ----------------------------------- */
 const formatPrice = (price) => {
   if (typeof price !== 'number') return price
   return price.toFixed(2)
 }
+
+const handleBuyNow = () => {
+  if (!isInStock(props.product)) {
+    toast.error({
+      title: 'Out of stock',
+      message: 'This product is currently out of stock.',
+      position: 'topCenter',
+      duration: 3000
+    })
+    return
+  }
+
+  buyNow(props.product, 1)
+}
+
+const handleAddToCart = () => {
+  if (!isInStock(props.product)) {
+    toast.error({
+      title: 'Out of stock',
+      message: 'This product is currently out of stock.',
+      position: 'topCenter',
+      duration: 3000
+    })
+    return
+  }
+
+  addToCart(props.product, 1)
+}
+
 </script>

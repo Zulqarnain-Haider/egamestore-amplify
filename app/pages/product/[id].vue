@@ -2,14 +2,19 @@
   <!-- ======================================
        LOADING (SSR + CSR SAFE)
        ====================================== -->
-  <div
+  <!-- <div
     v-if="productStore.loading"
     class="min-h-screen text-mainText font-poppins"
   >
     <div class="w-[90%] max-w-7xl mx-auto flex flex-col gap-10 animate-fadeIn">
       <ProductOverviewSkeleton />
     </div>
-  </div>
+  </div> -->
+  
+<div v-if="productStore.loading" class="min-h-screen flex items-center justify-center">
+  <p>Loading product details...</p>
+</div>
+
 
   <!-- ======================================
        ERROR (ONLY IF FETCH FAILED)

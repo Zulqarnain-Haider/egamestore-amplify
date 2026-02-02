@@ -186,7 +186,9 @@
       :visible="showModal"
       :codes="selectedCodes"
       @close="showModal = false"
+      @open-redeem="handleOpenRedeem"
     />
+    <RedeemModal v-model="showRedeemModal" />
   </div>
 </template>
 
@@ -194,6 +196,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useOrdersStore } from '~/stores/ordersStore'
+import RedeemModal from '~/components/RedeemModal.vue'
 
 useHead({
   title: 'My Orders | eGameStore',
@@ -211,10 +214,17 @@ const statusFilter = ref(route.query.status || 'all')
 
 const dropdownOpen = ref(false)
 const showModal = ref(false)
+const showRedeemModal = ref(false) 
 const selectedCodes = ref([])
 
 const orders = computed(() => ordersStore.orders)
 const paginatedOrders = computed(() => orders.value)
+
+const handleOpenRedeem = () => {
+  showModal.value = false        // OrderKeyModal close
+  showRedeemModal.value = true  // RedeemModal open
+}
+
 
 /* Status options */
 const statusOptions = computed(() => [

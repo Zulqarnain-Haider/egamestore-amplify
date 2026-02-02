@@ -505,6 +505,11 @@
 
  "noProductsTitle": "No Products Available!",
   "noProductsDescStart": "There are currently no products available in",
-  "noProductsDescEnd": "for the selected country. Please check back later or try a different category."
+  "noProductsDescEnd": "for the selected country. Please check back later or try a different category.",
+
+  "productNotFound": "Product Not Found",
+  "productNotAvailableDesc": "The product you are looking for is no longer available.",
+  "backToHome": "Back to Home",
+  "howToRedeem": "How to Redeem"
 
 }

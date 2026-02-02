@@ -77,11 +77,6 @@
           >
             +
           </button>
-           <!-- Loading indicator -->
-      <div v-if="loading" class="text-sm text-gray-400">
-        Updating...
-      </div>
-
         </div>
       </div>
 
@@ -149,7 +144,7 @@
           full
           extraClass="text-md py-3 rounded-2xl flex-1"
           :disabled="!isInStock(product)"
-          @click="buyNow(product, quantity)"
+          @click.stop.prevent="handleBuyNow"
         >
          {{ t('buyNow') }}
         </AppButton>
@@ -159,8 +154,8 @@
           :height="45"
           full
           extraClass="text-md py-3 rounded-2xl flex-1"
-          :disabled="!isInStock(product)"
-          @click.stop.prevent="addToCart(product, quantity)"
+          :disabled="!isInStock(product)"  
+          @click.stop.prevent="handleAddToCart"
         >
           {{ isInStock(product) ? t('addToCart') : t('productOutOfStock') }}
         </AppButton>
@@ -205,15 +200,14 @@
 import { ref, computed, watchEffect } from 'vue'
 import { useCart } from '~/composables/useCart'
 import { useStock } from '~/composables/useStock'
-import { useCartStore } from '~/stores/cartStore'
-
-
 import { useToast } from '#imports'
 
-const { addToCart, buyNow, updateQty } = useCart()
+const { addToCart, buyNow } = useCart()
 const { isInStock, stockLabel } = useStock()
 const { t } = useI18n()
-const toast = useToast() // Add this
+
+const toast = useToast()
+
 
 const props = defineProps({
   product: {
@@ -223,121 +217,75 @@ const props = defineProps({
 })
 
 const quantity = ref(1)
-const loading = ref(false)
 
 const selected = ref({
   region: '',
   language: ''
 })
 
-
-// Check if product is already in cart
-const cartItem = ref(null)
-
-watchEffect(async () => {
+watchEffect(() => {
   if (props.product) {
     selected.value.region = props.product.regions?.[0] || ''
     selected.value.language = props.product.languages?.[0] || ''
-    
-    // Fetch current cart to check if product already exists
-    try {
-      const cartStore = useCartStore()
-      // Wait for cart to load if needed
-      if (cartStore.items) {
-        const existingItem = cartStore.items.find(item => item.id === props.product.id)
-        if (existingItem) {
-          quantity.value = existingItem.qty || 1
-          cartItem.value = existingItem
-        }
-      }
-    } catch (error) {
-      console.log('Could not fetch cart items:', error)
-    }
   }
 })
 
-const increaseQty = async () => {
-  // Client-side validation FIRST
-  if (quantity.value >= 5) {
+const MAX_QTY = 5
+
+const increaseQty = () => {
+   if (quantity.value >= MAX_QTY) {
     toast.error({
       title: 'Limit exceeded',
-      message: 'Maximum 5 items per product allowed',
+      message: 'The quantity may not be greater than 5.',
       position: 'topCenter',
       duration: 3000
     })
     return
   }
-  
-  // Don't proceed if already loading
-  if (loading.value) return
-  
-  loading.value = true
-  const oldQty = quantity.value
-  const newQty = oldQty + 1
-  
-  try {
-    // Update local quantity first (for instant feedback)
-    quantity.value = newQty
-    
-    // Prepare item object
-    const itemToUpdate = cartItem.value || { 
-      id: props.product.id, 
-      title: props.product.name,
-      ...props.product 
-    }
-    
-    // Update cart
-    if (cartItem.value) {
-      await updateQty(itemToUpdate, newQty)
-    } else {
-      await addToCart(props.product, newQty)
-      // Update cartItem reference after successful add
-      cartItem.value = { ...itemToUpdate, qty: newQty }
-    }
-    
-  } catch (error) {
-    console.error('Error increasing quantity:', error)
-    // Revert quantity if update failed
-    quantity.value = oldQty
-  } finally {
-    loading.value = false
-  }
+  quantity.value++
 }
 
-const decreaseQty = async () => {
-  if (quantity.value <= 1) return
-  if (loading.value) return
-  
-  loading.value = true
-  const oldQty = quantity.value
-  const newQty = oldQty - 1
-  
-  try {
-    // Update local quantity
-    quantity.value = newQty
-    
-    // Prepare item object
-    const itemToUpdate = cartItem.value || { 
-      id: props.product.id, 
-      title: props.product.name,
-      ...props.product 
-    }
-    
-    // Update cart
-    if (cartItem.value) {
-      await updateQty(itemToUpdate, newQty)
-    } else {
-      await addToCart(props.product, newQty)
-      cartItem.value = { ...itemToUpdate, qty: newQty }
-    }
-    
-  } catch (error) {
-    console.error('Error decreasing quantity:', error)
-    // Revert quantity if update failed
-    quantity.value = oldQty
-  } finally {
-    loading.value = false
+
+const handleBuyNow = () => {
+  if (!isInStock(props.product)) {
+    toast.error({
+      title: 'Out of stock',
+      message: 'This product is currently out of stock.',
+      position: 'topCenter',
+      duration: 3000
+    })
+    return
   }
+
+  buyNow(props.product, quantity.value)
+}
+
+const handleAddToCart = () => {
+  if (!isInStock(props.product)) {
+    toast.error({
+      title: 'Out of stock',
+      message: 'This product is currently out of stock.',
+      position: 'topCenter',
+      duration: 3000
+    })
+    return
+  }
+
+  if (quantity.value > 5) {
+    toast.error({
+      title: 'Limit exceeded',
+      message: 'The quantity may not be greater than 5.',
+      position: 'topCenter',
+      duration: 3000
+    })
+    return
+  }
+
+  addToCart(props.product, quantity.value)
+}
+
+const decreaseQty = () => {
+  if (quantity.value > 1) quantity.value--
 }
 
 const starCount = computed(() =>

@@ -93,7 +93,8 @@
                   <p class="text-sm text-mainText">{{ t(item.description) }}</p>
                 </div>
                 </div>
-                <h2 class="text-primary text-lg">{{ t(item.action) }}</h2>
+                <h2 class="text-primary text-lg cursor-pointer"
+                @click="openRedeemModal(item)">{{ t(item.action) }}</h2>
 
           </div>
         </div>
@@ -265,6 +266,7 @@
       />
     </div>
   </div>
+   <RedeemModal v-model="showRedeemModal" />
 </template>
 
 <script setup>
@@ -283,6 +285,15 @@ const perPage = ref(10)
 const page = ref(1) 
 const total = ref(0)
 const lastPage = ref(1)
+
+const showRedeemModal = ref(false)
+
+const openRedeemModal = (item) => {
+  // Agar sirf 'Redeem' action wale items par hi open karna hai, toh check karo
+  if (item.action === 'walletActionRedeem') {
+    showRedeemModal.value = true
+  }
+}
 
 const earnOptions = [
   { 

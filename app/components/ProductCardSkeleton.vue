@@ -21,13 +21,13 @@
     <!-- Skeleton for Price + Rating -->
     <div class="flex items-center justify-between mt-2 md:mt-1 xl:mt-2">
       <div class="flex items-end gap-1 md:gap-1 xl:gap-2">
-        <div class="bg-gray-200 rounded w-2 h-8 sm:h-3 sm:w-10"></div> <!-- Old Price -->
-        <div class="bg-gray-200 rounded w-3 h-10 sm:h-4 sm:w-12"></div> <!-- New Price -->
+        <div class="bg-gray-200 rounded w-2 h-8 sm:h-3 sm:w-7"></div> <!-- Old Price -->
+        <div class="bg-gray-200 rounded w-3 h-10 sm:h-4 sm:w-7"></div> <!-- New Price -->
       </div>
       <div class="flex items-center gap-1">
         <div class="bg-gray-200 rounded-full w-3 h-3 sm:w-5 sm:h-5"></div> <!-- Rating Icon -->
-        <div class="bg-gray-200 rounded  w-6 h-3 sm:h-4 sm:w-8"></div> <!-- Rating Text -->
-        <div class="bg-gray-200 rounded h-2 w-4 sm:h-3 sm:w-6"></div> <!-- /100 -->
+        <div class="bg-gray-200 rounded  w-6 h-3 sm:h-4 sm:w-7"></div> <!-- Rating Text -->
+        <div class="bg-gray-200 rounded h-2 w-4 sm:h-3 sm:w-5"></div> <!-- /100 -->
       </div>
     </div>
 
