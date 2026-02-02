@@ -17,7 +17,7 @@
           class="text-3xl sm:text-4xl lg:text-5xl font-bold font-poppins leading-tight mb-4 whitespace-nowrap text-primary"
         >
           {{ t('heroDealsTitleLine1') }} <br/>
-          <span class="text-mainText" >& {{ t('heroDealsTitleLine2') }}</span>
+          <span class="text-mainText" > {{ t('heroDealsTitleLine2') }}</span>
         </h1>
 
         <p

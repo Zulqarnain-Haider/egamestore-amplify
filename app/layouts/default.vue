@@ -1,10 +1,13 @@
 <template>
-  <div>
+   <div class="min-h-screen flex flex-col">
     <Navbar />
 
-    <Transition :name="transitionName" mode="out-in">
-      <NuxtPage />
-    </Transition>
+    <!-- PAGE CONTENT -->
+    <main class="flex-1 relative overflow-hidden">
+      <Transition :name="transitionName" mode="out-in">
+        <NuxtPage />
+      </Transition>
+    </main>
 
     <Footer />
   </div>
@@ -12,9 +15,8 @@
 
 <script setup>
 import { ref, watch } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRoute } from 'vue-router'
 
-const router = useRouter()
 const route = useRoute()
 const transitionName = ref('slide-left')
 

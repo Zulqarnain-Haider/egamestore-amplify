@@ -12,7 +12,7 @@
                cursor-pointer hover:text-primary transition"
       >
         {{ t('viewAll') }}
-        <Icon name="mdi:chevron-right" class="w-10 h-10" />
+        <Icon name="mdi:chevron-right" class="w-7 h-7 sm:w-10 sm:h-10" />
       </NuxtLink>
     </div>
 
@@ -114,20 +114,21 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, nextTick, watch } from 'vue'
+
 const { t, locale } = useI18n()
 const config = useRuntimeConfig()
 
 /* ---------------------------
-   SSR FETCH (ONLY CHANGE)
+   API FETCH
 --------------------------- */
 const { data, pending } = useFetch(
   `${config.public.apiBase}/products/latest?limit=26`,
   {
-    headers: { 'lang': locale.value },
+    headers: { lang: locale.value },
     key: 'trending-games',
     server: false,
-    lazy: true,
+    lazy: true
   }
 )
 
@@ -148,20 +149,14 @@ const getWindowWidth = () =>
 
 const updateWidth = () => {
   windowWidth.value = getWindowWidth()
-}
 
-/* SLIDER SETUP (CLIENT ONLY) */
-function setupSlider() {
-  if (!slider.value) return
-  const first = slider.value.querySelector('div')
-  if (first) {
-    const style = getComputedStyle(first)
-    cardWidth.value = first.offsetWidth + parseInt(style.marginRight)
+  const maxPage = pages.value - 1
+  if (currentPage.value > maxPage) {
+    currentPage.value = maxPage
   }
-  slider.value.addEventListener('scroll', handleScroll)
 }
 
-/* RESPONSIVE COUNT */
+/* RESPONSIVE CARD COUNT */
 const visibleCards = computed(() => {
   const w = windowWidth.value
   if (w >= 1280) return 5
@@ -170,12 +165,26 @@ const visibleCards = computed(() => {
   return 2
 })
 
-/* PAGES (DATA DRIVEN) */
+/* PAGES (SINGLE SOURCE OF TRUTH) */
 const pages = computed(() =>
   Math.max(1, Math.ceil(games.value.length / visibleCards.value))
 )
 
-/* SCROLL */
+/* SLIDER SETUP */
+function setupSlider() {
+  if (!slider.value) return
+
+  const first = slider.value.querySelector('div')
+  if (first) {
+    const style = getComputedStyle(first)
+    cardWidth.value = first.offsetWidth + parseInt(style.marginRight)
+  }
+
+  slider.value.removeEventListener('scroll', handleScroll)
+  slider.value.addEventListener('scroll', handleScroll)
+}
+
+/* SCROLL HANDLERS */
 function scrollLeft() {
   slider.value?.scrollBy({
     left: -cardWidth.value * visibleCards.value,
@@ -192,13 +201,21 @@ function scrollRight() {
 
 function handleScroll() {
   if (!slider.value || cardWidth.value === 0) return
-  const left = slider.value.scrollLeft
+
   const perPage = cardWidth.value * visibleCards.value
-  currentPage.value = Math.min(
-    Math.round(left / perPage),
-    pages.value - 1
-  )
+  const rawPage = Math.round(slider.value.scrollLeft / perPage)
+
+  currentPage.value = rawPage % pages.value
 }
+
+
+/* 🔥 DATA CHANGE SYNC (KEY FIX) */
+watch(games, async () => {
+  await nextTick()
+  setupSlider()
+  currentPage.value = 0
+  slider.value?.scrollTo({ left: 0 })
+})
 
 /* LIFECYCLE */
 onMounted(async () => {

@@ -2,10 +2,12 @@
   <transition name="fade">
     <div
       v-if="visible"
+      @click="closeModal"
       class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50"
     >
       <!--Card -->
       <div
+        @click.stop
         class="relative flex flex-col items-center justify-center
          text-center w-[90%] max-w-lg aspect-[4/5] sm:aspect-[4/4] md:aspect-[3/4] 
          overflow-hidden sm:p-8 rounded-[3rem] shadow-2xl animate-fadeIn">
@@ -171,7 +173,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch, onUnmounted } from 'vue'
 import { useUser} from '~/composables/useUser'
 
 const { t } = useI18n()
@@ -228,6 +230,22 @@ const closeModal = () => {
   confirmPassword.value = ''
   emit('close')
 }
+
+
+watch(
+  () => props.visible,
+  (val) => {
+    if (val) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+  }
+)
+
+onUnmounted(() => {
+  document.body.style.overflow = ''
+})
 </script>
 
 

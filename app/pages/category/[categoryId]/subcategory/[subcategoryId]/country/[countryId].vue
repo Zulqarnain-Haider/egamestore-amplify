@@ -59,10 +59,30 @@
         </div>
 
         <!-- Products -->
-        <div v-else class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div v-else-if="products.length > 0" class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           <ProductCard v-for="p in products" :key="p.id" :product="normalizeProduct(p)" />
         </div>
+  
 
+        <!-- Empty State -->
+<div
+  v-else
+  class="flex flex-col items-center justify-center py-20 text-center"
+>
+  <Icon
+    name="heroicons-archive-box-x-mark-20-solid"
+    class="w-16 h-16 text-mainText/40 mb-4"
+  />
+  <h3 class="text-xl font-semibold text-mainText mb-2">
+   {{ t ('noProductsTitle') }}
+  </h3>
+  <p class="text-mainText/70 max-w-md">
+        {{ t('noProductsDescStart') }}
+ <span class="font-medium font-poppins text-primary">
+    {{ subcategoryName || categoryName }}
+  </span>     {{ t('noProductsDescEnd') }} </p>
+  
+</div>
         <!-- Pagination -->
         <Pagination
           v-if="total > perPage"
@@ -78,16 +98,22 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, onActivated } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useHead } from '#imports'
 import { useProductsStore } from '~/stores/productsStore'
 import { useCategoriesStore } from '~/stores/categoriesStore'
 import { useCategoryContext } from '~/composables/useCategoryContext'
+import { useStock } from '~/composables/useStock'
+import { useToast } from '#imports'
+
 
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
+const { isInStock } = useStock()
+const toast = useToast()
+
 const productsStore = useProductsStore()
 const categoriesStore = useCategoriesStore()
 const { categoryId, subcategoryId, countryId } = useCategoryContext()
@@ -162,14 +188,27 @@ const normalizeProduct = (product) => {
     rating: product.reviews_avg_rating || 0,
     category: product.category,
     subCategory: product.sub_category,
-    country: product.country
+    country: product.country,
+     //STOCK (VERY IMPORTANT)
+    stock: product.stock,
+    type: product.type
   }
 }
 
+onActivated(() => {
+  fetchData()  // Back se aane par data refetch karo
+})
+
+watch(() => route.fullPath, fetchData)
+
 // Watchers
-watch(() => route.query.page, fetchData)
+// watch(() => route.query.page, fetchData)
 watch(countryId, fetchData)
 watch(subcategoryId, fetchData)
 
 onMounted(fetchData)
+
+definePageMeta({
+  isr: 300 // regenerate every 5 minutes
+})
 </script>

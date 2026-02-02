@@ -104,6 +104,9 @@ const formatDate = (dateStr) => {
     year: 'numeric'
   })
 }
+definePageMeta({
+  isr: 300 // regenerate every 5 minutes
+})
 </script>
 
 <style scoped>

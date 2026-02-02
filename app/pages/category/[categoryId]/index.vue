@@ -13,7 +13,7 @@
     </div>
 
     <!-- Error State -->
-    <div v-else-if="error" class="text-center py-12">
+    <!-- <div v-else-if="error" class="text-center py-12">
       <p class="text-error text-lg mb-4">{{ error }}</p>
       <NuxtLink
       to="/"
@@ -21,10 +21,11 @@
         >
         Go To Home
       </NuxtLink>
-    </div>
+    </div> -->
+
 
     <!-- Empty State -->
-    <div v-else-if="!categories.length" class="text-center py-12">
+    <div v-else-if="categories.length === 0" class="text-center py-12">
       <p class="text-onFooter text-lg">{{ t('noSubcategoriesFound') }}</p>
     </div>
 
