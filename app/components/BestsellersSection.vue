@@ -12,13 +12,11 @@
                cursor-pointer hover:text-primary transition"
       >
         {{ t('viewAll') }}
-        <Icon name="mdi:chevron-right" class="w-10 h-10" />
+        <Icon name="mdi:chevron-right" class="w-7 h-7 sm:w-10 sm:h-10 mb-1" />
       </NuxtLink>
     </div>
 
-    <!-- ===============================
-         LOADING (SKELETON – SAME AS TRENDING)
-         =============================== -->
+    <!-- LOADING -->
     <div v-if="loading" class="relative mt-8">
       <div
         class="flex gap-4 overflow-x-auto scroll-smooth scrollbar-hide
@@ -36,9 +34,7 @@
       </div>
     </div>
 
-    <!-- ===============================
-         REAL SLIDER
-         =============================== -->
+    <!-- SLIDER -->
     <div v-else class="relative mt-8">
       <div
         ref="slider"
@@ -79,9 +75,7 @@
       </button>
     </div>
 
-    <!-- ===============================
-         DOTS (DATA DRIVEN – SAME AS TRENDING)
-         =============================== -->
+    <!-- DOTS -->
     <div class="flex justify-center items-center mt-6 gap-2">
       <span
         v-for="i in pages"
@@ -98,26 +92,25 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, nextTick, watch } from 'vue'
 
 const config = useRuntimeConfig()
 const { t, locale } = useI18n()
 
 /* ---------------------------
-   SSR FETCH (BESTSELLERS)
+   FETCH BESTSELLERS
 --------------------------- */
 const { data, pending } = useFetch(
-  `${config.public.apiBase}/products/best-selling?limit=15&days=100`,
+  `${config.public.apiBase}/products/best-selling?limit=15&days=300`,
   {
-    headers: { 'lang': locale.value },
+    headers: { lang: locale.value },
     server: false,
-    lazy: true,
+    lazy: true
   }
 )
 
-/* MAP API → PRODUCT CARD (SAME SHAPE) */
+/* MAP API → PRODUCT CARD */
 const products = computed(() => {
-  // ✅ FIX: fallback to cards if products is empty
   const list =
     data.value?.data?.products?.length
       ? data.value.data.products
@@ -172,12 +165,12 @@ const visibleCards = computed(() => {
   return 2
 })
 
-/* PAGES (SINGLE SOURCE OF TRUTH) */
+/* PAGES */
 const pages = computed(() =>
   Math.max(1, Math.ceil(products.value.length / visibleCards.value))
 )
 
-/* SCROLL */
+/* SCROLL ACTIONS */
 function scrollLeft() {
   slider.value?.scrollBy({
     left: -cardWidth.value * visibleCards.value,
@@ -192,29 +185,45 @@ function scrollRight() {
   })
 }
 
+/* 🔁 DOTS LOOP LOGIC (SAME AS TRENDING) */
 function handleScroll() {
   if (!slider.value || cardWidth.value === 0) return
+
   const perPage = cardWidth.value * visibleCards.value
-  currentPage.value = Math.min(
-    Math.round(slider.value.scrollLeft / perPage),
-    pages.value - 1
-  )
+  const rawPage = Math.round(slider.value.scrollLeft / perPage)
+
+  currentPage.value = rawPage % pages.value
 }
 
-/* CLIENT-ONLY MEASURE */
+/* SETUP SLIDER */
+function setupSlider() {
+  if (!slider.value) return
+
+  const first = slider.value.querySelector('div')
+  if (first) {
+    const style = getComputedStyle(first)
+    cardWidth.value = first.offsetWidth + parseInt(style.marginRight)
+  }
+
+  slider.value.removeEventListener('scroll', handleScroll)
+  slider.value.addEventListener('scroll', handleScroll)
+}
+
+/* DATA CHANGE SYNC */
+watch(products, async () => {
+  await nextTick()
+  setupSlider()
+  currentPage.value = 0
+  slider.value?.scrollTo({ left: 0 })
+})
+
+/* LIFECYCLE */
 onMounted(async () => {
   windowWidth.value = getWindowWidth()
   window.addEventListener('resize', updateWidth)
 
   await nextTick()
-  if (slider.value) {
-    const first = slider.value.querySelector('div')
-    if (first) {
-      const style = getComputedStyle(first)
-      cardWidth.value = first.offsetWidth + parseInt(style.marginRight)
-    }
-    slider.value.addEventListener('scroll', handleScroll)
-  }
+  setupSlider()
 })
 
 onBeforeUnmount(() => {
@@ -222,7 +231,6 @@ onBeforeUnmount(() => {
   slider.value?.removeEventListener('scroll', handleScroll)
 })
 </script>
-
 
 <style scoped>
 .scrollbar-hide {

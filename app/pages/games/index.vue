@@ -233,4 +233,7 @@ const genresList = ref([
   { name: 'Racing', count: 0 },
   { name: 'Simulation', count: 0 }
 ])
+definePageMeta({
+  isr: 300 // regenerate every 5 minutes
+})
 </script>

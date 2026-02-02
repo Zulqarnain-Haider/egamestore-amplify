@@ -98,16 +98,22 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, onActivated } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useHead } from '#imports'
 import { useProductsStore } from '~/stores/productsStore'
 import { useCategoriesStore } from '~/stores/categoriesStore'
 import { useCategoryContext } from '~/composables/useCategoryContext'
+import { useStock } from '~/composables/useStock'
+import { useToast } from '#imports'
+
 
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
+const { isInStock } = useStock()
+const toast = useToast()
+
 const productsStore = useProductsStore()
 const categoriesStore = useCategoriesStore()
 const { categoryId, subcategoryId, countryId } = useCategoryContext()
@@ -182,14 +188,27 @@ const normalizeProduct = (product) => {
     rating: product.reviews_avg_rating || 0,
     category: product.category,
     subCategory: product.sub_category,
-    country: product.country
+    country: product.country,
+     //STOCK (VERY IMPORTANT)
+    stock: product.stock,
+    type: product.type
   }
 }
 
+onActivated(() => {
+  fetchData()  // Back se aane par data refetch karo
+})
+
+watch(() => route.fullPath, fetchData)
+
 // Watchers
-watch(() => route.query.page, fetchData)
+// watch(() => route.query.page, fetchData)
 watch(countryId, fetchData)
 watch(subcategoryId, fetchData)
 
 onMounted(fetchData)
+
+definePageMeta({
+  isr: 300 // regenerate every 5 minutes
+})
 </script>

@@ -2,24 +2,44 @@
   <!-- ======================================
        LOADING (SSR + CSR SAFE)
        ====================================== -->
-  <div
+  <!-- <div
     v-if="productStore.loading"
     class="min-h-screen text-mainText font-poppins"
   >
     <div class="w-[90%] max-w-7xl mx-auto flex flex-col gap-10 animate-fadeIn">
       <ProductOverviewSkeleton />
     </div>
-  </div>
+  </div> -->
+  
+<div v-if="productStore.loading" class="min-h-screen flex items-center justify-center">
+  <p>Loading product details...</p>
+</div>
+
 
   <!-- ======================================
        ERROR (ONLY IF FETCH FAILED)
        ====================================== -->
-  <div
-    v-else-if="productStore.error"
-    class="text-center py-10 text-onMainText"
-  >
-    {{ productStore.error }}
+<div
+  v-else-if="productStore.error"
+  class="min-h-[60vh] flex items-center justify-center text-center text-onMainText"
+>
+  <div class="space-y-4">
+    <h2 class="text-2xl font-semibold">
+      {{ t('productNotFound') }}
+    </h2>
+
+    <p class="text-sm opacity-70">
+      {{ t('productNotAvailableDesc') }}
+    </p>
+
+    <NuxtLink
+      to="/"
+      class="inline-block mt-4 px-6 py-2 bg-primary text-white rounded-md"
+    >
+      {{ t('backToHome') }}
+    </NuxtLink>
   </div>
+</div>
 
   <!-- ======================================
        PRODUCT CONTENT
@@ -110,5 +130,9 @@ useHead(() => {
       }
     ]
   }
+})
+
+definePageMeta({
+  isr: 300 // regenerate every 5 minutes
 })
 </script>

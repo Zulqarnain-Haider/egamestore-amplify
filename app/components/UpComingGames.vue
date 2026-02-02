@@ -1,18 +1,18 @@
 <template>
   <section class="mt-16 text-white w-full relative">
     <!-- Header -->
-    <div class="flex items-center justify-between px-4 sm:px-6 lg:px-7">
-      <h2 class="text-2xl font-semibold font-vazirmatn">
+    <div class="flex items-center justify-between gap-3 sm:gap-0 px-4 sm:px-6 lg:px-7">
+      <h2 class="text-2xl font-semibold font-vazirmatn whitespace-nowrap">
         {{ t('upComingGames') }}
       </h2>
 
       <NuxtLink
         to="/games?type=preorders"
         class="text-onGoNext text-lg font-vazirmatn flex items-center
-               cursor-pointer hover:text-primary transition"
+               cursor-pointer hover:text-primary transition whitespace-nowrap"
       >
         {{ t('viewAll') }}
-        <Icon name="mdi:chevron-right" class="w-10 h-10" />
+        <Icon name="mdi:chevron-right" class="w-7 h-7 sm:w-10 sm:h-10 mb-1" />
       </NuxtLink>
     </div>
 
@@ -160,12 +160,13 @@ function scrollRight() {
 
 function handleScroll() {
   if (!slider.value || cardWidth.value === 0) return
+
   const perPage = cardWidth.value * visibleCards.value
-  currentPage.value = Math.min(
-    Math.round(slider.value.scrollLeft / perPage),
-    pages.value - 1
-  )
+  const rawPage = Math.round(slider.value.scrollLeft / perPage)
+
+  currentPage.value = rawPage % pages.value
 }
+
 
 /* CLIENT-ONLY MEASURE */
 onMounted(async () => {

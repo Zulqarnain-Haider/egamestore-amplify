@@ -18,11 +18,12 @@ export function useCart() {
       'add',
       product
     )
+    const productName = product.name || product.title || 'Product'
 
     if (res?.success) {
       toast.success({
         title: 'Added to cart',
-        message: `${product.title} was added successfully`,
+        message: `${productName} was added successfully`,
         position: 'topCenter',
         duration: 2500
       })
@@ -40,6 +41,15 @@ export function useCart() {
   // UPDATE QTY (+ / -)
   // ============================
   const updateQty = async (item, qty) => {
+      if (qty > 5) {
+    toast.error({
+      title: 'Limit exceeded',
+      message: 'Maximum 5 items per product allowed',
+      position: 'topCenter',
+      duration: 3000
+    })
+    return
+  }
     const res = await cartStore.addOrUpdateCard(
       item.id,
       qty,

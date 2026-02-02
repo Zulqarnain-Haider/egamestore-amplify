@@ -5,9 +5,11 @@
       class="fixed inset-0 bg-black/70 
       backdrop-blur-sm flex items-center justify-center z-[9999] overflow-hidden
        !m-0 !p-0 w-screen h-screen"
+       @click="$emit('close')"
     >
       <!-- ================= Main Popup Card ================= -->
       <div
+      @click.stop
         class="relative flex flex-col items-center justify-center text-center
          w-[90%] max-w-md sm:max-w-lg
          overflow-hidden p-8 md:p-10 animate-fadeIn"
@@ -25,7 +27,8 @@
 
         <!-- ================= Content ================= -->
         <div
-          class="relative z-10 flex flex-col scale-75 md:scale-90 font-poppins items-center justify-center w-full space-y-5"
+          class="relative z-10 flex flex-col scale-[0.6] sm:scale-75 md:scale-90 
+          font-poppins items-center justify-center w-full space-y-5"
         >
           <!-- Heading -->
           <h2 class="text-xl sm:text-2xl font-semibold text-mainText">
@@ -106,7 +109,7 @@
           <!-- ================= Bottom Buttons ================= -->
           <div class="flex items-center w-full gap-3">
             <button
-              class="w-full py-3 text-onError bg-error/70 hover:bg-red/80 rounded-full text-sm flex items-center justify-center gap-2"
+              class="w-full py-3 text-onError bg-error/70 hover:bg-red/80 rounded-full text-xs sm:text-sm flex items-center justify-center gap-2"
               @click="reportProblem"
             >
               Report problem
@@ -116,12 +119,12 @@
               variant="primary"
               full
               :height="42"
-              extraClass="text-sm flex items-center rounded-full justify-center gap-2"
+              extraClass="text-xs sm:text-sm flex items-center rounded-full justify-center whitespace-nowrap"
               @click="goToRedeem"
             >
               <Icon
                 name="heroicons-solid:question-mark-circle"
-                class="text-xl text-white"
+                class="text-xl text-white mr-1"
               />
               How to redeem
             </AppButton>
@@ -133,10 +136,13 @@
 </template>
 
 <script setup>
-import { computed, watch } from 'vue'
+import { computed, watch, ref } from 'vue'
 import { useToast, useRouter } from '#imports'
 import { useOrdersStore } from '~/stores/ordersStore.js'
 
+
+const showOrderKeyModal = ref(false)
+const showRedeemModal = ref(false)
 /* ================= Setup ================= */
 const toast = useToast()
 const router = useRouter()
@@ -157,7 +163,12 @@ const props = defineProps({
   itemId: { type: Number, default: null }
 })
 
-const emit = defineEmits(['close', 'codesFetched'])
+const emit = defineEmits(['close', 'codesFetched', 'open-redeem'])
+
+const openRedeemFromOrderKey = () => {
+  showOrderKeyModal.value = false
+  showRedeemModal.value = true
+}
 
 /* ================= Resolved Codes ================= */
 /**
@@ -208,7 +219,8 @@ const reportProblem = () => {
 }
 
 const goToRedeem = () => {
-  router.push('/product_activation')
+ emit('close')
+  emit('open-redeem')
 }
 
 /* ================= Watchers ================= */

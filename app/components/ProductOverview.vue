@@ -144,7 +144,7 @@
           full
           extraClass="text-md py-3 rounded-2xl flex-1"
           :disabled="!isInStock(product)"
-          @click="buyNow(product, quantity)"
+          @click.stop.prevent="handleBuyNow"
         >
          {{ t('buyNow') }}
         </AppButton>
@@ -154,8 +154,8 @@
           :height="45"
           full
           extraClass="text-md py-3 rounded-2xl flex-1"
-          :disabled="!isInStock(product)"
-          @click.stop.prevent="addToCart(product, quantity)"
+          :disabled="!isInStock(product)"  
+          @click.stop.prevent="handleAddToCart"
         >
           {{ isInStock(product) ? t('addToCart') : t('productOutOfStock') }}
         </AppButton>
@@ -200,10 +200,14 @@
 import { ref, computed, watchEffect } from 'vue'
 import { useCart } from '~/composables/useCart'
 import { useStock } from '~/composables/useStock'
+import { useToast } from '#imports'
 
 const { addToCart, buyNow } = useCart()
 const { isInStock, stockLabel } = useStock()
 const { t } = useI18n()
+
+const toast = useToast()
+
 
 const props = defineProps({
   product: {
@@ -226,8 +230,58 @@ watchEffect(() => {
   }
 })
 
+const MAX_QTY = 5
+
 const increaseQty = () => {
+   if (quantity.value >= MAX_QTY) {
+    toast.error({
+      title: 'Limit exceeded',
+      message: 'The quantity may not be greater than 5.',
+      position: 'topCenter',
+      duration: 3000
+    })
+    return
+  }
   quantity.value++
+}
+
+
+const handleBuyNow = () => {
+  if (!isInStock(props.product)) {
+    toast.error({
+      title: 'Out of stock',
+      message: 'This product is currently out of stock.',
+      position: 'topCenter',
+      duration: 3000
+    })
+    return
+  }
+
+  buyNow(props.product, quantity.value)
+}
+
+const handleAddToCart = () => {
+  if (!isInStock(props.product)) {
+    toast.error({
+      title: 'Out of stock',
+      message: 'This product is currently out of stock.',
+      position: 'topCenter',
+      duration: 3000
+    })
+    return
+  }
+
+  if (quantity.value > 5) {
+    toast.error({
+      title: 'Limit exceeded',
+      message: 'The quantity may not be greater than 5.',
+      position: 'topCenter',
+      duration: 3000
+    })
+    return
+  }
+
+  addToCart(props.product, quantity.value)
 }
 
 const decreaseQty = () => {

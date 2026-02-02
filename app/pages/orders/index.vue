@@ -23,7 +23,7 @@
             />
           </div>
 
-          <!-- ✅ Styled Status Dropdown -->
+          <!--Styled Status Dropdown -->
           <div class="relative">
             <!-- Trigger -->
             <button
@@ -150,7 +150,7 @@
 
           <div class="border-t border-onMainText/60"></div>
 
-          <div class="flex justify-between items-center text-sm">
+          <div class="flex justify-between gap-1 items-center text-sm">
             <div class="text-onMainText space-x-3">
               <span>{{ t('orderPlatform') }}: <span class="text-mainText">{{ order.platform }}</span></span>
               <span>{{ t('orderRegion')}}: <span class="text-mainText">{{ order.region }}</span></span>
@@ -158,7 +158,7 @@
             </div>
 
             <p
-              class="text-primary cursor-pointer hover:underline flex items-center"
+              class="text-primary cursor-pointer  whitespace-nowrap hover:underline flex items-center"
               @click="goToDetails(order)"
             >
               {{ t('orderViewDetails') }}
@@ -169,8 +169,8 @@
       </div>
 
       <!-- Pagination -->
-      <div class="flex justify-between items-center">
-        <p class="text-onFooter text-md">{{ paginationText }}</p>
+      <div class="flex flex-wrap md:justify-between items-center">
+        <p class="text-onFooter mb-2 sm:mb-0 text-md">{{ paginationText }}</p>
 
         <Pagination
           :total="ordersStore.pagination.total"
@@ -186,7 +186,9 @@
       :visible="showModal"
       :codes="selectedCodes"
       @close="showModal = false"
+      @open-redeem="handleOpenRedeem"
     />
+    <RedeemModal v-model="showRedeemModal" />
   </div>
 </template>
 
@@ -194,6 +196,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useOrdersStore } from '~/stores/ordersStore'
+import RedeemModal from '~/components/RedeemModal.vue'
 
 useHead({
   title: 'My Orders | eGameStore',
@@ -211,10 +214,17 @@ const statusFilter = ref(route.query.status || 'all')
 
 const dropdownOpen = ref(false)
 const showModal = ref(false)
+const showRedeemModal = ref(false) 
 const selectedCodes = ref([])
 
 const orders = computed(() => ordersStore.orders)
 const paginatedOrders = computed(() => orders.value)
+
+const handleOpenRedeem = () => {
+  showModal.value = false        // OrderKeyModal close
+  showRedeemModal.value = true  // RedeemModal open
+}
+
 
 /* Status options */
 const statusOptions = computed(() => [
