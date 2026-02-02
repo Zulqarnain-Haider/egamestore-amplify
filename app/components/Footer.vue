@@ -6,7 +6,7 @@
       <div class="space-y-3 sm:col-span-2 md:col-span-3 lg:col-span-1">
          <NuxtImg 
          densities="x1" quality="80" preload
-          src="/games/Navbar-logo.svg.svg" alt="" class="h-[45px] w-auto mb-6 md:mb-4" />
+          src="/games/EGAMESTORE-logo.png" alt="" class="h-[45px] w-auto mb-6 md:mb-4" />
         <p class="text-lg">
           {{ t('footerAboutText') }}
         </p>

@@ -213,4 +213,8 @@ const totalProducts = computed(() => allProducts.value.length)
    WATCHERS
 -------------------------- */
 watch(sortBy, () => (currentPage.value = 1))
+
+definePageMeta({
+  isr: 300 // regenerate every 5 minutes
+})
 </script>
