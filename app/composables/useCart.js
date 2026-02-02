@@ -18,11 +18,12 @@ export function useCart() {
       'add',
       product
     )
+    const productName = product.name || product.title || 'Product'
 
     if (res?.success) {
       toast.success({
         title: 'Added to cart',
-        message: `${product.title} was added successfully`,
+        message: `${productName} was added successfully`,
         position: 'topCenter',
         duration: 2500
       })
