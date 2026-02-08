@@ -20,8 +20,110 @@ export default defineNuxtConfig({
     "@nuxtjs/tailwindcss",
     "nuxt-toast",
     "@nuxtjs/i18n",
+    "@nuxtjs/sitemap",
   ],
 
+  /* =========================
+     SITEMAP CONFIG (SEO)
+  ========================= */
+  sitemap: {
+    // @ts-ignore
+    siteUrl: 'https://www.store.egamestore.com',
+    gzip: true,
+    autoI18n: false,
+
+    // ❌ Pages that should NOT be indexed
+    exclude: [
+      '/auth/**',
+      '/contact-us/chat'
+    ],
+
+    urls: async () => {
+      const urls: any[] = []
+
+      /* --------------------
+         Static SEO Pages
+      -------------------- */
+      urls.push(
+        { loc: '/', priority: 1.0 },
+        { loc: '/contact-us', priority: 0.6 },
+        { loc: '/news-blog', priority: 0.8 }
+      )
+
+      /* --------------------
+         PRODUCTS (product/[id].vue)
+      -------------------- */
+      try {
+        let page = 1
+        let hasMore = true
+
+        while (hasMore) {
+          const res: any = await $fetch(
+            `${process.env.NUXT_PUBLIC_API_BASE}/cards/category`,
+            {
+              params: {
+                category_id: 1,  
+                country_id: 1,   
+                page,
+                per_page: 100,
+                sort_type: 'asc_price'
+              },
+              headers: {
+                'Accept-language': 'en'
+              }
+            }
+          )
+
+          const cards = res?.data?.cards || []
+
+          cards.forEach((p: any) => {
+            urls.push({
+              loc: `/product/${p.id}`,
+              lastmod: p.updated_at,
+              priority: 0.9
+            })
+          })
+
+          hasMore = res?.data?.has_more
+          page++
+        }
+      } catch (e) {
+        console.warn('Products sitemap failed')
+      }
+
+      /* --------------------
+         BLOGS (news-blog/[slug].vue)
+      -------------------- */
+      try {
+        const blogs: any[] = await $fetch(
+          `${process.env.NUXT_PUBLIC_API_BASE}/blogs`
+        )
+
+        blogs.forEach((b: any) => {
+          urls.push({
+            loc: `/news-blog/${b.slug}`,
+            lastmod: b.updated_at,
+            priority: 0.7
+          })
+        })
+      } catch (e) {
+        console.warn('Blogs sitemap skipped')
+      }
+
+      return urls
+    },
+
+    robots: [
+      {
+        UserAgent: '*',
+        Allow: '/'
+      }
+    ]
+  },
+
+  /* =========================
+     REST CONFIG (UNCHANGED)
+  ========================= */
   toast: {
     position: "top-right",
     duration: 3000,
@@ -75,18 +177,8 @@ export default defineNuxtConfig({
 
   i18n: {
     locales: [
-      {
-        code: "en",
-        iso: "en-US",
-        dir: "ltr",
-        file: "en.json"
-      },
-      {
-        code: "ar",
-        iso: "ar-SA",
-        dir: "rtl",
-        file: "ar.json"
-      },
+      { code: "en", iso: "en-US", dir: "ltr", file: "en.json" },
+      { code: "ar", iso: "ar-SA", dir: "rtl", file: "ar.json" },
     ],
     defaultLocale: "en",
     strategy: "no_prefix",
@@ -99,4 +191,4 @@ export default defineNuxtConfig({
     lazy: true,
     langDir: "locales",
   },
-});
+})
