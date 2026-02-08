@@ -30,6 +30,7 @@ export default defineNuxtConfig({
     // @ts-ignore
     siteUrl: 'https://www.store.egamestore.com',
     gzip: true,
+    zeroRuntime: true,
     autoI18n: false,
 
     // ❌ Pages that should NOT be indexed
@@ -116,7 +117,9 @@ export default defineNuxtConfig({
     robots: [
       {
         UserAgent: '*',
-        Allow: '/'
+        Allow: '/',
+        Sitemap: 'https://www.store.egamestore.com/sitemap.xml'
+
       }
     ]
   },
