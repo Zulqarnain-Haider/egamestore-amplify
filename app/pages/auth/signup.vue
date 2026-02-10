@@ -237,18 +237,18 @@
       <!-- Social Icons -->
       <div class="flex justify-center gap-4 mb-6">
         <NuxtImg
-         densities="x1" quality="85" loading="lazy"
+         densities="x1" quality="85" preload
         src="/games/Signinwith1.svg" alt="" class="cursor-pointer" />
         <NuxtImg
-         densities="x1" quality="85" loading="lazy"
+         densities="x1" quality="85" preload
          src="/games/Signinwith2.svg" alt="" class="cursor-pointer" />
         <NuxtImg
-         densities="x1" quality="85" loading="lazy"
+         densities="x1" quality="85" preload
          src="/games/Signinwith3.svg" alt="" class="cursor-pointer"
          @click="handleSocialLogin('facebook')"
          />
         <NuxtImg
-         densities="x1" quality="85" loading="lazy"
+         densities="x1" quality="85" preload
          src="/games/Signinwith4.svg" alt="" class="cursor-pointer"
          @click="handleSocialLogin('google')"
          />
@@ -348,7 +348,7 @@ const globalError = ref('')
 
 // Input style
 const inputClass = (field) => [
-  'w-full h-10 p-2 text-sm rounded-md text-onFooter bg-bgDark font-poppins focus:outline-none transition-all duration-200 placeholder:text-inputsIn',
+  'w-full h-10 p-2 text-sm rounded-md text-onPrimary/80 bg-bgDark font-poppins focus:outline-none transition-all duration-200 placeholder:text-inputsIn',
   errors.value[field] ? 'border border-error' : 'border border-transparent focus:border-primary',
 ].join(' ')
 

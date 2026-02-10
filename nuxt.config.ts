@@ -39,17 +39,20 @@ export default defineNuxtConfig({
     // Static routes first
     routes: [
       '/',
-      '/auth',
-      '/contact-us',
       '/games',
       '/news-blog',
-      '/orders',
       '/profile',
       '/search',
       '/cart',
       '/checkout',
       '/faq',
       '/wallet'
+    ],
+    // Exclude
+    exclude: [
+      '/auth',
+      '/contact-us',
+      '/orders',
     ],
     // Default options
     defaults: {
@@ -116,18 +119,8 @@ export default defineNuxtConfig({
 
   i18n: {
     locales: [
-      {
-        code: "en",
-        iso: "en-US",
-        dir: "ltr",
-        file: "en.json"
-      },
-      {
-        code: "ar",
-        iso: "ar-SA",
-        dir: "rtl",
-        file: "ar.json"
-      },
+      { code: "en", iso: "en-US", dir: "ltr", file: "en.json" },
+      { code: "ar", iso: "ar-SA", dir: "rtl", file: "ar.json" },
     ],
     defaultLocale: "en",
     strategy: "no_prefix",
