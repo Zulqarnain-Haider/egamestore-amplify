@@ -237,18 +237,18 @@
       <!-- Social Icons -->
       <div class="flex justify-center gap-4 mb-6">
         <NuxtImg
-         densities="x1" quality="85" loading="lazy"
+         densities="x1" quality="85" preload
         src="/games/Signinwith1.svg" alt="" class="cursor-pointer" />
         <NuxtImg
-         densities="x1" quality="85" loading="lazy"
+         densities="x1" quality="85" preload
          src="/games/Signinwith2.svg" alt="" class="cursor-pointer" />
         <NuxtImg
-         densities="x1" quality="85" loading="lazy"
+         densities="x1" quality="85" preload
          src="/games/Signinwith3.svg" alt="" class="cursor-pointer"
          @click="handleSocialLogin('facebook')"
          />
         <NuxtImg
-         densities="x1" quality="85" loading="lazy"
+         densities="x1" quality="85" preload
          src="/games/Signinwith4.svg" alt="" class="cursor-pointer"
          @click="handleSocialLogin('google')"
          />

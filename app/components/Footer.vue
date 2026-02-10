@@ -1,6 +1,7 @@
 <template>
   <footer class="bg-surface text-onFooter px-6 py-10" style="background-image: url('/games/Footer.background.newer.jpeg'); background-size: cover; background-repeat: no-repeat;">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 p-7  lg:grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-8 md:gap-10">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 p-7 
+     lg:grid-cols-[2fr_1fr_1fr_1fr] gap-8 md:gap-10">
       
       <!-- About -->
       <div class="space-y-3 sm:col-span-2 md:col-span-3 lg:col-span-1">
@@ -26,7 +27,7 @@
       </div>
 
       <!-- Quick Links -->
-      <div>
+      <div class="lg:ml-5">
         <h3 class="text-lg font-semibold text-outline mb-3">{{ t('footerQuickLinks') }}</h3>
         <ul class="space-y-3">
         <li><NuxtLink to="/" class="hover:text-primary">{{ t('footerHome') }}</NuxtLink></li>
@@ -59,7 +60,7 @@
       </div>
 
       <!-- Contact Us -->
-      <div class="space-y-3">
+      <!-- <div class="space-y-3">
         <h3 class="text-lg font-semibold text-outline mb-3">{{ t('footerContactUs') }}</h3>
         <span v-if="settings.address" class="flex gap-1">
    <Icon name="heroicons-map-pin" class="w-8 h-10 text-white" />
@@ -85,7 +86,7 @@
             </a>
           </p>
         </span>
-      </div>
+      </div> -->
     </div>
 
     <!-- Bottom -->

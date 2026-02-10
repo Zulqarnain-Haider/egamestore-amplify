@@ -1,6 +1,6 @@
 <template>
-  <nav class="bg-bgNav text-mainText px-4 sm:px-6 md:px-8 lg:px-10 py-4 md:py-5 lg:py-6
-    sticky top-0 z-50 flex items-center justify-between flex-wrap">
+  <nav class="bg-bgNav text-mainText px-4 sm:px-6 md:px-8 lg:px-10 min-h-[64px] md:min-h-[72px] xl:min-h-[80px]
+    sticky top-0 z-50 flex items-center justify-between">
     
     <!-- ========== LEFT SECTION ========== -->
     <div class="flex items-center gap-3 md:gap-4 xl:gap-6">
@@ -11,8 +11,10 @@
 
       <!-- Logo -->
       <NuxtLink to="/">
-        <NuxtImg src="/games/EGAMESTORE-logo.png" alt="E-Game Store" class="h-8 sm:h-9 xl:h-8 w-auto" densities="x1 x2"
-          quality="80" height="32" width="120" preload />
+        <NuxtImg src="/games/EGAMESTORE-logo.png" alt="E-Game Store" 
+        class="max-h-[40px] md:max-h-[44px] xl:max-h-[48px] object-contain w-auto"
+        densities="x1 x2"
+        quality="80" height="32" width="120" preload />
       </NuxtLink>
 
       <!-- Nav links (desktop) -->
