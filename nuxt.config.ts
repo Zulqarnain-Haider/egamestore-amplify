@@ -20,7 +20,44 @@ export default defineNuxtConfig({
     "@nuxtjs/tailwindcss",
     "nuxt-toast",
     "@nuxtjs/i18n",
+    "@nuxtjs/sitemap",
+    "@nuxtjs/robots",
   ],
+
+  site: {
+    url: 'www.store.egamestore.com'
+  },
+
+  sitemap: {
+    hostname: 'https://www.store.egamestore.com',
+    gzip: true,
+    // Define your data sources
+    sources: [
+      '/api/__sitemap__/blogs', // Your new dynamic endpoint
+      '/api/__sitemap__/categories_and_products'
+    ],
+    // Static routes first
+    routes: [
+      '/',
+      '/auth',
+      '/contact-us',
+      '/games',
+      '/news-blog',
+      '/orders',
+      '/profile',
+      '/search',
+      '/cart',
+      '/checkout',
+      '/faq',
+      '/wallet'
+    ],
+    // Default options
+    defaults: {
+      changefreq: 'weekly',
+      priority: 0.7,
+      lastmod: new Date().toISOString()
+    }
+  },
 
   toast: {
     position: "top-right",
