@@ -39,17 +39,20 @@ export default defineNuxtConfig({
     // Static routes first
     routes: [
       '/',
-      '/auth',
-      '/contact-us',
       '/games',
       '/news-blog',
-      '/orders',
       '/profile',
       '/search',
       '/cart',
       '/checkout',
       '/faq',
       '/wallet'
+    ],
+    // Exclude
+    exclude: [
+      '/auth',
+      '/contact-us',
+      '/orders',
     ],
     // Default options
     defaults: {
