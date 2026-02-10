@@ -348,7 +348,7 @@ const globalError = ref('')
 
 // Input style
 const inputClass = (field) => [
-  'w-full h-10 p-2 text-sm rounded-md text-onFooter bg-bgDark font-poppins focus:outline-none transition-all duration-200 placeholder:text-inputsIn',
+  'w-full h-10 p-2 text-sm rounded-md text-onPrimary/80 bg-bgDark font-poppins focus:outline-none transition-all duration-200 placeholder:text-inputsIn',
   errors.value[field] ? 'border border-error' : 'border border-transparent focus:border-primary',
 ].join(' ')
 
