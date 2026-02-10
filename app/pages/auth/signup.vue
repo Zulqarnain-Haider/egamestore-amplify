@@ -238,18 +238,18 @@
       <div class="flex justify-center gap-4 mb-6">
         <NuxtImg
          densities="x1" quality="85" preload
-        src="/games/Signinwith1.svg" alt="" class="cursor-pointer" />
+        src="/games/Signinwith1.png" alt="" class="cursor-pointer" />
         <NuxtImg
          densities="x1" quality="85" preload
-         src="/games/Signinwith2.svg" alt="" class="cursor-pointer" />
+         src="/games/Signinwith2.png" alt="" class="cursor-pointer" />
         <NuxtImg
          densities="x1" quality="85" preload
-         src="/games/Signinwith3.svg" alt="" class="cursor-pointer"
+         src="/games/Signinwith3.png" alt="" class="cursor-pointer"
          @click="handleSocialLogin('facebook')"
          />
         <NuxtImg
          densities="x1" quality="85" preload
-         src="/games/Signinwith4.svg" alt="" class="cursor-pointer"
+         src="/games/Signinwith4.png" alt="" class="cursor-pointer"
          @click="handleSocialLogin('google')"
          />
       </div>

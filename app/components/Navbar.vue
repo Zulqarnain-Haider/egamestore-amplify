@@ -12,9 +12,9 @@
       <!-- Logo -->
       <NuxtLink to="/">
         <NuxtImg src="/games/EGAMESTORE-logo.png" alt="E-Game Store" 
-        class="max-h-[40px] md:max-h-[44px] xl:max-h-[48px] object-contain w-auto"
+        class="object-contain w-auto"
         densities="x1 x2"
-        quality="80" height="32" width="120" preload />
+        quality="80" preload />
       </NuxtLink>
 
       <!-- Nav links (desktop) -->
@@ -129,7 +129,7 @@
         <div class="relative z-50 h-full w-72 bg-bgNav shadow-lg flex flex-col">
           <!-- Sidebar Header -->
           <div class="flex items-center justify-between px-3 py-3 border-b border-outline">
-            <NuxtImg src="/games/EGAMESTORE-logo.png" alt="EGAMESTORE Logo" class="h-6 w-auto" 
+            <NuxtImg src="/games/EGAMESTORE-logo.png" alt="EGAMESTORE Logo" class="object-contain w-auto" 
             format="webp" densities="x1 x2" quality="80" preload />
             
             <Icon name="mdi:close" class="h-7 w-7 text-primary cursor-pointer" @click="isOpen = false" />
