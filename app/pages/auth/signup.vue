@@ -266,7 +266,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useAuth } from '~/composables/useAuth'
 import { googleTokenLogin } from 'vue3-google-login'
 
@@ -299,6 +299,16 @@ const form = ref({
   agree_sms: false,
 })
 
+const getMaxDays = (month, year) => {
+  if (!month || !year) return 31
+
+  const m = Number(month)
+  const y = Number(year)
+
+  // JS trick: next month ka day 0 = current month ka last day
+  return new Date(y, m, 0).getDate()
+}
+
 const onMonthInput = () => {
   let val = dob.value.month.replace(/\D/g, '')
 
@@ -311,11 +321,14 @@ const onMonthInput = () => {
 const onDayInput = () => {
   let val = dob.value.day.replace(/\D/g, '')
 
-  if (+val > 31) val = '31'
+  const maxDays = getMaxDays(dob.value.month, dob.value.year)
+
+  if (+val > maxDays) val = maxDays.toString()
   if (+val < 1 && val !== '') val = '01'
 
   dob.value.day = val
 }
+
 
 const CURRENT_YEAR = new Date().getFullYear()
 
@@ -389,7 +402,7 @@ const handleSignup = async () => {
 
   // Create DOB format YYYY-MM-DD
   const pad = (val) => val.toString().padStart(2, '0')
-  const finalDob = `${dob.value.year}-${dob.value.month}-${dob.value.day}`
+  const finalDob = `${dob.value.year}-${pad(dob.value.month)}-${pad(dob.value.day)}`
 
   const payload = {
     email: form.value.email,
@@ -501,6 +514,19 @@ definePageMeta({
   layout: 'auth',
   middleware: 'guest-only',
 })
+
+watch(
+  () => [dob.value.month, dob.value.year],
+  () => {
+    if (!dob.value.day) return
+
+    const maxDays = getMaxDays(dob.value.month, dob.value.year)
+
+    if (Number(dob.value.day) > maxDays) {
+      dob.value.day = maxDays.toString().padStart(2, '0')
+    }
+  }
+)
 
 </script>
 
