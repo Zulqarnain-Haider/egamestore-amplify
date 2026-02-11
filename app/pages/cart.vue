@@ -85,13 +85,13 @@
                       border-b border-outline/40 text-sm"
              >
                <div class="flex items-center gap-3">
-                 <NuxtImg
+                 <!-- <NuxtImg
                    :src="item.image"
                    densities="x1"
                    quality="80"
                    format="webp"
                    class="w-10 h-10 object-cover rounded"
-                 />
+                 /> -->
                  <div>
                    <p class="font-medium text-mainText leading-tight">
                      {{ item.title }}
