@@ -82,7 +82,7 @@
                v-for="item in cartItems"
                :key="item.id"
                class="flex justify-between items-center py-3
-                      border-b border-outline/40  text-sm"
+                      border-b border-outline/40 text-sm"
              >
                <div class="flex items-center gap-3">
                  <NuxtImg
