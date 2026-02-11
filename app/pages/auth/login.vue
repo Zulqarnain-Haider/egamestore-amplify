@@ -101,6 +101,33 @@
         </AppLink>
       </form>
 
+      <!-- Divider -->
+      <div class="flex items-center justify-center my-6 text-onMainText relative">
+        <span class="border-t border-2 border-white w-1/2"></span>
+        <span class="text-sm bg-white px-1 text-black">Or</span>
+        <span class="border-t border-2 border-white w-1/2"></span>
+      </div>
+
+      <!-- Social Icons -->
+      <div class="flex justify-center gap-4 mb-6">
+        <NuxtImg
+         densities="x1" quality="85" preload
+        src="/games/Signinwith1.png" alt="" class="cursor-pointer" />
+        <NuxtImg
+         densities="x1" quality="85" preload
+         src="/games/Signinwith2.png" alt="" class="cursor-pointer" />
+        <NuxtImg
+         densities="x1" quality="85" preload
+         src="/games/Signinwith3.png" alt="" class="cursor-pointer"
+         @click="handleSocialLogin('facebook')"
+         />
+        <NuxtImg
+         densities="x1" quality="85" preload
+         src="/games/Signinwith4.png" alt="" class="cursor-pointer"
+         @click="handleSocialLogin('google')"
+         />
+      </div>
+
       <!-- Signup -->
       <p class="text-center text-sm mt-6">
         {{ t('noAccount') }}
@@ -115,6 +142,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { navigateTo, useCookie } from '#app'
+import { googleTokenLogin } from 'vue3-google-login'
 import { useAuth } from '~/composables/useAuth'
 import { useToast } from '#imports'
 
@@ -249,4 +277,62 @@ const handleLogin = async () => {
     })
   }
 }
+
+const handleSocialLogin = async (provider) => {
+  try {
+    // Facebook not supported yet
+    if (provider !== 'google') {
+      toast.error({
+        title: t('errorTitle'),
+        message: t('googleOnlyError') || 'Facebook login is not supported yet',
+        position: 'bottomRight',
+      })
+      return
+    }
+
+    // Google OAuth
+    const response = await googleTokenLogin()
+
+    const oauthToken = response?.access_token
+    if (!oauthToken) {
+      toast.error({
+        title: t('errorTitle'),
+        message: t('googleTokenError'),
+        position: 'topCenter',
+      })
+      return
+    }
+
+    const currentLocale = locale.value
+
+    const res = await auth.socialLogin('google', oauthToken, currentLocale)
+
+    if (!res.success) {
+      toast.error({
+        title: t('errorTitle'),
+        message: res.message,
+        position: 'topCenter',
+      })
+      return
+    }
+
+    toast.success({
+      title: t('successTitle'),
+      message: t('loggedInSuccessfully'),
+      position: 'topCenter',
+      duration: 2500,
+    })
+
+    // Activation check
+    navigateTo(res.otpRequired ? '/auth/otp-verification' : '/')
+
+  } catch (err) {
+    toast.error({
+      title: t('errorTitle'),
+      message: err?.message || t('googleLoginFailed'),
+      position: 'topCenter',
+    })
+  }
+}
+
 </script>

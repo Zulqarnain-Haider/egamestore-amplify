@@ -148,10 +148,10 @@
               />
               <div>
                 <p class="font-medium">{{ item.name }}</p>
-                <p class="text-xs text-onMainText">x{{ item.qty }}</p>
+                <p class="text-sm text-onMainText">x{{ item.qty }}</p>
               </div>
             </div>
-            <p class="font-semibold">{{ (item.price * item.qty).toFixed(2) }} USD</p>
+            <p class="font-semibold flex-nowrap ml-3">{{ (item.price * item.qty).toFixed(2) }}USD</p>
           </div>
 
           <!-- Price Breakdown -->

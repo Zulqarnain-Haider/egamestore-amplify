@@ -55,9 +55,58 @@
       </div>
 
       <!-- Right: Order Summary -->
-      <div class="w-full lg:w-[350px] bg-[#282C32]/70 border border-outline rounded-xl p-6 h-fit self-start">
+      <div class="w-full lg:w-[370px] bg-[#282C32]/70 border border-outline rounded-xl p-6 h-fit self-start">
         <h3 class="text-lg font-semibold text-mainText mb-8">{{ t('cartOrderSummary') }}</h3>
+  
+        <!-- Checkout-style Product List -->
+           <div class="mb-6">
+             <!-- Header -->
+             <div
+               class="flex justify-between text-xs uppercase
+              border-b border-white pb-2 mb-3"
+             >
+          <span>{{ t('checkoutProduct') }}</span>
+          <span>{{ t('checkoutPrice') }}</span>
+         </div>
 
+             <!-- Empty -->
+             <p
+               v-if="!cartItems.length"
+               class="text-center text-onMainText/60 text-sm py-4"
+             >
+               {{ t('cartEmpty') }}
+             </p>
+
+             <!-- Items -->
+             <div
+               v-for="item in cartItems"
+               :key="item.id"
+               class="flex justify-between items-center py-3
+                      border-b border-outline/40 text-sm"
+             >
+               <div class="flex items-center gap-3">
+                 <!-- <NuxtImg
+                   :src="item.image"
+                   densities="x1"
+                   quality="80"
+                   format="webp"
+                   class="w-10 h-10 object-cover rounded"
+                 /> -->
+                 <div>
+                   <p class="font-medium text-mainText leading-tight">
+                     {{ item.title }}
+                   </p>
+                   <p class="text-sm text-onMainText">
+                     x{{ item.qty }}
+                   </p>
+                 </div>
+               </div>
+
+               <p class="font-semibold ml-3 flex-nowrap">
+                 {{ (item.price * item.qty).toFixed(2) }}USD
+               </p>
+             </div>
+           </div>
         <div class="space-y-3 text-sm">
           <div class="flex justify-between">
             <p>{{ t('cartSubtotal') }}:</p>
