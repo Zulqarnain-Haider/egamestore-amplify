@@ -233,6 +233,7 @@ const user = reactive({
 
 const previewImage = ref('/games/ProfileAvatar.png')
 
+
 const normalizeAvatar = (avatar) => {
   if (!avatar) return '/games/ProfileAvatar.png'
   return avatar.replace(/(\.svg)+$/, '.svg')
