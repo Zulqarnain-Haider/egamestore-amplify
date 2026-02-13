@@ -264,12 +264,22 @@ const saveChanges = async () => {
     })
 
     if (!res.success) {
-      toast.error('Update failed')
+      toast.error({
+        title: 'Update failed',
+        message: res.message || 'Could not update profile',
+        position: 'topCenter',
+        duration: 3000
+      })
       return
     }
 
     showSuccessModal.value = true
-    toast.success('Profile updated')
+    toast.success({
+      title: 'Profile updated',
+      message: 'Your profile has been saved successfully',
+      position: 'topCenter',
+      duration: 2500
+  })
   } finally {
     isSaving.value = false
   }
