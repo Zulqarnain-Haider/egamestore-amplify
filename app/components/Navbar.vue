@@ -51,8 +51,8 @@
           <Icon name="mdi:map-marker" class="text-[18px] mr-1" />Spain
         </button>
 
-        <!-- Language -->
-        <div class="relative" ref="langRef">
+        <!-- Language ( English only for now but ready for future use ) -->
+        <!-- <div class="relative" ref="langRef">
           <button @click="toggleDropdown('lang')" class="flex items-center text-[12px] font-roboto">
             {{ locale.toUpperCase() }}
             <Icon :class="{'rotate-180': showLangDropdown}" name="mdi:menu-down" class="w-6 h-6 text-current transition-transform" />
@@ -61,7 +61,7 @@
             <li @click="selectLang('en')" class="px-3 py-2 hover:bg-outline hover:text-white cursor-pointer">EN</li>
             <li @click="selectLang('ar')" class="px-3 py-2 hover:bg-outline hover:text-white cursor-pointer">AR</li>
           </ul>
-        </div>
+        </div> -->
 
         <!-- Currency -->
         <div class="relative" ref="currencyRef">
@@ -151,8 +151,8 @@
 
           <!-- Sidebar Footer (Mobile dropdowns) -->
           <div class="mt-2 border-t border-outline px-6 py-4 flex items-center justify-between">
-            <!-- Language -->
-            <div class="relative" ref="mobileLangRef">
+            <!-- Language ( English only for now but ready for future use ) -->
+            <!-- <div class="relative" ref="mobileLangRef">
               <button @click="toggleDropdown('mobileLang')" class="flex items-center text-sm font-roboto">
                 EN
                 <Icon :class="{'rotate-180': showMobileLangDropdown}" name="mdi:menu-down" class="w-6 h-6 text-current transition-transform" />
@@ -161,7 +161,7 @@
                 <li @click="selectLang('en')" class="px-3 py-2 hover:bg-outline hover:text-white cursor-pointer">EN</li>
                 <li @click="selectLang('ar')" class="px-3 py-2 hover:bg-outline hover:text-white cursor-pointer">AR</li>
               </ul>
-            </div>
+            </div> -->
 
             <!-- Currency -->
             <div class="relative" ref="mobileCurrencyRef">

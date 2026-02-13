@@ -123,12 +123,8 @@ export default defineNuxtConfig({
       { code: "ar", iso: "ar-SA", dir: "rtl", file: "ar.json" },
     ],
     defaultLocale: "en",
+    detectBrowserLanguage: false,
     strategy: "no_prefix",
-    detectBrowserLanguage: {
-      useCookie: true,
-      cookieKey: 'lang',
-      redirectOn: 'root'
-    },
     vueI18n: "./i18n.config.ts",
     lazy: true,
     langDir: "locales",
