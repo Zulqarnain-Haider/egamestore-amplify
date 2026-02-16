@@ -144,11 +144,11 @@ import { ref, watch, onMounted } from 'vue'
 import { navigateTo, useCookie } from '#app'
 import { googleTokenLogin } from 'vue3-google-login'
 import { useAuth } from '~/composables/useAuth'
-import { useTurnstile } from '~/composables/useTurnstile'
+// import { useTurnstile } from '~/composables/useTurnstile'
 import { useToast } from '#imports'
 
 const { t, locale } = useI18n()
-const { execute, verified } = useTurnstile()
+// const { execute, verified } = useTurnstile()
 
 
 /* -----------------------------------
@@ -188,9 +188,9 @@ const loading = ref(false)
 const errors = ref({})
 const globalError = ref('')
 
-onMounted(() => {
-  execute()
-})
+// onMounted(() => {
+//   execute()
+// })
 
 /* -----------------------------------
  * Clear errors on input change
@@ -234,7 +234,7 @@ const handleLogin = async () => {
   if (!validateForm()) return
 
   if (!verified.value) {
-    execute()
+    // execute()
     
     toast.error({
       title: 'Verification',
@@ -254,7 +254,7 @@ const handleLogin = async () => {
     loading.value = false
 
     if (!res.success) {
-      execute()
+      // execute()
       globalError.value = res.message || t('loginFailed')
       toast.error({
         title: t('loginFailedTitle'),
@@ -299,7 +299,7 @@ const handleLogin = async () => {
 
 const handleSocialLogin = async (provider) => {
   if (!verified.value) {
-    execute()
+    // execute()
     
     toast.error({
       title: 'Verification',
