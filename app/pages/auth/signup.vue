@@ -268,7 +268,7 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
 import { useAuth } from '~/composables/useAuth'
-import { useTurnstile } from '~/composables/useTurnstile'
+// import { useTurnstile } from '~/composables/useTurnstile'
 import { googleTokenLogin } from 'vue3-google-login'
 
 import { navigateTo } from '#app'
@@ -281,7 +281,7 @@ import 'vue-tel-input/dist/vue-tel-input.css'
 const toast = useToast()
 const auth = useAuth()
 const { t, locale } = useI18n()
-const { execute, verified } = useTurnstile()
+// const { execute, verified } = useTurnstile()
 
 
 // Password toggle
@@ -290,9 +290,9 @@ const showConfirmPassword = ref(false)
 // Terms Modal Toggle
 const showTerms = ref(false)
 
-onMounted(() => {
-  execute()
-})
+// onMounted(() => {
+//   execute()
+// })
 
 // Form
 const form = ref({
@@ -403,16 +403,16 @@ const handleSignup = async () => {
     return
   }
 
-  if (!verified.value) {
-    execute()
+  // if (!verified.value) {
+  //   execute()
 
-    toast.error({
-      title: 'Verification',
-      message: 'Please wait while we verify you...',
-      position: 'topCenter'
-    })
-    return
-  }
+  //   toast.error({
+  //     title: 'Verification',
+  //     message: 'Please wait while we verify you...',
+  //     position: 'topCenter'
+  //   })
+  //   return
+  // }
 
   const cleanPhone = form.value.phone.replace(/\s+/g, '').replace(/[()-]/g, '')
 
@@ -472,16 +472,16 @@ const handleSignup = async () => {
 
 // Social Login
 const handleSocialLogin = async (provider) => {
-  if (!verified.value) {
-    execute()
+  // if (!verified.value) {
+  //   execute()
     
-    toast.error({
-      title: 'Verification',
-      message: 'Please wait while we verify you...',
-      position: 'topCenter'
-    })
-    return
-  }
+  //   toast.error({
+  //     title: 'Verification',
+  //     message: 'Please wait while we verify you...',
+  //     position: 'topCenter'
+  //   })
+  //   return
+  // }
   
   try {
     if (provider !== 'google') {
