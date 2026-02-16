@@ -233,16 +233,16 @@ const validateForm = () => {
 const handleLogin = async () => {
   if (!validateForm()) return
 
-  if (!verified.value) {
-    // execute()
+  // if (!verified.value) {
+  //   execute()
     
-    toast.error({
-      title: 'Verification',
-      message: 'Please wait while we verify you...',
-      position: 'topCenter'
-    })
-    return
-  }
+  //   toast.error({
+  //     title: 'Verification',
+  //     message: 'Please wait while we verify you...',
+  //     position: 'topCenter'
+  //   })
+  //   return
+  // }
 
   loading.value = true
 
@@ -252,17 +252,6 @@ const handleLogin = async () => {
     const res = await auth.login(identifier.value, password.value, currentLocale)
 
     loading.value = false
-
-    if (!res.success) {
-      // execute()
-      globalError.value = res.message || t('loginFailed')
-      toast.error({
-        title: t('loginFailedTitle'),
-        message: globalError.value,
-        position: 'topCenter',
-      })
-      return
-    }
 
     // Activation required → OTP page
     if (res.otpRequired) {
