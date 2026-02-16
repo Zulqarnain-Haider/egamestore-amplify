@@ -26,7 +26,15 @@ export const useUser = () => {
       )
       
       if (!res.data?.status) {
-        return { success: false, message: res.data?.message }
+         let errorMessage = res.data?.message || 'Update failed'
+
+           if (res.data?.errors) {
+        // Convert errors object to readable string
+        errorMessage = Object.values(res.data.errors)
+          .flat()
+          .join('\n')
+      }
+        return { success: false, message: errorMessage }
       }
       
       userStore.currentUser = {
@@ -36,9 +44,16 @@ export const useUser = () => {
       
       return { success: true }
     } catch (err: any) {
+       let errorMessage = err.response?.data?.message || 'Update failed'
+
+    if (err.response?.data?.errors) {
+      errorMessage = Object.values(err.response.data.errors)
+        .flat()
+        .join('\n')
+    }
       return {
         success: false,
-        message: err.response?.data?.message || 'Update failed',
+        message: errorMessage
       }
     }
   }

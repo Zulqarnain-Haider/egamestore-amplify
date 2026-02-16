@@ -157,12 +157,16 @@ const fetchData = async () => {
   loading.value = true
   try {
     await categoriesStore.fetchChildren(categoryId.value)
+
+     const sortParam =
+      sortBy.value === 'default' ? null : sortBy.value
+
     await productsStore.fetchProducts(
       countryId.value,
       subcategoryId.value,
       page.value,
       perPage.value,
-      sortBy.value
+      sortParam
     )
   } finally {
     loading.value = false

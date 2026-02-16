@@ -19,19 +19,23 @@ export const useProductsStore = defineStore('products', {
       return config.public.apiBase
     },
 
-    async fetchProducts(countryId, subcategoryId, page = 1, perPage = 16, sortType = 'asc_price') {
+    async fetchProducts(countryId, subcategoryId, page = 1, perPage = 16, sortType = null) {
       this.loading = true
       this.error = null
 
       try {
-        const response = await $fetch(`${this._getApiBase()}/cards/category`, {
-          params: { 
+        const params = { 
             category_id: subcategoryId,
             country_id: countryId,
-            sort_type: sortType,
             page,
             per_page: perPage
-          },
+          }
+       // ONLY send sort_type if it exists
+    if (sortType) {
+      params.sort_type = sortType
+    }
+    const response = await $fetch(`${this._getApiBase()}/cards/category`, {
+          params,
           headers: { 'Accept-language': 'en' }
         })
 

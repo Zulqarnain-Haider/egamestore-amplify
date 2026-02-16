@@ -17,7 +17,7 @@
           quality="80"
           format="webp"
           loading="lazy"
-          :src="previewImage"
+          :src="previewImage || '/games/ProfileAvatar.png'"
           alt="User Avatar"
           class="w-full h-full object-cover bg-center transition-transform duration-300 group-hover:scale-105"
         />
@@ -233,12 +233,19 @@ const user = reactive({
 
 const previewImage = ref('/games/ProfileAvatar.png')
 
+
+const normalizeAvatar = (avatar) => {
+  if (!avatar) return '/games/ProfileAvatar.png'
+  return avatar.replace(/(\.svg)+$/, '.svg')
+}
+
+
 watch(
   () => auth.user.value,
   (u) => {
     if (!u) return
     Object.assign(user, u)
-    previewImage.value = u.avatar || '/games/ProfileAvatar.png'
+    previewImage.value = normalizeAvatar(u.avatar)
   },
   { immediate: true }
 )
@@ -257,12 +264,22 @@ const saveChanges = async () => {
     })
 
     if (!res.success) {
-      toast.error('Update failed')
+      toast.error({
+        title: 'Update failed',
+        message: res.message || 'Could not update profile',
+        position: 'topCenter',
+        duration: 3000
+      })
       return
     }
 
     showSuccessModal.value = true
-    toast.success('Profile updated')
+    toast.success({
+      title: 'Profile updated',
+      message: 'Your profile has been saved successfully',
+      position: 'topCenter',
+      duration: 2500
+  })
   } finally {
     isSaving.value = false
   }
