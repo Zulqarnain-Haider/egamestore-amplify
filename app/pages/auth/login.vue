@@ -140,13 +140,16 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { navigateTo, useCookie } from '#app'
 import { googleTokenLogin } from 'vue3-google-login'
 import { useAuth } from '~/composables/useAuth'
+import { useTurnstile } from '~/composables/useTurnstile'
 import { useToast } from '#imports'
 
 const { t, locale } = useI18n()
+const { execute, verified } = useTurnstile()
+
 
 /* -----------------------------------
  * Meta (Auth pages should not be indexed)
@@ -184,6 +187,10 @@ const rememberMe = ref(false)
 const loading = ref(false)
 const errors = ref({})
 const globalError = ref('')
+
+onMounted(() => {
+  execute()
+})
 
 /* -----------------------------------
  * Clear errors on input change
@@ -226,6 +233,17 @@ const validateForm = () => {
 const handleLogin = async () => {
   if (!validateForm()) return
 
+  if (!verified.value) {
+    execute()
+    
+    toast.error({
+      title: 'Verification',
+      message: 'Please wait while we verify you...',
+      position: 'topCenter'
+    })
+    return
+  }
+
   loading.value = true
 
   const currentLocale = locale.value
@@ -236,6 +254,7 @@ const handleLogin = async () => {
     loading.value = false
 
     if (!res.success) {
+      execute()
       globalError.value = res.message || t('loginFailed')
       toast.error({
         title: t('loginFailedTitle'),
@@ -279,6 +298,17 @@ const handleLogin = async () => {
 }
 
 const handleSocialLogin = async (provider) => {
+  if (!verified.value) {
+    execute()
+    
+    toast.error({
+      title: 'Verification',
+      message: 'Please wait while we verify you...',
+      position: 'topCenter'
+    })
+    return
+  }
+  
   try {
     // Facebook not supported yet
     if (provider !== 'google') {
