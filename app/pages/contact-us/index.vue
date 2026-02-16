@@ -224,10 +224,12 @@
 import { ref, computed, onMounted } from 'vue'
 import { useTicketStore } from '~/stores/ticketStore.js'
 import { useUserStore } from '~/stores/userStore.js'
+import { useTurnstile } from '~/composables/useTurnstile'
 import { useRouter } from 'vue-router'
 import { useToast } from '#imports'
 
 const { t, locale } = useI18n()
+const { execute, verified } = useTurnstile()
 const ticketStore = useTicketStore()
 const userStore = useUserStore()
 const router = useRouter()
@@ -409,6 +411,17 @@ function validateForm() {
 
 async function submitTicket() {
   if (!validateForm()) return
+  if (!verified.value) {
+    execute()
+
+    toast.error({
+      title: 'Verification',
+      message: 'Please wait while we verify you...',
+      position: 'topCenter'
+    })
+    return
+  }
+
   try {
     const payload = {
       name: form.value.name,
@@ -420,6 +433,9 @@ async function submitTicket() {
       attachments: form.value.attachments.map(f => f.file || f)
     }
     const response = await ticketStore.createTicket(payload)
+    if (!response.status) {
+      execute()
+    }
     if (response.status) {
       toast.success({ title: t('ticketToastSuccess'), message: t('ticketToastCreated'), position: 'topCenter', duration: 2500 })
       router.push({ path: '/contact-us/chat', query: { uuid: response.data.uuid } })
@@ -440,6 +456,9 @@ function openConversation(uuid) {
 
 let reasonsFetched = false
 onMounted(() => {
+  // Execute Turnstile
+  execute()
+
   if (isLoggedIn.value) ticketStore.fetchTickets()
   if (!reasonsFetched) { fetchReasons(); reasonsFetched = true }
 })

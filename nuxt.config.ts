@@ -77,6 +77,7 @@ export default defineNuxtConfig({
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE,
       googleClientId: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_ID,
+      turnstileSiteKey: process.env.NUXT_PUBLIC_TURNSTILE_SITE_KEY
     },
   },
 
@@ -97,6 +98,13 @@ export default defineNuxtConfig({
       title: "E-GAMESTORE",
       htmlAttrs: { lang: "en" },
       link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.png" }],
+      script: [
+        {
+          src: "https://challenges.cloudflare.com/turnstile/v0/api.js",
+          async: true,
+          defer: true
+        }
+      ]
     },
   },
 
