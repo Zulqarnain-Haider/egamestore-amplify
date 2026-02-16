@@ -298,16 +298,16 @@ const handleLogin = async () => {
 }
 
 const handleSocialLogin = async (provider) => {
-  if (!verified.value) {
-    // execute()
+  // if (!verified.value) {
+  //   execute()
     
-    toast.error({
-      title: 'Verification',
-      message: 'Please wait while we verify you...',
-      position: 'topCenter'
-    })
-    return
-  }
+  //   toast.error({
+  //     title: 'Verification',
+  //     message: 'Please wait while we verify you...',
+  //     position: 'topCenter'
+  //   })
+  //   return
+  // }
   
   try {
     // Facebook not supported yet
