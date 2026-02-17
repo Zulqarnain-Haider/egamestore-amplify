@@ -25,7 +25,7 @@ export default defineNuxtConfig({
   ],
 
   site: {
-    url: 'www.store.egamestore.com'
+    url: 'https://store.egamestore.com'
   },
 
   sitemap: {
