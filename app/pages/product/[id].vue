@@ -2,24 +2,24 @@
   <!-- ======================================
        LOADING (SSR + CSR SAFE)
        ====================================== -->
-  <!-- <div
+  <div
     v-if="productStore.loading"
     class="min-h-screen text-mainText font-poppins"
   >
     <div class="w-[90%] max-w-7xl mx-auto flex flex-col gap-10 animate-fadeIn">
       <ProductOverviewSkeleton />
     </div>
-  </div> -->
+  </div>
   
-<div v-if="productStore.loading" class="min-h-screen flex items-center justify-center">
+<!-- <div v-if="productStore.loading" class="min-h-screen flex items-center justify-center">
   <p>Loading product details...</p>
-</div>
+</div> -->
 
 
   <!-- ======================================
        ERROR (ONLY IF FETCH FAILED)
        ====================================== -->
-<div
+<!-- <div
   v-else-if="productStore.error"
   class="min-h-[60vh] flex items-center justify-center text-center text-onMainText"
 >
@@ -39,7 +39,7 @@
       {{ t('backToHome') }}
     </NuxtLink>
   </div>
-</div>
+</div> -->
 
   <!-- ======================================
        PRODUCT CONTENT

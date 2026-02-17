@@ -49,10 +49,10 @@
             v-if="product.oldPrice"
             class="line-through text-onMainText text-xs sm:text-sm"
           >
-            {{ formatPrice(product.oldPrice) }}$
+            {{ formatPrice(product.oldPrice) }}{{ currencySymbol }}
           </span>
           <span class="text-mainText text-xs sm:text-base">
-            {{ formatPrice(product.price) }}$
+            {{ formatPrice(product.price) }}{{ currencySymbol }}
           </span>
         </div>
 
@@ -108,6 +108,15 @@
 import { useCart } from '~/composables/useCart'
 import { useStock } from '~/composables/useStock'
 import { useToast } from '#imports'
+import { useCurrencyStore } from '~/stores/currencyStore'
+import { computed } from 'vue'
+
+const currencyStore = useCurrencyStore()
+
+const currencySymbol = computed(() => 
+  currencyStore.selectedCurrency?.symbol || '$'
+)
+
 
 const { isInStock } = useStock()
 const toast = useToast()

@@ -209,7 +209,7 @@ function handleScroll() {
 }
 
 
-/* 🔥 DATA CHANGE SYNC (KEY FIX) */
+/* DATA CHANGE SYNC (KEY FIX) */
 watch(games, async () => {
   await nextTick()
   setupSlider()

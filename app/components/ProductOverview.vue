@@ -42,14 +42,14 @@
       <!-- Price + Discount -->
       <div class="flex items-center gap-3">
         <span class="text-2xl">
-          ${{ product.final_price }}
+          {{ currencySymbol }}{{ product.final_price }}
         </span>
 
         <span
           v-if="product.old_price"
           class="line-through text-onMainText text-lg"
         >
-          ${{ product.old_price }}
+          {{ currencySymbol }}{{ product.old_price }}
         </span>
       </div>
 
@@ -201,6 +201,9 @@ import { ref, computed, watchEffect } from 'vue'
 import { useCart } from '~/composables/useCart'
 import { useStock } from '~/composables/useStock'
 import { useToast } from '#imports'
+import { useCurrencyStore } from '~/stores/currencyStore'
+
+const currencyStore = useCurrencyStore()
 
 const { addToCart, buyNow } = useCart()
 const { isInStock, stockLabel } = useStock()
@@ -222,6 +225,10 @@ const selected = ref({
   region: '',
   language: ''
 })
+
+const currencySymbol = computed(() =>
+  currencyStore.selectedCurrency?.symbol || '$'
+)
 
 watchEffect(() => {
   if (props.product) {
