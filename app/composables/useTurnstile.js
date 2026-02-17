@@ -1,52 +1,52 @@
-import { ref } from 'vue'
+// import { ref } from 'vue'
 
-export const useTurnstile = () => {
+// export const useTurnstile = () => {
 
-  const config = useRuntimeConfig()
+//   const config = useRuntimeConfig()
 
-  const verified = ref(false)
-  const token = ref(null)
+//   const verified = ref(false)
+//   const token = ref(null)
 
-  const execute = () => {
+//   const execute = () => {
 
-    if (!process.client) return
+//     if (!process.client) return
 
-    if (!window.turnstile) {
-      console.warn('Turnstile not loaded yet')
-      return
-    }
+//     if (!window.turnstile) {
+//       console.warn('Turnstile not loaded yet')
+//       return
+//     }
 
-    verified.value = false
-    token.value = null
+//     verified.value = false
+//     token.value = null
 
-    // create invisible container
-    const el = document.createElement('div')
-    document.body.appendChild(el)
+//     // create invisible container
+//     const el = document.createElement('div')
+//     document.body.appendChild(el)
 
-    const widgetId = window.turnstile.render(el, {
-      sitekey: config.public.turnstileSiteKey,
-      size: 'invisible',
+//     const widgetId = window.turnstile.render(el, {
+//       sitekey: config.public.turnstileSiteKey,
+//       size: 'invisible',
 
-      callback: (t) => {
-        token.value = t
-        verified.value = true
+//       callback: (t) => {
+//         token.value = t
+//         verified.value = true
 
-        window.turnstile.remove(widgetId)
-        el.remove()
-      },
+//         window.turnstile.remove(widgetId)
+//         el.remove()
+//       },
 
-      'error-callback': () => {
-        verified.value = false
-        console.warn('Turnstile verification failed')
-      }
-    })
+//       'error-callback': () => {
+//         verified.value = false
+//         console.warn('Turnstile verification failed')
+//       }
+//     })
 
-    window.turnstile.execute(widgetId)
-  }
+//     window.turnstile.execute(widgetId)
+//   }
 
-  return {
-    verified,
-    token,
-    execute
-  }
-}
+//   return {
+//     verified,
+//     token,
+//     execute
+//   }
+// }
