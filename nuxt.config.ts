@@ -33,7 +33,7 @@ export default defineNuxtConfig({
     gzip: true,
     // Define your data sources
     sources: [
-      '/api/__sitemap__/blogs', // Your new dynamic endpoint
+      '/api/__sitemap__/blogs',
       '/api/__sitemap__/categories_and_products'
     ],
     // Static routes first
@@ -98,13 +98,13 @@ export default defineNuxtConfig({
       title: "E-GAMESTORE",
       htmlAttrs: { lang: "en" },
       link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.png" }],
-      script: [
-        {
-          src: "https://challenges.cloudflare.com/turnstile/v0/api.js",
-          async: true,
-          defer: true
-        }
-      ]
+      // script: [
+      //   {
+      //     src: "https://challenges.cloudflare.com/turnstile/v0/api.js",
+      //     async: true,
+      //     defer: true
+      //   }
+      // ]
     },
   },
 
