@@ -304,6 +304,13 @@ onMounted(() => {
 })
 const cartCount = computed(() => cartStore.cartCount)
 
+watch(currencies, (newCurrencies) => {
+  if (newCurrencies.length) {
+    const defaultCurrency = newCurrencies.find(c => c.is_default)
+    currencyStore.initCurrency(defaultCurrency)
+  }
+}, { immediate: true })
+
 
 // Sidebar overflow
 watch(isOpen, (v) => {
@@ -363,13 +370,6 @@ const selectLang = async (code) => {
   showLangDropdown.value = false
   showMobileLangDropdown.value = false
 }
-
-onMounted(() => {
-  if (currencies.value.length) {
-    const defaultCurrency = currencies.value.find(c => c.is_default)
-    currencyStore.initCurrency(defaultCurrency)
-  }
-})
 
 const selectCurrency = (code) => {
   const currencyObj = currencies.value.find(c => c.code === code)
