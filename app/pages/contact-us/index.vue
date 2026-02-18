@@ -131,7 +131,8 @@
                 @click.stop="triggerFile"
                 class="flex items-center gap-2 mr-3 bg-mainText px-6 py-2 rounded-md"
               >
-                <NuxtImg src="/wallet/TicketUpload.svg" densities="x1" quality="80" loading="lazy" />
+                <NuxtImg src="/compressed/New folder/TicketUpload.png" densities="x1" quality="80"
+                 loading="lazy" class="h-5 w-5" />
               </button>
               <span v-if="fileName">{{ fileName }}</span>
               <span v-else class="text-onFooter">

@@ -20,8 +20,8 @@
       <div class="flex mb-5">
         <NuxtImg
          densities="x1" quality="80" loading="lazy"
-          src="/games/ResetPasswordSuccess.svg"
-          alt="Success Icon"
+          src="/compressed/New folder/ResetPasswordSuccess.png"
+          alt="Success Icon" class="h-16 w-16"
           />
       </div>
 

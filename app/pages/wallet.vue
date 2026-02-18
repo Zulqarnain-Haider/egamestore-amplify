@@ -59,7 +59,8 @@
                 }"
                 >
             <NuxtImg 
-            densities="x1" quality="80" loading="lazy" :src="item.icon" alt="icon" class="object-contain" />
+            densities="x1" quality="80" loading="lazy" :src="item.icon" alt="icon"
+             class="object-contain w-6 h-6" />
           </div>
             <div>
               <h4 class="">{{ t(item.title) }}</h4>
@@ -86,7 +87,8 @@
                 }"
                 >
                 <NuxtImg 
-                densities="x1" quality="80" loading="lazy" :src="item.icon" alt="icon" class="object-contain" />
+                densities="x1" quality="80" loading="lazy"
+                 :src="item.icon" alt="icon" class="object-contain h-6 w-6" />
                 </div>  
                 <div>
                   <h4 class="text-mainText">{{ t(item.title) }}</h4>
@@ -306,13 +308,13 @@ const earnOptions = [
         id: 2,
         title: 'walletEarnDailyTitle',
         description: 'walletEarnDailyDesc',
-        icon: '/wallet/EranPoint2.svg'
+        icon: '/compressed/New folder/EranPoint2.png'
       },
       { 
         id: 3,
         title: 'walletEarnReferTitle',
         description: 'walletEarnReferDesc',
-        icon: '/wallet/EranPoint3.svg'
+        icon: '/compressed/New folder/EranPoint3.png'
       },
 ]
 
@@ -323,7 +325,7 @@ const useOptions = [
         description: 'walletUseCouponDesc',
         action: 'walletActionRedeem',
         color: 'text-primary',
-        icon: '/wallet/UsePoint1.svg'
+        icon: '/compressed/New folder/UsePoint1.png'
       },
       {
         id: 2,
@@ -331,7 +333,7 @@ const useOptions = [
         description: 'walletUseShippingDesc',
         action: 'walletActionRedeem',
         color: 'text-primary',
-        icon: '/wallet/UsePoint2.svg'
+        icon: '/compressed/New folder/UsePoint2.png'
       },
       {
         id: 3,
@@ -339,7 +341,7 @@ const useOptions = [
         description: 'walletUseExclusiveDesc',
         action: 'walletActionBrowse',
         color: 'text-orange-400',
-        icon: '/wallet/UsePoint3.svg'
+        icon: '/compressed/New folder/UsePoint3.png'
       },
 ]
 
