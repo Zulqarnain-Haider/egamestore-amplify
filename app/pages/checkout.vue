@@ -151,19 +151,19 @@
                 <p class="text-sm text-onMainText">x{{ item.qty }}</p>
               </div>
             </div>
-            <p class="font-semibold flex-nowrap ml-3">{{ (item.price * item.qty).toFixed(2) }}USD</p>
+            <p class="font-semibold flex-nowrap ml-3">{{ (item.price * item.qty).toFixed(2) }}{{ selectedCurrency }}</p>
           </div>
 
           <!-- Price Breakdown -->
           <div v-if="checkoutStore.cartPrice" class="mt-4 space-y-2 text-sm">
             <div class="flex justify-between">
               <p>{{ t('checkoutSubtotal') }}:</p>
-              <p class="font-semibold">{{ checkoutStore.cartPrice.cart_price?.toFixed(2) || '0.00' }} USD</p>
+              <p class="font-semibold">{{ checkoutStore.cartPrice.cart_price?.toFixed(2) || '0.00' }} {{ selectedCurrency }}</p>
             </div>
 
             <div v-if="checkoutStore.cartPrice.shipping_fees > 0" class="flex justify-between">
               <p>{{ t('checkoutShipping') }}:</p>
-              <p class="font-semibold">{{ checkoutStore.cartPrice.shipping_fees.toFixed(2) }} USD</p>
+              <p class="font-semibold">{{ checkoutStore.cartPrice.shipping_fees.toFixed(2) }} {{ selectedCurrency }}</p>
             </div>
 
             <div v-if="checkoutStore.cartPrice.payment_fee > 0" class="flex justify-between">
@@ -178,7 +178,7 @@
 
             <div v-if="checkoutStore.cartPrice.wallet_discount > 0" class="flex justify-between text-green-600">
               <p>{{ t('checkoutWalletDiscount') }}:</p>
-              <p class="font-semibold">-{{ checkoutStore.cartPrice.wallet_discount.toFixed(2) }} USD</p>
+              <p class="font-semibold">-{{ checkoutStore.cartPrice.wallet_discount.toFixed(2) }} {{ selectedCurrency }}</p>
             </div>
           </div>
 
@@ -186,7 +186,7 @@
           <div class="flex justify-between font-semibold text-lg mt-4 pt-3 border-t border-onOutline">
             <p>{{ t('checkoutTotal') }}:</p>
             <p class="text-green-600">
-              {{ checkoutStore.cartPrice?.total_price?.toFixed(2) || '0.00' }} USD
+              {{ checkoutStore.cartPrice?.total_price?.toFixed(2) || '0.00' }} {{ selectedCurrency }}
             </p>
           </div>
 
@@ -253,6 +253,9 @@ import { useCheckoutStore } from '~/stores/checkoutStore'
 import { useCartStore } from '~/stores/cartStore'
 import { useCheckout } from '~/composables/useCheckout'
 import { useRoute } from '#app'
+import { useCurrencyStore } from '~/stores/currencyStore'
+
+const currencyStore = useCurrencyStore()
 
 const checkoutStore = useCheckoutStore()
 const cartStore = useCartStore()
@@ -264,6 +267,11 @@ const { initCheckout, applyCoupon, removeCoupon, selectPayment, placeOrder } = u
 const isBuyNow = computed(() => route.query.is_buy_now === '1')
 const buyNowCardId = computed(() => route.query.card_id ? parseInt(route.query.card_id) : null)
 const buyNowQty = computed(() => route.query.qty ? parseInt(route.query.qty) : 1)
+
+
+const selectedCurrency = computed(() =>
+  currencyStore.selectedCurrency?.code || 'USD'
+)
 
 // Form State
 const form = ref({
