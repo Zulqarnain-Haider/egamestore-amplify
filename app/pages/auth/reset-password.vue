@@ -24,11 +24,12 @@
       <!-- Icon -->
       <div class="flex mb-4">
         <NuxtImg
-          src="/games/ForgotPasswordLock.svg"
+          src="/compressed/New folder/ForgotPasswordLock.png"
           alt="Main Icon"
           quality="80"
           densities="x1"
           loading="lazy"
+          class="h-16 w-16"
         />
       </div>
 

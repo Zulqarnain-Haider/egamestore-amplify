@@ -24,7 +24,7 @@
       <!-- Icon -->
       <div class="flex mb-4">
         <NuxtImg
-          src="/games/ForgotPasswordLock.svg"
+          src="/compressed/New folder/ForgotPasswordLock.png"
           alt="Forgot password lock icon"
           quality="80"
           densities="x1"
