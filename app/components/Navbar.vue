@@ -276,7 +276,7 @@ const { data: currencyData, pending: currencyPending } = useFetch(
   `${config.public.apiBase}/currencies`,
   {
     key: 'navbar-currencies',
-    server: false,   // Navbar me SSR ki zarurat nahi
+    server: false,
     lazy: true
   }
 )
