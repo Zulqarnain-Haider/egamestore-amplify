@@ -106,6 +106,9 @@ import { useCategoriesStore } from '~/stores/categoriesStore'
 import { useCategoryContext } from '~/composables/useCategoryContext'
 import { useStock } from '~/composables/useStock'
 import { useToast } from '#imports'
+// import { useCurrencyStore } from '~/stores/currencyStore'
+
+// const currencyStore = useCurrencyStore()
 
 
 const route = useRoute()

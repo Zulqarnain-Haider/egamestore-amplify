@@ -78,7 +78,7 @@
           densities="x1" quality="80" format="webp" loading="lazy"
             :src="blog.image"
             alt="Blog Thumbnail"
-            class="absoulte inset-0 w-full h-full object-cover rounded-2xl"
+            class="absolute inset-0 w-full h-full object-cover rounded-2xl"
           />
           <div
             class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col justify-end p-3"
@@ -113,76 +113,55 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 // I18N
 const { t } = useI18n()
 
-// --------------------------------------
-// RuntimeConfig (From .env)
-// --------------------------------------
+// Runtime Config
 const config = useRuntimeConfig()
 
-const allBlogs = ref([])
+// Slider state
 const activeIndex = ref(0)
 const mobileScroll = ref(null)
+let intervalId = null
 
-const pending = ref(true)
-const error = ref(null)
-
-
-// -----------------------
-// FETCH BLOGS
-// -----------------------
-const loadBlogs = async () => {
-  try {
-    const { data } = await useFetch(
-      `${config.public.apiBase}/posts`,
-      {
-     headers: { Accept: "application/json" },
-     query: {
-        type: "blog",      // <-- REQUIRED
-        lazy: true,      // optional
-        per_page: 25,       // optional
-        cache: true
-      }
-     }
-    )
-
-    const posts = data.value?.data?.posts || data.value?.data || []
-
-    allBlogs.value = posts.map(post => ({
-      id: post.id,
-      slug: post.slug,
-      title: post.title,
-      category: post.tags?.[0]?.name || "Blog",
-      image: post.img?.startsWith("/")
-        ? config.public.apiBase.replace('/api', "") + post.img
-        : post.img
-    }))
-
-  } catch (err) {
-    console.error(err)
-    error.value = true
-  } finally {
-    pending.value = false
+// --------------------------------------
+// FETCH BLOGS (SSR SAFE)
+// --------------------------------------
+const { data, pending, error } = await useFetch(
+  `${config.public.apiBase}/posts`,
+  {
+    headers: { Accept: "application/json" },
+    query: {
+      type: "blog",
+      per_page: 25
+    }
   }
-}
+)
 
-// -----------------------
-// CLICK HANDLER FOR CARDS
-// -----------------------
-const goToBlog = (blog) => {
-  navigateTo
-   (blog.slug
-      ? `/news-blog/${blog.id}/${blog.slug}`
-      : `/news-blog/${blog.id}`)
-}
+// Transform API data
+const allBlogs = computed(() => {
+  const posts = data.value?.data?.posts || data.value?.data || []
 
-// -----------------------
-// SLIDER COMPUTED
-// -----------------------
+  return posts.map(post => ({
+    id: post.id,
+    slug: post.slug,
+    title: post.title,
+    category: post.tags?.[0]?.name || "Blog",
+    image: post.img?.startsWith("/")
+      ? config.public.apiBase.replace('/api', "") + post.img
+      : post.img
+  }))
+})
+
+// --------------------------------------
+// SLIDER COMPUTEDS
+// --------------------------------------
 const currentDot = computed(() => activeIndex.value % 5)
-const isReady = computed(() => allBlogs.value.length >= 5 && !pending.value)
+
+const isReady = computed(() =>
+  allBlogs.value.length >= 5 && !pending.value
+)
 
 const currentSet = computed(() => {
   const len = allBlogs.value.length
-    if (len < 5) return []   // prevent crash ✔
+  if (len < 5) return []
 
   const s = activeIndex.value
 
@@ -195,30 +174,45 @@ const currentSet = computed(() => {
   ]
 })
 
-let intervalId = null
+// --------------------------------------
+// START SLIDER (CLIENT ONLY)
+// --------------------------------------
+onMounted(() => {
+  if (process.client && allBlogs.value.length > 0) {
+    intervalId = setInterval(() => {
+      activeIndex.value =
+        (activeIndex.value + 1) % allBlogs.value.length
 
-onMounted(async () => {
- await loadBlogs()
-
-     if (allBlogs.value.length > 0) {
-  intervalId = setInterval(() => {
-    activeIndex.value = (activeIndex.value + 1) % allBlogs.value.length
-
-    if (mobileScroll.value) {
-      mobileScroll.value.scrollTo({
-        left: (activeIndex.value * mobileScroll.value.scrollWidth) / allBlogs.value.length,
-        behavior: "smooth"
-      })
-    }
-  
-  }, 4000)
-}
+      if (mobileScroll.value) {
+        mobileScroll.value.scrollTo({
+          left:
+            (activeIndex.value *
+              mobileScroll.value.scrollWidth) /
+            allBlogs.value.length,
+          behavior: "smooth"
+        })
+      }
+    }, 4000)
+  }
 })
 
+// Cleanup
 onUnmounted(() => {
   if (intervalId) clearInterval(intervalId)
 })
+
+// --------------------------------------
+// NAVIGATION
+// --------------------------------------
+const goToBlog = (blog) => {
+  navigateTo(
+    blog.slug
+      ? `/news-blog/${blog.id}/${blog.slug}`
+      : `/news-blog/${blog.id}`
+  )
+}
 </script>
+
 
 <style scoped>
 .bg-primary {

@@ -66,13 +66,24 @@
         <!-- Currency -->
         <div class="relative" ref="currencyRef">
           <button @click="toggleDropdown('currency')" class="flex items-center text-[12px] font-roboto">
-            USD
+            {{ selectedCurrency }}
             <Icon :class="{'rotate-180': showCurrencyDropdown}" name="mdi:menu-down" class="w-6 h-6 text-current transition-transform" />
           </button>
-          <ul v-if="showCurrencyDropdown" class="absolute right-0 mt-2 bg-bgNav border border-outline rounded shadow-lg text-sm z-50">
-            <li @click="selectCurrency('USD')" class="px-3 py-2 hover:bg-outline hover:text-white cursor-pointer">USD</li>
-            <li @click="selectCurrency('EUR')" class="px-3 py-2 hover:bg-outline hover:text-white cursor-pointer">EUR</li>
-            <li @click="selectCurrency('PKR')" class="px-3 py-2 hover:bg-outline hover:text-white cursor-pointer">PKR</li>
+          <ul v-if="showCurrencyDropdown" class="absolute right-0 mt-2 bg-bgNav border border-outline rounded 
+          shadow-lg text-sm z-50  max-h-60 overflow-y-auto min-w-[80px] 
+          scrollbar-thin scrollbar-thumb-primary scrollbar-track-transparent">
+                 <li v-if="currencyPending" class="px-3 py-2 text-gray-400">
+        Loading...
+         </li>
+
+    <li
+      v-for="cur in currencies"
+      :key="cur.id"
+      @click="selectCurrency(cur.code)"
+      class="px-3 py-2 hover:bg-outline hover:text-white cursor-pointer"
+    >
+      {{ cur.code }}
+    </li>
           </ul>
         </div>
       </div>
@@ -166,15 +177,21 @@
             <!-- Currency -->
             <div class="relative" ref="mobileCurrencyRef">
               <button @click="toggleDropdown('mobileCurrency')" class="flex items-center  text-sm font-roboto">
-                USD
+            {{ selectedCurrency }}
                 <Icon :class="{'rotate-180': showMobileCurrencyDropdown}" name="mdi:menu-down" class="w-6 h-6 text-current transition-transform" />
               </button>
-              <ul v-if="showMobileCurrencyDropdown" class="absolute left-0 mt-2 bg-bgNav border border-outline rounded shadow-lg text-sm max-h-[50vh] overflow-y-auto z-50">
-                <li @click="selectCurrency('USD')" class="px-3 py-2 hover:bg-outline hover:text-white cursor-pointer">USD</li>
-                <li @click="selectCurrency('EUR')" class="px-3 py-2 hover:bg-outline hover:text-white cursor-pointer">EUR</li>
-                <li @click="selectCurrency('PKR')" class="px-3 py-2 hover:bg-outline hover:text-white cursor-pointer">PKR</li>
+              <ul v-if="showMobileCurrencyDropdown" class="absolute left-0 mt-2 bg-bgNav border border-outline rounded shadow-lg text-sm
+               max-h-32 overflow-y-auto z-50">
+              <li
+              v-for="cur in currencies"
+                :key="cur.id"
+              @click="selectCurrency(cur.code)"
+              class="px-3 py-2 hover:bg-outline hover:text-white cursor-pointer"
+            >
+              {{ cur.code }}
+            </li>
               </ul>
-            </div>
+            </div>            
 
             <!-- Map marker -->
             <button class="hover:text-primary text-[18px] flex items-center font-roboto">
@@ -196,6 +213,10 @@ import { ref, watch, onMounted, onBeforeUnmount, computed } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useCartStore } from '~/stores/cartStore'
 import { useAuth } from '~/composables/useAuth'
+import { useCurrencyStore } from '~/stores/currencyStore'
+
+const currencyStore = useCurrencyStore()
+
 
 const { locale, setLocale, t } = useI18n()
 const langCookie = useLang()
@@ -204,6 +225,7 @@ const router = useRouter()
 const route = useRoute()
 const auth = useAuth()
 const cartStore = useCartStore()
+const config = useRuntimeConfig()
 
 
 // States
@@ -221,6 +243,10 @@ const currencyRef = ref(null)
 const profileRef = ref(null)
 const mobileLangRef = ref(null)
 const mobileCurrencyRef = ref(null)
+
+const selectedCurrency = computed(() => 
+  currencyStore.selectedCurrency?.code || 'USD'
+)
 
 // Category ID mapping (from your existing code)
 const categoryMap = {
@@ -243,6 +269,22 @@ const links = [
   { key: 'news-blog', path: '/news-blog' }
 ]
 
+/* ---------------------------
+   CURRENCIES API
+--------------------------- */
+const { data: currencyData, pending: currencyPending } = useFetch(
+  `${config.public.apiBase}/currencies`,
+  {
+    key: 'navbar-currencies',
+    server: false,
+    lazy: true
+  }
+)
+
+const currencies = computed(() => 
+  currencyData.value?.data || []
+)
+
 const isLoggedIn = computed(() => auth.isAuthenticated.value)
 
 // Check if current route is active
@@ -261,6 +303,13 @@ onMounted(() => {
   cartStore.fetchCart()
 })
 const cartCount = computed(() => cartStore.cartCount)
+
+watch(currencies, (newCurrencies) => {
+  if (newCurrencies.length) {
+    const defaultCurrency = newCurrencies.find(c => c.is_default)
+    currencyStore.initCurrency(defaultCurrency)
+  }
+}, { immediate: true })
 
 
 // Sidebar overflow
@@ -322,11 +371,14 @@ const selectLang = async (code) => {
   showMobileLangDropdown.value = false
 }
 
-const selectCurrency = (cur) => { 
-  console.log('Currency:', cur)
+const selectCurrency = (code) => {
+  const currencyObj = currencies.value.find(c => c.code === code)
+  currencyStore.setCurrency(currencyObj)
+
   showCurrencyDropdown.value = false
   showMobileCurrencyDropdown.value = false
 }
+
 
 const selectProfileOption = (path) => { 
   showProfileDropdown.value = false

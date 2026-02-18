@@ -26,7 +26,7 @@
             <!-- Title + Price -->
             <div class="text-mainText">
               <h2 class="text-lg">{{ item.title }}</h2>
-              <p class="text-base mt-1 font-semibold">{{ item.price }} USD</p>
+              <p class="text-base mt-1 font-semibold">{{ item.price }} {{ selectedCurrency }}</p>
             </div>
 
             <!-- Qty Controls -->
@@ -103,14 +103,14 @@
                </div>
 
                <p class="font-semibold ml-3 flex-nowrap">
-                 {{ (item.price * item.qty).toFixed(2) }}USD
+                 {{ (item.price * item.qty).toFixed(2) }}{{ selectedCurrency }}
                </p>
              </div>
            </div>
         <div class="space-y-3 text-sm">
           <div class="flex justify-between">
             <p>{{ t('cartSubtotal') }}:</p>
-            <p class="font-semibold">USD {{ cartTotal.toFixed(2) }}</p>
+            <p class="font-semibold">{{ selectedCurrency }} {{ cartTotal.toFixed(2) }}</p>
           </div>
           <hr class="text-mainText mb-2">
           
@@ -129,7 +129,7 @@
 
         <div class="flex justify-between text-sm font-semibold mt-2">
           <p>{{ t('cartOrderTotal') }}:</p>
-          <p>USD {{ cartTotal.toFixed(2) }}</p>
+          <p>{{ selectedCurrency }} {{ cartTotal.toFixed(2) }}</p>
         </div>
 
         <div class="flex justify-center">
@@ -147,6 +147,9 @@
 import { onMounted, computed } from 'vue'
 import { useCartStore } from '~/stores/cartStore'
 import { useCart } from '~/composables/useCart'
+import { useCurrencyStore } from '~/stores/currencyStore'
+
+const currencyStore = useCurrencyStore()
 
 const cartStore = useCartStore()
 const { t } = useI18n()
@@ -155,6 +158,11 @@ const { updateQty, removeCard } = useCart()
 onMounted(() => {
   cartStore.fetchCart({})
 })
+
+const selectedCurrency = computed(() => 
+  currencyStore.selectedCurrency?.code || 'USD'
+)
+
 
 /**
  * Normalize backend cart item to UI-friendly structure
