@@ -119,7 +119,7 @@ const error = ref(false)
  
 const helpCards = ref([
   {
-    icon: '/wallet/FaqChat.png',
+    icon: '/compressed/New folder/FaqChat.png',
     title: t('supportLiveChat'),
     description: t('supportLiveChatDesc'),
     buttonText: t('supportLiveChatBtn'),
@@ -128,7 +128,7 @@ const helpCards = ref([
        //  (Violet)
   },
   {
-    icon: '/compressed/FaqEmail.png',
+    icon: '/compressed/New folder/FaqEmail.png',
     title:t('supportEmail'),
     description:t('supportEmailDesc'),
     buttonText:t('supportEmailBtn'),
@@ -137,7 +137,7 @@ const helpCards = ref([
      //  Cyan
   },
   {
-    icon: '/wallet/FaqPhone.png',
+    icon: '/compressed/New folder/FaqPhone.png',
     title:t('supportPhone'),
     description:t('supportPhoneDesc'),
     buttonText:t('supportPhoneBtn'),
